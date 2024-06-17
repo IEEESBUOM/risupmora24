@@ -1,5 +1,6 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import QueryProvider from "@/provider/QueryProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
@@ -16,21 +17,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 0,
-      },
-    },
-  });
+  // const queryClient = new QueryClient({
+  //   defaultOptions: {
+  //     queries: {
+  //       staleTime: 0,
+  //     },
+  //   },
+  // });
 
   return (
     <html lang="en">
       <body>
-        <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools initialIsOpen={false} />
-          {children}
-        </QueryClientProvider>
+        {/* <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools initialIsOpen={false} /> */}
+        <QueryProvider>{children}</QueryProvider>
+        {/* </QueryClientProvider> */}
       </body>
     </html>
   );
