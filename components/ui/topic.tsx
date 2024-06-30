@@ -1,23 +1,19 @@
-import React, { FC } from "react";
+import React from 'react'
+import { Button } from './button'
 
-interface TopicProps {
-  topicText: string;
-}
-
-const Topic: FC<TopicProps> = ({ topicText }) => {
+export default function Topic({text}:{text:string}) {
   return (
-    <div className="relative flex justify-start items-start ml-4">
-      <div className="relative z-10 bg-[#0c2735] text-white rounded-lg w-fit px-8 py-2 cursor-pointer font-poppins">
-        <span>{topicText}</span>
-      </div>
-      <div
-        className="absolute top-0 left-0 z-0 bg-[#f1c232] rounded-lg w-fit px-8 py-2.5 translate-x-[-0.0625rem] translate-y-[0.125rem]"
-        style={{ transform: "translate(-2px, 2px)" }}
-      >
-        <span className="opacity-0">{topicText}</span>
-      </div>
-    </div>
-  );
-};
+    <div className='relative flex justify-center items-center font-poppins   px-3  '>
+        <Button  variant="secondary" size="default">
+            {text}
+        </Button>
+        <div  className='absolute mt-2 mr-2 sm:mt-3 sm:mr-3 bg-[#f1c232] text-[#f1c232] rounded-[10px] border-none  px-7 py-2.5  cursor-pointer  '>
+        {text}
+            </div>
+        
+        
 
-export default Topic;
+      
+    </div>
+  )
+}
