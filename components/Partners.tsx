@@ -49,29 +49,29 @@ function Partners() {
     );
 
     // Animation for images
-    gsap.utils.toArray<HTMLElement>(".imgFromLeft").forEach((img) => {
-      gsap.fromTo(
-        img,
-        { x: -200, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 0.5,
-          scrollTrigger: {
-            trigger: img,
-            start: "top 90%",
-            end: "bottom 10%",
-            scrub: true,
-            onEnter: () => gsap.to(img, { x: 0, opacity: 1, duration: 0.5 }),
-            onLeave: () => gsap.to(img, { x: 200, opacity: 0, duration: 0.5 }),
-            onEnterBack: () =>
-              gsap.to(img, { x: 0, opacity: 1, duration: 0.5 }),
-            onLeaveBack: () =>
-              gsap.to(img, { x: -200, opacity: 0, duration: 0.5 }),
-          },
-        }
-      );
-    });
+    // gsap.utils.toArray<HTMLElement>(".imgFromLeft").forEach((img) => {
+    //   gsap.fromTo(
+    //     img,
+    //     { x: -200, opacity: 0 },
+    //     {
+    //       x: 0,
+    //       opacity: 1,
+    //       duration: 0.5,
+    //       scrollTrigger: {
+    //         trigger: img,
+    //         start: "top 90%",
+    //         end: "bottom 10%",
+    //         scrub: true,
+    //         onEnter: () => gsap.to(img, { x: 0, opacity: 1, duration: 0.5 }),
+    //         onLeave: () => gsap.to(img, { x: 200, opacity: 0, duration: 0.5 }),
+    //         onEnterBack: () =>
+    //           gsap.to(img, { x: 0, opacity: 1, duration: 0.5 }),
+    //         onLeaveBack: () =>
+    //           gsap.to(img, { x: -200, opacity: 0, duration: 0.5 }),
+    //       },
+    //     }
+    //   );
+    // });
 
     // Animation for the Topic component
     gsap.fromTo(
@@ -104,7 +104,7 @@ function Partners() {
         <div className="row flex flex-wrap justify-center items-center mt-5">
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
             <div className="text-center text-lg w-64">Platinum Partner</div>
-            <div className="flex justify-center items-center w-36 h-36 imgFromLeft">
+            <div className="flex justify-center items-center w-36 h-36 ">
               <Image
                 src={unilever}
                 alt="Unilever"
@@ -117,7 +117,7 @@ function Partners() {
 
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0 h-44">
             <div className="text-center text-lg w-64">Gold Partner</div>
-            <div className="flex justify-center items-center w-36 h-36 imgFromLeft">
+            <div className="flex justify-center items-center w-36 h-36 ">
               <Image
                 src={ws02}
                 alt="WSO2"
@@ -130,7 +130,7 @@ function Partners() {
 
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0 h-44">
             <div className="text-center text-lg w-64">Innovation Partner</div>
-            <div className="flex justify-center items-center w-36 h-36 imgFromLeft">
+            <div className="flex justify-center items-center w-36 h-36 ">
               <Image
                 src={IFS}
                 alt="IFS"
@@ -145,7 +145,7 @@ function Partners() {
         <div className="row flex flex-wrap justify-center items-center mt-5">
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
             <div className="text-center text-lg w-64">Silver Partner</div>
-            <div className="flex justify-center items-center h-24 imgFromLeft">
+            <div className="flex justify-center items-center h-24 ">
               <Image
                 src={gtn}
                 alt="GTN"
@@ -157,7 +157,7 @@ function Partners() {
           </div>
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
             <div className="text-center text-lg w-64">Silver Partner</div>
-            <div className="flex justify-center items-center h-24 imgFromLeft">
+            <div className="flex justify-center items-center h-24 ">
               <Image
                 src={pickMe}
                 alt="PickMe"
@@ -169,7 +169,7 @@ function Partners() {
           </div>
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
             <div className="text-center text-lg w-64">Bronze Partner</div>
-            <div className="flex justify-center items-center h-24 imgFromLeft">
+            <div className="flex justify-center items-center h-24 ">
               <Image
                 src={zero_beta}
                 alt="Zero Beta"
