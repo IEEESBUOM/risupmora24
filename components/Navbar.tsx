@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -12,10 +10,9 @@ import {
   NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuLink,
-  NavigationMenuTrigger,
-  NavigationMenuContent,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { MutableRefObject } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -31,33 +28,21 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
+import PrimaryButtonSmall from "./ui/PrimaryButtonSmall";
+import HamburgerButton from "./ui/HamburgerButton";
 
-const components: { title: string; href: string; icon: string }[] = [
-  {
-    title: "General Procurement",
-    href: "/services/general-procurement",
-    icon: "/icons/general-procurement.svg",
-  },
-  {
-    title: "Special Sourcing",
-    href: "/services/special-sourcing",
-    icon: "/icons/special-sourcing.svg",
-  },
-  {
-    title: "Pay Supplier",
-    href: "/services/pay-supplier",
-    icon: "/icons/pay-supplier.svg",
-  },
-  {
-    title: "Shipping Only",
-    href: "/services/shipping-only",
-    icon: "/icons/shipping.svg",
-  },
-];
+interface SectionRefs {
+  heroSectionRef: MutableRefObject<HTMLDivElement | null>;
+  aboutRef: MutableRefObject<HTMLDivElement | null>;
+  timelineRef: MutableRefObject<HTMLDivElement | null>;
+  contactUsRef: MutableRefObject<HTMLDivElement | null>;
+}
 
-const Navbar = () => {
+const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
+  const [active, setActive] = useState("home");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -70,273 +55,227 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const hamburgerClick = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleScroll = (scrollTo: string) => {
+    setActive(scrollTo);
+
+    const navbarHeight = isMobile ? 70 : 90;
+    switch (scrollTo) {
+      case "home":
+        if (sectionRefs.heroSectionRef.current) {
+          window.scrollTo({
+            top: sectionRefs.heroSectionRef.current.offsetTop - navbarHeight,
+            behavior: "smooth",
+          });
+        } else {
+          //navigate to home
+          window.location.href = "/";
+        }
+        break;
+      case "about":
+        if (sectionRefs.aboutRef.current) {
+          window.scrollTo({
+            top: sectionRefs.aboutRef.current.offsetTop - navbarHeight,
+            behavior: "smooth",
+          });
+        }
+        break;
+      case "timeline":
+        if (sectionRefs.timelineRef.current) {
+          window.scrollTo({
+            top: sectionRefs.timelineRef.current.offsetTop - navbarHeight,
+            behavior: "smooth",
+          });
+        }
+        break;
+      case "contact":
+        if (sectionRefs.contactUsRef.current) {
+          window.scrollTo({
+            top: sectionRefs.contactUsRef.current.offsetTop - navbarHeight,
+            behavior: "smooth",
+          });
+        }
+        break;
+      default:
+        break;
+    }
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <div className="absolute  flex min-h-[768px] w-full flex-col overflow-hidden px-20 pb-20 pt-6 max-md:max-w-full max-md:px-5">
-      {!isMobile && (
-        <div className="flex w-full flex-row justify-between">
-          <div className="z-20 h-12 w-28">
-            <Link href="/" passHref>
-              <Image
-                src="/images/logo-white.svg"
-                alt="Spreadit"
-                width={135}
-                height={45}
-                className=""
-                quality={100}
-              />
-            </Link>
-          </div>
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <Link href="/" legacyBehavior passHref>
-                  <NavigationMenuLink
-                    className={clsx(navigationMenuTriggerStyle(), {
-                      "after:w-full after:scale-x-100": pathname === "/",
-                    })}
-                  >
-                    Home
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Videos</NavigationMenuTrigger>
-                <NavigationMenuContent className="rounded-2xl bg-transparent">
-                  <ul className="grid w-72 gap-3 rounded-3xl bg-transparent p-6 lg:grid-cols-[.75fr_1fr]">
-                    <ListItem
-                      href="https://www.tiktok.com/@tochukwunkwocha"
-                      title="TikTok"
-                      icon="/icons/tiktok-app-symbol.svg"
-                    />
-                    <ListItem
-                      href="https://youtube.com/@spreaditng"
-                      title="YouTube"
-                      icon="/icons/yt-app-symbol.svg"
-                    />
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger
-                  className={clsx(navigationMenuTriggerStyle(), {
-                    "after:w-full after:scale-x-100":
-                      pathname.startsWith("/services"),
-                  })}
-                >
-                  Services
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-96 gap-3 p-4 md:grid-cols-2">
-                    {components.map((component) => (
-                      <ListItem
-                        key={component.title}
-                        title={component.title}
-                        href={component.href}
-                        icon={component.icon}
-                        active={pathname.startsWith("/services")}
-                      />
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link
-                  href="/shop/deal-directly-with-suppliers"
-                  legacyBehavior
-                  passHref
-                >
-                  <NavigationMenuLink
-                    className={clsx(navigationMenuTriggerStyle(), {
-                      "after:w-full after:scale-x-100":
-                        pathname === "/shop/deal-directly-with-suppliers",
-                    })}
-                  >
-                    Shop
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link
-                  href="https://spreaditglobal.com/calculator"
-                  legacyBehavior
-                  passHref
-                  target="_blank"
-                >
-                  <NavigationMenuLink
-                    className={clsx(navigationMenuTriggerStyle(), {
-                      "after:w-full after:scale-x-100":
-                        pathname === "/calculator",
-                    })}
-                  >
-                    Calculator
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-          <Button asChild className="z-20 h-12 w-28">
-            <Link href="/auth/login" passHref>
-              Sign In
-            </Link>
-          </Button>
-        </div>
-      )}
-      {isMobile && (
-        <div className="z-30 flex w-full flex-row items-center justify-between">
+    <div className=" fixed  grid w-full bg-white   sm:overflow-hidden  sm:h-24    max-md:max-w-full z-20   ">
+     
+      <div className="flex sm:h-[90px] h-[65px]  justify-between sm:justify-around font-poppins  lg:px-24   ">
+        <div
+          className="z-20  sm:grid content-center w-28 cursor-pointer hidden   "
+          onClick={() => handleScroll("home")}
+        >
           <Image
-            src="/images/logo-white.png"
-            alt="Kalhara JA"
-            width={135}
-            height={45}
-            className="m-2 rounded-full"
+            src="/images/navbar-logo-large.png"
+            alt="riseupmora-logo"
+            width={145}
+            height={145}
+            className=""
+            quality={100}
           />
-          <Sheet>
-            <SheetTrigger asChild className="m-2 h-10">
-              <Button className="text-white">
-                <AlignRight />
-              </Button>
-            </SheetTrigger>
-            <SheetContent className="bg-indigo-800 text-white">
-              <NavigationMenu className="min-w-full">
-                <nav className="w-full">
-                  <SheetClose asChild>
-                    <NavigationMenuLink
-                      href="/"
-                      className={clsx(
-                        "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-white",
-                        {
-                          "after:w-full after:scale-x-100": pathname === "/",
-                          "text-white": pathname !== "/",
-                        }
-                      )}
-                    >
-                      Home
-                    </NavigationMenuLink>
-                  </SheetClose>
-                  <Accordion type="single" collapsible>
-                    <AccordionItem value="videos" className="border-none">
-                      <AccordionTrigger className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-white hover:no-underline">
-                        Videos
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <SheetClose asChild>
-                          <NavigationMenuLink
-                            href="https://www.tiktok.com/@tochukwunkwocha"
-                            className="flex items-center gap-4 px-3 py-2 text-white"
-                          >
-                            <Image
-                              src="/icons/tiktok-app-symbol.svg"
-                              alt="TikTok"
-                              width={20}
-                              height={20}
-                              className="mr-2 rounded-full bg-white p-1"
-                            />
-                            TikTok
-                          </NavigationMenuLink>
-                        </SheetClose>
-                        <SheetClose asChild>
-                          <NavigationMenuLink
-                            href="https://youtube.com/@spreaditng"
-                            className="flex items-center gap-4 px-3 py-2 text-white"
-                          >
-                            <Image
-                              src="/icons/yt-app-symbol.svg"
-                              alt="YouTube"
-                              width={20}
-                              height={20}
-                              className="mr-2 rounded-full bg-white p-1"
-                            />
-                            YouTube
-                          </NavigationMenuLink>
-                        </SheetClose>
-                      </AccordionContent>
-                    </AccordionItem>
-                    <AccordionItem value="services" className="border-none">
-                      <AccordionTrigger className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-white hover:no-underline">
-                        Services
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        {components.map((component) => (
-                          <SheetClose asChild key={component.title}>
-                            <NavigationMenuLink
-                              href={component.href}
-                              className={clsx(
-                                "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-white",
-                                {
-                                  "after:w-full after:scale-x-100":
-                                    pathname === component.href,
-                                  "text-white": pathname !== component.href,
-                                }
-                              )}
-                            >
-                              <Image
-                                src={component.icon}
-                                alt={component.title}
-                                width={20}
-                                height={20}
-                                className="mr-2 rounded-full bg-white p-1"
-                              />
-                              {component.title}
-                            </NavigationMenuLink>
-                          </SheetClose>
-                        ))}
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                  <SheetClose asChild>
-                    <NavigationMenuLink
-                      href="/shop/deal-directly-with-suppliers"
-                      className={clsx(
-                        "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-white",
-                        {
-                          "after:w-full after:scale-x-100":
-                            pathname === "/shop/deal-directly-with-suppliers",
-                          "text-white":
-                            pathname !== "/shop/deal-directly-with-suppliers",
-                        }
-                      )}
-                    >
-                      Shop
-                    </NavigationMenuLink>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <NavigationMenuLink
-                      href="https://spreaditglobal.com/calculator"
-                      className={clsx(
-                        "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-white",
-                        {
-                          "after:w-full after:scale-x-100":
-                            pathname === "/calculator",
-                          "text-white": pathname !== "/calculator",
-                        }
-                      )}
-                      target="_blank"
-                    >
-                      Calculator
-                    </NavigationMenuLink>
-                  </SheetClose>
-                </nav>
-              </NavigationMenu>
-              <SheetFooter className="w-full">
-                <Button
-                  variant="default"
-                  asChild
-                  className={clsx(
-                    "w-30 m-7 h-12 w-full bg-white text-base text-indigo-800 hover:bg-indigo-100",
-                    {
-                      "ml-0": isMobile,
-                    }
-                  )}
-                >
-                  <Link href="/auth/login" passHref>
-                    Sign In
-                  </Link>
-                </Button>
-              </SheetFooter>
-            </SheetContent>
-          </Sheet>
         </div>
-      )}
+        <div onClick={hamburgerClick}  className="grid content-center cursor-pointer sm:hidden">
+          <HamburgerButton />
+        </div>
+
+        
+
+
+        {/* desktop view */}
+        <NavigationMenu className="max-sm:hidden">
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                onClick={() => handleScroll("home")}
+                className={clsx(navigationMenuTriggerStyle(), {
+                  "after:w-full after:scale-x-100 ": pathname === "/",
+                })}
+              >
+                Home
+                {active == "home" && (
+                  <div className=" grid   justify-center">
+                    <div className="size-1.5 bg-white rounded-full"></div>
+                  </div>
+                )}
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                onClick={() => handleScroll("about")}
+                className={clsx(navigationMenuTriggerStyle(), {
+                  "after:w-full after:scale-x-100": pathname === "/",
+                })}
+              >
+                About
+                {active == "about" && (
+                  <div className=" grid   justify-center">
+                    <div className="size-1.5 bg-white rounded-full"></div>
+                  </div>
+                )}
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                onClick={() => handleScroll("timeline")}
+                className={clsx(navigationMenuTriggerStyle(), {
+                  "after:w-full after:scale-x-100": pathname === "/",
+                })}
+              >
+                Timeline
+                {active == "timeline" && (
+                  <div className=" grid   justify-center">
+                    <div className="size-1.5 bg-white rounded-full"></div>
+                  </div>
+                )}
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                onClick={() => handleScroll("contact")}
+                className={clsx(navigationMenuTriggerStyle(), {
+                  "after:w-full after:scale-x-100 ": pathname === "/",
+                })}
+              >
+                Contact Us
+                {active == "contact" && (
+                  <div className=" grid   justify-center">
+                    <div className="size-1.5 bg-white rounded-full"></div>
+                  </div>
+                )}
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+
+        
+
+        <Link href="/auth/signin" passHref className=" grid ">
+          <PrimaryButtonSmall text="Sign In" />
+        </Link>
+      </div>
+
+      <div
+        className=" h-[5px] w-full self-end"
+        style={{
+          background:
+            "linear-gradient(to right, #0c2735 75%, #28a8e0 75%, #28a8e0 92%, #f1c232 92%, #f1c232 95%)",
+        }}
+      ></div>
+
+      {/* mobile view */}
+      {isMobileMenuOpen && <NavigationMenu className="sm:hidden  mt-[65px]  absolute grid justify-self-center    ">
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                onClick={() => handleScroll("home")}
+                className={clsx(navigationMenuTriggerStyle(), {
+                  "after:w-full after:scale-x-100 ": pathname === "/",
+                })}
+              >
+                Home
+                {active == "home" && (
+                  <div className=" grid   justify-center">
+                    <div className="size-1.5 bg-white rounded-full"></div>
+                  </div>
+                )}
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                onClick={() => handleScroll("about")}
+                className={clsx(navigationMenuTriggerStyle(), {
+                  "after:w-full after:scale-x-100": pathname === "/",
+                })}
+              >
+                About
+                {active == "about" && (
+                  <div className=" grid   justify-center">
+                    <div className="size-1.5 bg-white rounded-full"></div>
+                  </div>
+                )}
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                onClick={() => handleScroll("timeline")}
+                className={clsx(navigationMenuTriggerStyle(), {
+                  "after:w-full after:scale-x-100": pathname === "/",
+                })}
+              >
+                Timeline
+                {active == "timeline" && (
+                  <div className=" grid   justify-center">
+                    <div className="size-1.5 bg-white rounded-full"></div>
+                  </div>
+                )}
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                onClick={() => handleScroll("contact")}
+                className={clsx(navigationMenuTriggerStyle(), {
+                  "after:w-full after:scale-x-100 ": pathname === "/",
+                })}
+              >
+                Contact Us
+                {active == "contact" && (
+                  <div className=" grid   justify-center">
+                    <div className="size-1.5 bg-white rounded-full"></div>
+                  </div>
+                )}
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+        }
     </div>
   );
 };

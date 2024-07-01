@@ -4,7 +4,7 @@ import QueryProvider from "@/provider/QueryProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -29,13 +29,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-        </head>
+
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet"></link>
+      </head>
+
       <body>
         {/* <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools initialIsOpen={false} /> */}
         <QueryProvider>
-          <Navbar />
+          
           {children}
         </QueryProvider>
         {/* </QueryClientProvider> */}

@@ -10,6 +10,7 @@ interface ProfileProps {
   telephone: string;
 }
 
+
 // Main ContactUs component
 export default function ContactUs() {
   return (
@@ -22,6 +23,7 @@ export default function ContactUs() {
         </div>
         <div className="absolute mt-8 mr-1 sm:mt-8 sm:mr-3 bg-[#f1c232] text-[#f1c232] rounded-[10px] border-none py-2.5 cursor-pointer sm:w-[290px] sm:h-[70px] w-[230px] h-[55px]" ></div>
       </div>
+
 
       {/* Profiles section */}
       <div className="flex justify-center flex-wrap">
