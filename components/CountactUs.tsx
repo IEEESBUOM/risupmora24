@@ -10,26 +10,24 @@ interface ProfileProps {
   telephone: string;
 }
 
-
 // Main ContactUs component
 export default function ContactUs() {
   return (
-    <div className="h-auto w-screen pb-10">
+    <div className="h-auto w-auto pb-10">
       <div className="flex justify-start p-10">
         <div className="bg-[#0c2735] text-white font rounded-[10px] border-none cursor-pointer z-10 py-2 px-5 ml-1.5 mt-4  ">
           <span className="font-poppins sm:text-[40px] line-height-1 sm:ml-3 ml-3 text-[30px]">
             Contact Us
           </span>
         </div>
-        <div className="absolute mt-8 mr-1 sm:mt-8 sm:mr-3 bg-[#f1c232] text-[#f1c232] rounded-[10px] border-none py-2.5 cursor-pointer sm:w-[290px] sm:h-[70px] w-[230px] h-[55px]" ></div>
+        <div className="absolute mt-8 mr-1 sm:mt-8 sm:mr-3 bg-[#f1c232] text-[#f1c232] rounded-[10px] border-none py-2.5 cursor-pointer sm:w-[290px] sm:h-[70px] w-[230px] h-[55px]"></div>
       </div>
-
 
       {/* Profiles section */}
       <div className="flex justify-center flex-wrap">
         {/* Profile components */}
         <Profile
-          image="/images/pramoth.jpg"
+          image="/images/pic 1.jpeg"
           name="Chasila Withanage"
           shortName="Chairman"
           details="IEEE Student Branch of University Of Moratuwa"
@@ -37,7 +35,7 @@ export default function ContactUs() {
           telephone="0712618255"
         />
         <Profile
-          image="/images/pramoth.jpg"
+          image="/images/pic 1.jpeg"
           name="Hiruna Harankahadeniya"
           shortName="Vice Chairman"
           details="IEEE Student Branch of University Of Moratuwa"
@@ -45,7 +43,7 @@ export default function ContactUs() {
           telephone="0762675516"
         />
         <Profile
-          image="/images/pramoth.jpg"
+          image="/images/pic 1.jpeg"
           name="Shehan Arampola"
           shortName="Web Master"
           details="IEEE Student Branch of University Of Moratuwa"
@@ -56,7 +54,7 @@ export default function ContactUs() {
 
       <div className="flex justify-center flex-wrap">
         <Profile
-          image="/images/pramoth.jpg"
+          image="/images/pic 1.jpeg"
           name="Supul Heshan"
           shortName="Event Co-Chairperson"
           details="Rise Up Mora 2023"
@@ -64,7 +62,7 @@ export default function ContactUs() {
           telephone="0713344150"
         />
         <Profile
-          image="/images/pramoth.jpg"
+          image="/images/pic 1.jpeg"
           name="Sithum Siyambalapitiya"
           shortName="Event Co-Chairperson"
           details="Rise Up Mora 2023"
@@ -75,7 +73,7 @@ export default function ContactUs() {
 
       <div className="flex justify-center flex-wrap">
         <Profile
-          image="/images/pramoth.jpg"
+          image="/images/pic 1.jpeg"
           name="Malithi Abayadeera"
           shortName="Event Co-Chairperson"
           details="Rise Up Mora 2023"
@@ -83,7 +81,7 @@ export default function ContactUs() {
           telephone="0776536321"
         />
         <Profile
-          image="/images/pramoth.jpg"
+          image="/images/pic 1.jpeg"
           name="Kalhara Jasin Arachchi"
           shortName="Event Co-Chairperson"
           details="Rise Up Mora 2023"
@@ -91,7 +89,7 @@ export default function ContactUs() {
           telephone="0711305808"
         />
         <Profile
-          image="/images/pramoth.jpg"
+          image="/images/pic 1.jpeg"
           name="Ama Weerasinghe"
           shortName="Event Co-Chairperson"
           details="Rise Up Mora 2023"
