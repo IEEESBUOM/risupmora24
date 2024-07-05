@@ -18,7 +18,7 @@ const Footer = () => {
       <div className="ml-[5vw] lg:ml-[10vw] z-5 flex flex-col gap-8 relative lg:w-10/12 mx-auto">
         <div className="flex flex-col items-center justify-center gap-8 lg:w-8/12 -mt-12">
           <div className="flex flex-col lg:flex-row items-center mt-12 lg:mt-24 justify-center gap-8">
-            <div className="relative w-52 mt-9 h-20 lg:w-64 lg:h-24">
+            <div className="relative w-52 mt-9 h-20 lg:mx-10 lg:w-64 lg:h-24">
               <Image
                 src="/img/IEEE STUDENT LOGO WHITE.png"
                 layout="fill"
@@ -26,7 +26,7 @@ const Footer = () => {
                 alt="IEEE Student Logo"
               />
             </div>
-            <div className="relative mt-9 w-52 h-20 lg:w-64 lg:h-24">
+            <div className="relative mt-9 w-52 h-20 lg:mx-10 lg:w-64 lg:h-24">
               <Image
                 src="/img/IEEEYoungProfessionalsLogoTM_White_Horiz.png"
                 layout="fill"
