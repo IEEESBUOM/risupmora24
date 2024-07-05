@@ -19,6 +19,9 @@ const config = {
     },
     extend: {
       colors: {
+        "custom-black": "#112735",
+        "custom-light-blue": "#29A7E1",
+        "custom-yellow": "#F1C332",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -63,6 +66,11 @@ const config = {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
         },
+        animate: {
+          '0%': { opacity: '0' },
+          '50%': { opacity: '1', transform: 'rotate(45deg) translate(10px, 10px)' },
+          '100%': { opacity: '0' },
+        },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
@@ -71,7 +79,15 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        
+          'animate': 'animate 2s infinite',
+        
       },
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+        quicksand: ['Quicksand', 'sans-serif'],
+      },
+      
     },
   },
   plugins: [require("tailwindcss-animate")],
