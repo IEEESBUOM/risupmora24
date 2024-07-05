@@ -32,7 +32,7 @@ export default function Slideshow() {
   }, [index]);
 
   return (
-    <div className="mx-auto overflow-hidden max-w-md">
+    <div className="mx-auto overflow-hidden max-w-md mt-10">
       <div
         className="whitespace-nowrap transition ease-linear duration-1000"
         style={{ transform: `translate3d(${-index * 100}%, 0, 0)` }}

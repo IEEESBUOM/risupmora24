@@ -23,7 +23,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 function Partners() {
   useEffect(() => {
-    // Animation for the Topic component
     gsap.fromTo(
       ".topicContainer",
       { x: -200, opacity: 0 },
@@ -31,62 +30,12 @@ function Partners() {
         x: 0,
         opacity: 1,
         duration: 0.5,
-        // scrollTrigger: {
-        //   trigger: ".partnersSection",
-        //   start: "top 80%",
-        //   end: "bottom 20%",
-        //   scrub: true,
-        //   onEnter: () =>
-        //     gsap.to(".topicContainer", { x: 0, opacity: 1, duration: 0.5 }),
-        //   onLeave: () =>
-        //     gsap.to(".topicContainer", { x: -200, opacity: 0, duration: 0.5 }),
-        //   onEnterBack: () =>
-        //     gsap.to(".topicContainer", { x: 0, opacity: 1, duration: 0.5 }),
-        //   onLeaveBack: () =>
-        //     gsap.to(".topicContainer", { x: -200, opacity: 0, duration: 0.5 }),
-        // },
-      }
-    );
-
-    // Animation for images
-    // gsap.utils.toArray<HTMLElement>(".imgFromLeft").forEach((img) => {
-    //   gsap.fromTo(
-    //     img,
-    //     { x: -200, opacity: 0 },
-    //     {
-    //       x: 0,
-    //       opacity: 1,
-    //       duration: 0.5,
-    //       scrollTrigger: {
-    //         trigger: img,
-    //         start: "top 90%",
-    //         end: "bottom 10%",
-    //         scrub: true,
-    //         onEnter: () => gsap.to(img, { x: 0, opacity: 1, duration: 0.5 }),
-    //         onLeave: () => gsap.to(img, { x: 200, opacity: 0, duration: 0.5 }),
-    //         onEnterBack: () =>
-    //           gsap.to(img, { x: 0, opacity: 1, duration: 0.5 }),
-    //         onLeaveBack: () =>
-    //           gsap.to(img, { x: -200, opacity: 0, duration: 0.5 }),
-    //       },
-    //     }
-    //   );
-    // });
-
-    // Animation for the Topic component
-    gsap.fromTo(
-      ".topicContainer",
-      { x: -200, opacity: 0 },
-      {
-        x: 0,
-        opacity: 5,
-        duration: 0.5,
         scrollTrigger: {
           trigger: ".partnersSection",
           start: "top 100%",
           end: "bottom 80%",
           scrub: true,
-          once: true, // Trigger animation only once
+          once: true,
           onEnter: () =>
             gsap.to(".topicContainer", { x: 0, opacity: 1, duration: 0.05 }),
         },
@@ -96,15 +45,18 @@ function Partners() {
 
   return (
     <div className="m-8 partnersSection relative">
-      <div className="topicContainer absolute top-2 left-2 opacity-0">
+      <div className="absolute top-2 left-2 sm:top-4 sm:left-4  topicContainer opacity-0 mb -10">
         <Topic text="Our Partners" />
       </div>
-      <Slideshow />
+      <br />
+      <div className="mt-16 sm:mt-20">
+        <Slideshow />
+      </div>
       <div className="container-fluid p-0 mt-8 flex flex-col items-center justify-center">
         <div className="row flex flex-wrap justify-center items-center mt-5">
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
             <div className="text-center text-lg w-64">Platinum Partner</div>
-            <div className="flex justify-center items-center w-36 h-36 ">
+            <div className="flex justify-center items-center w-36 h-36">
               <Image
                 src={unilever}
                 alt="Unilever"
@@ -117,7 +69,7 @@ function Partners() {
 
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0 h-44">
             <div className="text-center text-lg w-64">Gold Partner</div>
-            <div className="flex justify-center items-center w-36 h-36 ">
+            <div className="flex justify-center items-center w-36 h-36">
               <Image
                 src={ws02}
                 alt="WSO2"
@@ -130,7 +82,7 @@ function Partners() {
 
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0 h-44">
             <div className="text-center text-lg w-64">Innovation Partner</div>
-            <div className="flex justify-center items-center w-36 h-36 ">
+            <div className="flex justify-center items-center w-36 h-36">
               <Image
                 src={IFS}
                 alt="IFS"
@@ -145,7 +97,7 @@ function Partners() {
         <div className="row flex flex-wrap justify-center items-center mt-5">
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
             <div className="text-center text-lg w-64">Silver Partner</div>
-            <div className="flex justify-center items-center h-24 ">
+            <div className="flex justify-center items-center h-24">
               <Image
                 src={gtn}
                 alt="GTN"
@@ -157,7 +109,7 @@ function Partners() {
           </div>
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
             <div className="text-center text-lg w-64">Silver Partner</div>
-            <div className="flex justify-center items-center h-24 ">
+            <div className="flex justify-center items-center h-24">
               <Image
                 src={pickMe}
                 alt="PickMe"
@@ -169,7 +121,7 @@ function Partners() {
           </div>
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
             <div className="text-center text-lg w-64">Bronze Partner</div>
-            <div className="flex justify-center items-center h-24 ">
+            <div className="flex justify-center items-center h-24">
               <Image
                 src={zero_beta}
                 alt="Zero Beta"
