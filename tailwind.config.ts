@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      boxShadow: {
+        'custom-shadow': '5px 10px 18px #888888',
+      },
       colors: {
         "custom-black": "#112735",
         "custom-light-blue": "#29A7E1",
@@ -86,6 +89,7 @@ const config = {
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
         quicksand: ['Quicksand', 'sans-serif'],
+        roboto: ['Roboto', 'sans-serif'],
       },
       
     },
