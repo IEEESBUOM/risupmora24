@@ -5,7 +5,7 @@ import PrimaryButtonSmall from "@/components/ui/PrimaryButtonSmall";
 
 const Page = () => {
   return (
-    <div>
+    <div className="p-10 flex flex-col gap-10 ">
       <PrimaryButtonSmall text="Registration" />
       <Registration />
     </div>
