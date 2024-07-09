@@ -3,9 +3,9 @@ import Image from "next/image";
 
 export default function Alert() {
   return (
-    <div className="flex flex-col w-9/12  items-start ">
+    <div className="flex flex-col w-full md:w-9/12  items-start ">
       <div className="flex items-center justify-start bg-yellow-200 bg-opacity-85 p-2 rounded-lg w-full">
-        <div className="mr-4">
+        <div className="mr-4 md:flex hidden">
           <Image
             src="/images/Frame.png"
             alt="icon"

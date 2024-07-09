@@ -4,6 +4,7 @@ import QueryProvider from "@/provider/QueryProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import TostifyProvider from "@/provider/TostifyProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,7 +46,10 @@ export default function RootLayout({
       <body>
         {/* <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools initialIsOpen={false} /> */}
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          {children}
+          <TostifyProvider />
+        </QueryProvider>
         {/* </QueryClientProvider> */}
       </body>
     </html>

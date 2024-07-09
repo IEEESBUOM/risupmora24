@@ -4,19 +4,11 @@
 
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-
-type FormData = {
-  firstName: string;
-  lastName: string;
-  nameWithInitials: string;
-  universityID: string;
-  contactNo: number;
-  degree: string;
-  department: string;
-  cv: FileList;
-  photo: FileList;
-  email: string;
-};
+import axios from "axios";
+import { RegistrationFormDataType } from "@/Type";
+import { useUserRegistration } from "@/hooks/user/useUserRegistration";
+import toast from "react-hot-toast";
+import Image from "next/image";
 
 export default function Form() {
   const {
@@ -24,9 +16,15 @@ export default function Form() {
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<RegistrationFormDataType>();
 
-  const onSubmit = handleSubmit((data) => console.log(data));
+  const { Registration, isPending } = useUserRegistration();
+
+  const onSubmit = handleSubmit(async (data) => {
+    console.log(data);
+    Registration({ registrationData: data });
+    toast.success("Registration Success");
+  });
 
   return (
     <div className="flex w-full  justify-center px-5 md:px-20 py-16 shadow-lg rounded-lg">
@@ -37,8 +35,8 @@ export default function Form() {
             Full Name
           </label>
 
-          <div className="lg:w-8/12 w-full flex flex-row md:flex-col lg:flex-row gap-2 lg:gap-6 lg:ml-10 md:ml-0  ">
-            <div className="w-full flex flex-col lg:w-7/12">
+          <div className="w-full md:w-8/12 flex flex-col lg:flex-row gap-2 lg:gap-6 lg:ml-10 md:ml-0  ">
+            <div className="w-10/12 md:w-11/12 flex flex-col lg:w-7/12">
               <input
                 type="text"
                 className="w-full flex-grow   px-3 py-2  border border-gray-300 focus:outline-blue-300 font-poppins rounded-lg"
@@ -54,7 +52,7 @@ export default function Form() {
               )}
             </div>
 
-            <div className="w-full flex flex-col lg:w-1/2">
+            <div className="w-10/12 md:w-11/12 flex flex-col lg:w-1/2">
               <input
                 type="text"
                 className="w-full   px-3 py-2 border border-gray-300 focus:outline-blue-300 font-poppins rounded-lg"
@@ -75,7 +73,7 @@ export default function Form() {
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             Name with initials
           </label>
-          <div className="flex flex-col lg:w-1/3  lg:ml-10 md:ml-0">
+          <div className="flex flex-col w-4/5 lg:w-1/3 md:w-3/5  lg:ml-10 md:ml-0">
             <input
               type="text"
               className="w-full   lg:w-full px-3 py-2 border border-gray-300 focus:outline-blue-300 font-poppins rounded-lg"
@@ -101,7 +99,7 @@ export default function Form() {
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             University ID
           </label>
-          <div className="flex flex-col lg:w-1/3  lg:ml-10 md:ml-0">
+          <div className="flex flex-col w-4/5 lg:w-1/3 md:w-3/5  lg:ml-10 md:ml-0">
             <input
               className="w-full  lg:w-full px-3 py-2 border border-gray-300 focus:outline-blue-300 font-poppins rounded-lg"
               placeholder="University ID"
@@ -135,7 +133,7 @@ export default function Form() {
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             Contact No (WhatsApp)
           </label>
-          <div className="flex flex-col lg:w-1/3  lg:ml-10 md:ml-0">
+          <div className="flex w-4/5 flex-col md:w-3/5 lg:w-1/3  lg:ml-10 md:ml-0">
             <input
               type="text"
               className="w-full  lg:w-full px-3 py-2 border border-gray-300 focus:outline-blue-300 font-poppins rounded-lg"
@@ -165,7 +163,7 @@ export default function Form() {
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             Email
           </label>
-          <div className="flex flex-col lg:w-1/3  lg:ml-10 md:ml-0">
+          <div className="flex w-4/5 flex-col md:w-3/5 lg:w-1/3  lg:ml-10 md:ml-0">
             <input
               type="email"
               className="w-full  lg:w-full px-3 py-2 border border-gray-300 focus:outline-blue-300 font-poppins rounded-lg"
@@ -192,9 +190,9 @@ export default function Form() {
             Degree
           </label>
 
-          <div className="flex flex-col lg:w-1/3  lg:ml-10 md:ml-0">
+          <div className="flex w-4/5 flex-col lg:w-1/3 md:w-3/5 lg:ml-10 md:ml-0">
             <select
-              className="w-full  px-3 py-2 border border-gray-300 focus:outline-blue-300 font-poppins rounded-lg"
+              className="w-full   px-3 py-2 border border-gray-300 focus:outline-blue-300 font-poppins rounded-lg"
               {...register("degree", { required: "Degree is required" })}
             >
               <option value="">None</option>
@@ -250,7 +248,7 @@ export default function Form() {
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             Department
           </label>
-          <div className="flex flex-col lg:w-1/3  lg:ml-10 md:ml-0">
+          <div className="flex flex-col  w-4/5 lg:w-1/3 md:w-3/5 lg:ml-10 md:ml-0">
             <select
               className="w-full  px-3 py-2 border border-gray-300 focus:outline-blue-300 font-poppins rounded-lg"
               {...register("department", {
@@ -312,7 +310,7 @@ export default function Form() {
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             Upload your CV (in PDF form)
           </label>
-          <div className="lg:w-1/3  lg:ml-10 md:ml-0">
+          <div className="lg:w-1/3 w-4/5 md:w-3/5 lg:ml-10 md:ml-0">
             <Input
               className="w-full    border-gray-300 rounded-lg"
               type="file"
@@ -336,7 +334,7 @@ export default function Form() {
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             Upload a Formal Photo of Yourself
           </label>
-          <div className="lg:w-1/3  lg:ml-10 md:ml-0">
+          <div className="lg:w-1/3 w-4/5 md:w-3/5 lg:ml-10 md:ml-0">
             <Input
               className="w-full   border-gray-300 rounded-lg"
               type="file"
@@ -358,11 +356,19 @@ export default function Form() {
         </div>
 
         {/* Register Button */}
-        <div className="flex justify-end mt-6">
+        <div className="flex  justify-center md:justify-end mt-6">
           <button
             type="submit"
-            className={`w-full md:w-1/3 lg:w-1/4 p-3 bg-[#0c2735] text-white font-bold rounded-full `}
+            className={`w-4/5 md:w-1/3 lg:w-1/4 p-3 bg-[#0c2735] text-white font-bold rounded-full `}
           >
+            {/* <div className="w-full flex justify-center items-center">
+              <Image
+                src="/spinner/loading.svg"
+                width={28}
+                height={28}
+                alt="spinner"
+              />
+            </div> */}
             Register
           </button>
         </div>
