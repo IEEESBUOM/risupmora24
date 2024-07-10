@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "precommit": "lint-staged"
   },
   "dependencies": {
     "@prisma/client": "^5.15.0",
@@ -46,7 +47,7 @@
     "typescript": "^5"
   },
   "lint-staged": {
-    "*.ts": "eslint --cache --fix",
-    "*.tsx": "eslint --cache --fix"
+    "*.js": "eslint --fix",
+    "*.css": "stylelint --fix"
   }
 }
