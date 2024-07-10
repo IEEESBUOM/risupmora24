@@ -20,7 +20,9 @@ const config = {
     extend: {
       boxShadow: {
         "custom-shadow": "5px 10px 18px #888888",
+
         custom: "5px 5px 10px #b9bbbb",
+
       },
       colors: {
         "stv-yellow": "#f1c232",
@@ -94,9 +96,11 @@ const config = {
         poppins: ["Poppins", "sans-serif"],
         quicksand: ["Quicksand", "sans-serif"],
         roboto: ["Roboto", "sans-serif"],
+
       },
       spacing: {
         "45": "45%",
+
       },
     },
   },
