@@ -20,8 +20,16 @@ const config = {
     extend: {
       boxShadow: {
         "custom-shadow": "5px 10px 18px #888888",
+
+        custom: "5px 5px 10px #b9bbbb",
+
       },
       colors: {
+        "stv-yellow": "#f1c232",
+        "stv-blue": "#28a8e0",
+        "stv-dark-blue": "#0c2735",
+        "stv-green": "#1da518",
+        "stv-gray": "#f4f4f4",
         "custom-black": "#112735",
         "custom-light-blue": "#29A7E1",
         "custom-yellow": "#F1C332",
@@ -88,6 +96,11 @@ const config = {
         poppins: ["Poppins", "sans-serif"],
         quicksand: ["Quicksand", "sans-serif"],
         roboto: ["Roboto", "sans-serif"],
+
+      },
+      spacing: {
+        "45": "45%",
+
       },
     },
   },

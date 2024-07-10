@@ -1,7 +1,12 @@
 import React from "react";
+import StudentView from "./components/StudentView";
 
-const StudentView = () => {
-  return <div>StudentView</div>;
+const Student = () => {
+  return (
+    <div>
+      <StudentView />
+    </div>
+  );
 };
 
-export default StudentView;
+export default Student;
