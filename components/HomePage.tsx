@@ -27,7 +27,7 @@ const contactUsRef = useRef<HTMLDivElement>(null);
 
       <Navbar sectionRefs={sectionRefs}/>
       <SideNavbar/>
-      <div className=" fixed bottom-0 bg-custom-yellow w-full  h-4">
+      <div className=" fixed bottom-0 bg-custom-yellow w-full z-40 h-4">
 
       </div>
       <div ref={heroSectionRef} >
