@@ -9,6 +9,8 @@ import Footer from "./Footer";
 import Navbar from "./Navbar";
 import { MutableRefObject } from 'react';
 import SideNavbar from "./ui/SideNavbar";
+import { useSession, signIn, signOut } from 'next-auth/react';
+
 
 const HomePage = () => {
   const heroSectionRef = useRef<HTMLDivElement>(null);
@@ -21,13 +23,16 @@ const contactUsRef = useRef<HTMLDivElement>(null);
     timelineRef,
     contactUsRef
   }
+  const { data: session, status } = useSession();
+  const loading = status === "loading";
 
   return (
     <div >
 
+
       <Navbar sectionRefs={sectionRefs}/>
       <SideNavbar/>
-      <div className=" fixed bottom-0 bg-custom-yellow w-full  h-4">
+      <div className=" fixed bottom-0 bg-custom-yellow w-full z-40 h-4">
 
       </div>
       <div ref={heroSectionRef} >

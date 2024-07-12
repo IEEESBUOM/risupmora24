@@ -20,6 +20,7 @@ const buttonVariants = cva(
           "bg-[#0c2735] text-white font rounded-[10px] border-none  cursor-pointer z-20 py-2.5 px-7",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        auth: "bg-custom-black text-white font-bold sm:h-10 rounded-full  h-12 w-72 sm:w-80 ",
       },
       size: {
         default: "",

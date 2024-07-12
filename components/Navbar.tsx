@@ -30,6 +30,7 @@ import {
 import { cn } from "@/lib/utils";
 import PrimaryButtonSmall from "./ui/PrimaryButtonSmall";
 import HamburgerButton from "./ui/HamburgerButton";
+import { signOut, useSession, } from "next-auth/react";
 
 interface SectionRefs {
   heroSectionRef: MutableRefObject<HTMLDivElement | null>;
@@ -43,6 +44,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   const pathname = usePathname();
   const [active, setActive] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     const handleResize = () => {
@@ -107,7 +109,6 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
 
   return (
     <div className=" fixed  grid w-full bg-white   sm:overflow-hidden  sm:h-24    max-md:max-w-full z-20   ">
-     
       <div className="flex sm:h-[90px] h-[65px]  justify-between sm:justify-around font-poppins  lg:px-24   ">
         <div
           className="z-20  sm:grid content-center w-28 cursor-pointer hidden   "
@@ -122,12 +123,12 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
             quality={100}
           />
         </div>
-        <div onClick={hamburgerClick}  className="grid content-center cursor-pointer sm:hidden">
+        <div
+          onClick={hamburgerClick}
+          className="grid content-center cursor-pointer sm:hidden"
+        >
           <HamburgerButton />
         </div>
-
-        
-
 
         {/* desktop view */}
         <NavigationMenu className="max-sm:hidden">
@@ -195,11 +196,18 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
           </NavigationMenuList>
         </NavigationMenu>
 
-        
-
-        <Link href="/auth/signin" passHref className=" grid ">
-          <PrimaryButtonSmall text="Sign In" />
-        </Link>
+        {status == "authenticated" ? (
+          
+            <div className="grid " onClick={()=>signOut()}>
+              <PrimaryButtonSmall  text="Sign Out" />
+            </div>
+          
+          
+        ) : (
+          <Link href="/auth/signin" passHref className=" grid ">
+            <PrimaryButtonSmall text="Sign In" />
+          </Link>
+        )}
       </div>
 
       <div
@@ -211,7 +219,8 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
       ></div>
 
       {/* mobile view */}
-      {isMobileMenuOpen && <NavigationMenu className="sm:hidden  mt-[65px]  absolute grid justify-self-center    ">
+      {isMobileMenuOpen && (
+        <NavigationMenu className="sm:hidden  mt-[65px]  absolute grid justify-self-center    ">
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuLink
@@ -275,7 +284,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
-        }
+      )}
     </div>
   );
 };

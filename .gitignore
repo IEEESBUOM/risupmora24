@@ -34,3 +34,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.eslintcache
+
+# Ignore the package-lock.json file
+package-lock.json
