@@ -102,6 +102,7 @@ const config = {
         "45": "45%",
 
       },
+
     },
   },
   plugins: [require("tailwindcss-animate")],
