@@ -1,9 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, set } from "react-hook-form";
 import { IoMdEyeOff,IoMdEye } from "react-icons/io";
+import toast from "react-hot-toast";
+import { redirect, useRouter } from "next/navigation";
+import PageLoader from "../../../components/PageLoader";
+import { useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
+
+
 
 
 const SignIn = () => {
@@ -15,16 +22,107 @@ const SignIn = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    //sign up logic here
-  };
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
+  useEffect(() => {
+    setLoading(true);
+    
+    async function checkSession() {
+      console.log(status,session)
+      
+      
+      
+      if (status === "unauthenticated") {
+        setLoading(false);
+        return;
+      }
+
+      // if (status === "authenticated") {
+      //   const res = await fetch("/api/v1/user/getOneUser", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({
+      //       email: session.user?.email,
+      //     }),
+      //   });
+      //   if (!res.ok) {
+         
+      //     return;
+      //   }
+      //   const { data } = await res.json();
+      //   if (!data) return;
+
+       
+        
+        
+      // }
+      if(status==="authenticated"){
+        router.push("/")
+      }
+    }
+    checkSession();
+  }, [status, session, router]);
+
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    
+    toast.promise(
+      new Promise<void>(async (resolve, reject) => {
+        fetch("/api/v1/user/signin", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then(async (res) => {
+            if (res.ok) {
+              console.log(data.email,data.password)
+              const result = await signIn("credentials", {
+                redirect: false,
+                email: data.email,
+                password: data.password,
+              });
+              if(result?.ok){
+                router.push("/")
+              } 
+              
+              resolve();
+            } else {
+              res.json().then((data) => {
+                setErrorMessage(data.message);
+                reject();
+                return;
+              });
+            }
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      }),
+      {
+        loading: "Signing in...",
+        success: "Signed in successfully",
+        error: "Failed to sign in",
+      }
+    );
+   
+    
+  };
+  
+
   return (
-    <form
+    <>
+    {loading && <PageLoader />}
+
+<form
       onSubmit={handleSubmit(onSubmit)}
       className="grid font-poppins place-self-center  "
     >
@@ -36,7 +134,7 @@ const SignIn = () => {
           Email
         </label>
         <input
-          {...register("email")}
+          {...register("email",{required:true})}
           type="email"
           name="email"
           placeholder="Enter your email"
@@ -55,12 +153,12 @@ const SignIn = () => {
         </label>
         <div className="relative">
         <input
-          {...register("password")}
+          {...register("password",{required:true})}
           type={passwordVisible ? "text" : "password"}
           name="password"
           placeholder="Enter your passsword"
           // required
-          id="passsword"
+          id="password"
           className="w-full py-4 sm:py-3 pl-5 border-transparent rounded-full border-gray-300  border-2 placeholder:text-stone-500"
           style={{
             background: `linear-gradient(white, white) padding-box, 
@@ -97,6 +195,10 @@ const SignIn = () => {
         <Button variant={"auth"}>Sign In</Button>
       </div>
     </form>
+
+
+    </>
+    
   );
 };
 

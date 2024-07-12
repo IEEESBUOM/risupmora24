@@ -1,3 +1,4 @@
+
 // import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import QueryProvider from "@/provider/QueryProvider";
@@ -5,6 +6,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import TostifyProvider from "@/provider/TostifyProvider";
+
+import AuthProvider from "./AuthProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -46,10 +49,12 @@ export default function RootLayout({
       <body>
         {/* <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools initialIsOpen={false} /> */}
+          <AuthProvider >
         <QueryProvider>
           {children}
           <TostifyProvider />
         </QueryProvider>
+        </AuthProvider>
         {/* </QueryClientProvider> */}
       </body>
     </html>
