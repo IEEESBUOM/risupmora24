@@ -28,21 +28,7 @@ const contactUsRef = useRef<HTMLDivElement>(null);
 
   return (
     <div >
-    {/* <div>
-      {!session && (
-        <>
-          <h1>You are not signed in</h1>
-          <p>{status}</p>
-          <button onClick={() => signIn('google')}>Sign in</button>
-        </>
-      )}
-      {session && (
-        <>
-          <h1>Welcome, {session.user?.name}</h1>
-          <button onClick={() => signOut()}>Sign out</button>
-        </>
-      )}
-    </div> */}
+
 
       <Navbar sectionRefs={sectionRefs}/>
       <SideNavbar/>
