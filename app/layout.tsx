@@ -4,6 +4,7 @@ import TostifyProvider from "@/provider/TostifyProvider";
 import AuthProvider from "./AuthProvider";
 import { Metadata } from "next";
 import { Inter, Poppins, Quicksand, Roboto } from "next/font/google";
+import { Analytics } from '@vercel/analytics/react';
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({ weight: ["400", "500", "600"], subsets: ["latin"] });
@@ -46,6 +47,7 @@ export default function RootLayout({
         <AuthProvider>
           <QueryProvider>
             {children}
+            <Analytics />
             <TostifyProvider />
           </QueryProvider>
         </AuthProvider>
