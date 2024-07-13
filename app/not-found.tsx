@@ -13,7 +13,7 @@ function NotFound() {
             <h1>404</h1>
           </div>
           <p className={styles.fadeInText}>
-            Oops! The page you're looking for doesn't exist.
+            Oops! The page you`&apos;` re looking for doesn`&apos;`t exist.
           </p>
           <a href="/" className={styles.backButton}>
             Go back to Home
