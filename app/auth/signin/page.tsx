@@ -33,7 +33,7 @@ const SignIn = () => {
     setLoading(true);
     
     async function checkSession() {
-      console.log(status,session)
+   
       
       
       
