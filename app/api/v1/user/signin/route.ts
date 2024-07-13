@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-
 import { comparePassword } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
@@ -18,7 +17,7 @@ export async function POST(req: NextRequest) {
         email,
       },
     });
-    if (!data) {
+    if (!data || !data.password) {
       return NextResponse.json(
         { message: "Invalid user name or password" },
         { status: 404 }
@@ -27,7 +26,7 @@ export async function POST(req: NextRequest) {
 
     const isMatch = await comparePassword(password, data.password);
 
-    if (isMatch) {
+    if (!isMatch) {
       return NextResponse.json(
         { message: "Invalid user name or password" },
         { status: 404 }
