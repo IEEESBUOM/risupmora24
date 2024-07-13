@@ -1,59 +1,57 @@
-
 import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
-export async function POST (req: NextRequest, res: NextResponse) {
-  const { token } = await req.json();
-  console.log(token)
 
-  if (!token || typeof token !== 'string') {
-    return NextResponse.json({ message: 'verification failed' }, { status: 400 });
-  }
+export async function POST(req: NextRequest) {
+  try {
+    const { token } = await req.json();
+  
 
-  const user = await prisma.user.findFirst({
-    where: { verificationToken: token },
-  });
+    if (!token || typeof token !== 'string') {
+        console.log('verification failed');
+      return NextResponse.json({ message: 'verification failed' }, { status: 400 });
+    }
 
-  if (!user) {
-    return NextResponse.json({ message: 'verification failed' }, { status: 400 });
-  }
+    const verificationToken = await prisma.verificationToken.findFirst({
+      where: { token },
+    });
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: {
-      emailVerified: new Date(),
-      verificationToken: null,
-      emailVerifyStatus:true
-    },
-  });
+    if (!verificationToken) {
+        console.log('verification failed')
+      return NextResponse.json({ message: 'verification failed' }, { status: 400 });
+    }
+  
+
+    const isTokenValid = (token==verificationToken.token);
+
+    if (!isTokenValid) {
+        console.log('verification failed    ')
+      return NextResponse.json({ message: 'verification failed' }, { status: 400 });
+    }
+
+    if (new Date() > verificationToken.expires) {
+      return NextResponse.json({ message: 'Token expired' }, { status: 400 });
+    }
+
+    await prisma.user.update({
+      where: { email: verificationToken.identifier },
+      data: { emailVerified: new Date(), emailVerifyStatus: true },
+    });
+
+    await prisma.verificationToken.delete({
+      where: {
+        identifier_token: {
+          identifier: verificationToken.identifier,
+          token: verificationToken.token,
+        },
+      },
+    });
 
     return NextResponse.json({ message: 'Email verified successfully' }, { status: 200 });
+  } catch (e) {
+    console.log(e);
+    return NextResponse.json({ message: 'Server error' }, { status: 500 });
+  }
 }
-
-// export  async function POST(req: NextApiRequest, res: NextApiResponse) => {
-//     console.log("ashan")
-//   const { token } = req.query;
-
-//   if (!token || typeof token !== 'string') {
-//     return res.status(400).json({ message: 'Invalid token' });
-//   }
-
-//   const user = await prisma.user.findFirst({
-//     where: { verificationToken: token },
-//   });
-
-//   if (!user) {
-//     return res.status(400).json({ message: 'Invalid token' });
-//   }
-
-//   await prisma.user.update({
-//     where: { id: user.id },
-//     data: {
-//       emailVerified: new Date(),
-//       verificationToken: null,
-//     },
-//   });
-
-//   res.status(200).json({ message: 'Email verified successfully' });
-// };
