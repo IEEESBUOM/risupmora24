@@ -48,7 +48,7 @@ export default function Page() {
           }),
           {
             loading: "Registering...",
-            success: "Registered successfully",
+            success: "Registered successfully... Please check your email to verify your account",
             error: "Failed to register"
           }
         )
