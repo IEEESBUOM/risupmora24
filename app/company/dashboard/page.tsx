@@ -50,6 +50,12 @@ const initialParticipants = [
     allocatedTime: "10:00 AM - 11:00 AM",
     attended: true,
   },
+  {
+    name: "John Doe",
+    degree: "BSc. Computer Science",
+    allocatedTime: "10:00 AM - 11:00 AM",
+    attended: false,
+  }
 ];
 
 const Page = () => {
