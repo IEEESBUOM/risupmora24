@@ -1,6 +1,62 @@
-import React from "react";
+"use client";
+
+import React, { use, useEffect, useState } from "react";
+import { getCandidates } from "@/service/getCandidates";
+import { Candidate } from "@/Type";
 
 function RegisterCandidate() {
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
+  const [filteredCandidates, setFilteredCandidates] = useState<Candidate[]>([]);
+  const [selectedDepartment, setSelectedDepartment] = useState<string>("");
+  const [searchIndex, setSearchIndex] = useState<string>("");
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getCandidates();
+        if (response && response.data) {
+          setCandidates(response.data); // Set candidates array from response.data
+          setFilteredCandidates(response.data); // Initialize filtered candidates
+        } else {
+          console.error("Failed to fetch candidates");
+          // Handle the error condition here
+        }
+      } catch (error) {
+        console.error("Error fetching candidates:", error);
+        // Handle the error condition here
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    // Filter candidates based on selected department and search index
+    let filtered = candidates;
+    if (selectedDepartment) {
+      filtered = filtered.filter(
+        (candidate) => candidate.department === selectedDepartment
+      );
+    }
+    if (searchIndex) {
+      filtered = filtered.filter((candidate) =>
+        candidate.universityID.toLowerCase().includes(searchIndex.toLowerCase())
+      );
+    }
+    setFilteredCandidates(filtered);
+  }, [candidates, selectedDepartment, searchIndex]);
+
+  const handleDepartmentChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSelectedDepartment(event.target.value);
+  };
+
+  const handleSearchIndexChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchIndex(event.target.value);
+  };
+  console.log(candidates);
   return (
     <div className="p-5">
       <div className="flex flex-col md:flex-row justify-end gap-4 mb-5">
@@ -9,6 +65,8 @@ function RegisterCandidate() {
             className="form-input w-full p-2 border border-gray-300 rounded-l-md text-sm md:text-base"
             type="search"
             placeholder="Search By Index"
+            value={searchIndex}
+            onChange={handleSearchIndexChange}
           />
           <button className="btn btn-success p-2 bg-green-500 text-white rounded-r-md">
             <svg
@@ -28,10 +86,16 @@ function RegisterCandidate() {
         style={{ margin: "0 2%" }}
       >
         <div className="text-blue-500 mb-4 border-b pb-2 flex flex-col md:flex-row justify-between items-start md:items-center">
-          <span className="text-lg mb-2 md:mb-0">
-            Number of candidates - 2
-          </span>
-          <select className="form-select text-blue-500 p-1 md:p-2 border border-gray-300 rounded-md text-sm md:text-base w-full md:w-auto">
+          <div className="text-blue-500 mb-4  pb-2 flex flex-col md:flex-row justify-between items-start md:items-center">
+            <span className="text-lg mb-2 md:mb-0">
+              Number of candidates - {filteredCandidates.length}
+            </span>
+          </div>
+          <select
+            className="form-select text-blue-500 p-1 md:p-2 border border-gray-300 rounded-md text-sm md:text-base w-full md:w-auto"
+            value={selectedDepartment}
+            onChange={handleDepartmentChange}
+          >
             <option value="sort-by">Sort By Department</option>
             <option value="Bio Medical Engineering">
               Bio Medical Engineering
@@ -75,9 +139,12 @@ function RegisterCandidate() {
             </option>
           </select>
         </div>
-        <div className="bg-red-100 text-red-700 p-2 rounded mb-4 text-center text-sm md:text-base">
-          No data found!
-        </div>
+
+        {filteredCandidates.length === 0 && selectedDepartment && (
+          <div className="bg-red-100 text-red-700 p-2 rounded mb-4 text-center text-sm md:text-base">
+            No data found.
+          </div>
+        )}
         <div className="overflow-x-auto">
           <table className="table-auto w-full text-gray-700 text-sm md:text-base">
             <thead>
@@ -90,22 +157,15 @@ function RegisterCandidate() {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b">
-                <td className="p-2">200336M</td>
-                <td className="p-2">T.S.Lakshan</td>
-                <td className="p-2">Computer Science & Engineering</td>
-                <td className="p-2">shanukalakshan9817@gmail.com</td>
-                <td className="p-2">0766723788</td>
-              </tr>
-              
-              <tr className="border-b">
-                <td className="p-2">200708G</td>
-                <td className="p-2">R. Y. Wickramage</td>
-                <td className="p-2">Computer Science & Engineering</td>
-                <td className="p-2">ravinduya-siska@gmail.com</td>
-                <td className="p-2">0769462759</td>
-              </tr>
-              
+              {filteredCandidates.map((candidate) => (
+                <tr key={candidate.candidate_id} className="border-b">
+                  <td className="p-2">{candidate.universityID}</td>
+                  <td className="p-2">{candidate.nameWithInitials}</td>
+                  <td className="p-2">{candidate.department}</td>
+                  <td className="p-2">{candidate.user.email}</td>
+                  <td className="p-2">{candidate.contactNo}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
