@@ -14,15 +14,13 @@ function RegisterCandidate() {
       try {
         const response = await getCandidates();
         if (response && response.data) {
-          setCandidates(response.data); // Set candidates array from response.data
-          setFilteredCandidates(response.data); // Initialize filtered candidates
+          setCandidates(response.data); 
+          setFilteredCandidates(response.data); 
         } else {
           console.error("Failed to fetch candidates");
-          // Handle the error condition here
         }
       } catch (error) {
         console.error("Error fetching candidates:", error);
-        // Handle the error condition here
       }
     };
 
@@ -30,7 +28,6 @@ function RegisterCandidate() {
   }, []);
 
   useEffect(() => {
-    // Filter candidates based on selected department and search index
     let filtered = candidates;
     if (selectedDepartment) {
       filtered = filtered.filter(

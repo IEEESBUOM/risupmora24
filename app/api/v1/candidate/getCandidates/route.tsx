@@ -15,12 +15,12 @@ type Responce = {
   email: string;
 };
 
-export async function GET(res: NextResponse) {
+export async function GET(req: NextRequest) {
   try {
     const data = await prisma.candidate.findMany({
-        include: {
-            user: true,
-        }
+      include: {
+        user: true,
+      },
     });
     return NextResponse.json({ data });
   } catch (e) {
