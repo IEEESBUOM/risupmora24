@@ -4,27 +4,85 @@
 
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { RegistrationFormDataType } from "@/Type";
 import { useUserRegistration } from "@/hooks/user/useUserRegistration";
 import toast from "react-hot-toast";
+import { useParams } from "next/navigation";
+import { useState } from "react";
 import Image from "next/image";
-
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 export default function Form() {
   const {
     register,
     setValue,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<RegistrationFormDataType>();
+
+  const session = useSession();
+
+  const [uploading, setUploading] = useState<boolean>(false);
+  const params = useParams();
+  const userId = params.id as string;
+  const router = useRouter();
 
   const { Registration, isPending } = useUserRegistration();
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
-    Registration({ registrationData: data });
+    // Replace with actual user ID
+    setUploading(true);
+    let cvurl,
+      imageurl = "";
+    if (data.cv[0]) {
+      cvurl = await uploadFile(data.cv[0], userId, "cv");
+    }
+
+    if (data.photo[0]) {
+      imageurl = await uploadFile(data.photo[0], userId, "image");
+    }
+    const userData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      nameWithInitials: data.nameWithInitials,
+      universityID: data.universityID,
+      contactNo: data.contactNo,
+      degree: data.degree,
+      department: data.department,
+      cvUrl: cvurl,
+      imgUrl: imageurl,
+      userId: userId,
+    };
+
+    console.log(cvurl, imageurl);
+
+    Registration({ registrationData: userData });
     toast.success("Registration Success");
+    reset();
+    setUploading(false);
+    router.push("/");
   });
+
+  const uploadFile = async (file: File, userId: string, fileType: string) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("userId", userId);
+    formData.append("fileType", fileType);
+
+    const response = await fetch("/api/v1/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return data.url;
+    } else {
+      alert("Upload failed");
+    }
+  };
 
   return (
     <div className="flex w-full  justify-center px-5 md:px-20 py-16 shadow-lg rounded-lg">
@@ -148,6 +206,10 @@ export default function Form() {
                   value: 10,
                   message: "Contact number is not valid",
                 },
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: "Contact number must be numeric",
+                },
               })}
             />
             {errors.contactNo && (
@@ -166,6 +228,8 @@ export default function Form() {
           <div className="flex w-4/5 flex-col md:w-3/5 lg:w-1/3  lg:ml-10 md:ml-0">
             <input
               type="email"
+              disabled
+              value={session.data?.user?.email as string}
               className="w-full  lg:w-full px-3 py-2 border border-gray-300 focus:outline-blue-300 font-poppins rounded-lg"
               placeholder="Email"
               {...register("email", {
@@ -313,6 +377,7 @@ export default function Form() {
           <div className="lg:w-1/3 w-4/5 md:w-3/5 lg:ml-10 md:ml-0">
             <Input
               className="w-full    border-gray-300 rounded-lg"
+              // onChange={handleFileChange}
               type="file"
               {...register("cv", {
                 required: "CV is required",
@@ -361,15 +426,18 @@ export default function Form() {
             type="submit"
             className={`w-4/5 md:w-1/3 lg:w-1/4 p-3 bg-[#0c2735] text-white font-bold rounded-full `}
           >
-            {/* <div className="w-full flex justify-center items-center">
-              <Image
-                src="/spinner/loading.svg"
-                width={28}
-                height={28}
-                alt="spinner"
-              />
-            </div> */}
-            Register
+            {uploading || isPending ? (
+              <div className="w-full flex justify-center items-center">
+                <Image
+                  src="/spinner/loading.svg"
+                  width={28}
+                  height={28}
+                  alt="spinner"
+                />
+              </div>
+            ) : (
+              " Register"
+            )}
           </button>
         </div>
         {/* <div className="mt-5 bg-red-200 rounded-lg">
