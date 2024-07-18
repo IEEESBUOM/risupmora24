@@ -3,7 +3,7 @@ export type RegistrationFormDataType = {
   lastName: string;
   nameWithInitials: string;
   universityID: string;
-  contactNo: number;
+  contactNo: string;
   degree: string;
   department: string;
   cv: FileList;
@@ -11,23 +11,19 @@ export type RegistrationFormDataType = {
   email: string;
 };
 
-export type User = {
-  id: string;
-  email: string;
-  name: string;
-};
-
-export type Candidate={
- candidate_id: string;
+export type RegistrationFormDataSendType = {
   firstName: string;
   lastName: string;
   nameWithInitials: string;
   universityID: string;
-  contactNo: number;
-  department: string;
+  contactNo: string;
   degree: string;
+  department: string;
   cvUrl: string;
   imgUrl: string;
-  user: User;
+  userId: string;
 };
 
+export interface CV {
+  cv: FileList;
+}

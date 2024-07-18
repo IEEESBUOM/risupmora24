@@ -33,12 +33,13 @@ model Candidate {
   lastName         String?
   nameWithInitials String?
   universityID     String?      @unique
-  contactNo        Int?
+  contactNo        String?
   department       String?
   degree           String?
   cvUrl            String?
-  createdAt        DateTime?    @default(now())
-  updatedAt        DateTime?    @updatedAt
+  imgUrl           String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
   feedback         Feedback[]
   allocation       Allocation[]
   user             User         @relation(fields: [candidate_id], references: [id])
