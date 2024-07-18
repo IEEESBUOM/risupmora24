@@ -33,11 +33,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if(!data.emailVerifyStatus){
-        return NextResponse.json(
-            {message:"Please verify your email"},
-            {status:404}
-        )
+    if (!data.emailVerifyStatus) {
+      return NextResponse.json(
+        { message: "Please verify your email" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json({ message: "success" }, { status: 200 });
