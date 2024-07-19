@@ -8,7 +8,7 @@ import { RegistrationFormDataType } from "@/Type";
 import { useUserRegistration } from "@/hooks/user/useUserRegistration";
 import toast from "react-hot-toast";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -29,6 +29,10 @@ export default function Form() {
   const router = useRouter();
 
   const { Registration, isPending } = useUserRegistration();
+
+  // useEffect(() => {
+  //   setValue("email", session.data?.user?.email as string); // Set initial value for "email"
+  // }, [setValue]);
 
   const onSubmit = handleSubmit(async (data) => {
     // Replace with actual user ID
@@ -221,7 +225,7 @@ export default function Form() {
         </div>
 
         {/* Email */}
-        <div className="flex flex-wrap items-center mb-6">
+        {/* <div className="flex flex-wrap items-center mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             Email
           </label>
@@ -229,7 +233,7 @@ export default function Form() {
             <input
               type="email"
               disabled
-              value={session.data?.user?.email as string}
+              defaultValue={session.data?.user?.email as string}
               className="w-full  lg:w-full px-3 py-2 border border-gray-300 focus:outline-blue-300 font-poppins rounded-lg"
               placeholder="Email"
               {...register("email", {
@@ -246,7 +250,7 @@ export default function Form() {
               </div>
             )}
           </div>
-        </div>
+        </div> */}
 
         {/* Degree */}
         <div className="flex flex-wrap items-center mb-6">

@@ -48,15 +48,19 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({
-      user,
-      account,
-    }: {
-      user: any;
-      account: any;
-    }): Promise<boolean> {
-      return true;
-    },
+    // async signIn({
+    //   user,
+    //   account,
+    // }: {
+    //   user: any;
+    //   account: any;
+    // }): Promise<boolean> {
+    //   // if (user) {
+    //   //   return true;
+    //   // }
+
+    //   return true;
+    // },
 
     async session({ session, token }: { session: Session; token: JWT }) {
       session.user.email = token.email;
@@ -87,7 +91,7 @@ export const authOptions: NextAuthOptions = {
   },
 
   pages: {
-    signIn: "/auth/login",
+    signIn: "/auth/signin",
     signOut: "/auth/signout",
   },
   session: {
