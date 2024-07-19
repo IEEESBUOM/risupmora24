@@ -1,15 +1,12 @@
-import { RegistrationFormDataSendType, RegistrationFormDataType } from "@/Type";
+import { RegistrationFormDataType } from "@/Type";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export const userRegistration = async (data: RegistrationFormDataSendType) => {
+export const userRegistration = async (data: RegistrationFormDataType) => {
   console.log(data);
 
   try {
-    const response = await axios.post(
-      `${process.env.APP_URL}/api/v1/user/registration`,
-      data
-    );
+    const response = await axios.post("/api/v1/user/registration", data);
     if (response.data) {
       return response.data;
     }
