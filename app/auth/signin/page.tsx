@@ -190,7 +190,7 @@ const SignIn = () => {
         <div className="mb-4">
           <Link href="/auth/register">
             <div className="text-center text-xs font-semibold hover:underline">
-              If you don't have an account? register!
+              If you dont have an account? register!
             </div>
           </Link>
         </div>
