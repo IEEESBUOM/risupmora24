@@ -2,10 +2,10 @@ import React from "react";
 
 import { useMutation } from "@tanstack/react-query";
 import { userRegistration } from "@/service/userRegistration";
-import { RegistrationFormDataSendType, RegistrationFormDataType } from "@/Type";
+import { RegistrationFormDataType } from "@/Type";
 
 type RegistrationHookType = {
-  registrationData: RegistrationFormDataSendType;
+  registrationData: RegistrationFormDataType;
 };
 
 export const useUserRegistration = () => {

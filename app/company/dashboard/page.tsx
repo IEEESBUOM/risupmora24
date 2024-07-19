@@ -1,3 +1,4 @@
+import React from "react";
 import StudentNavbar from "@/components/StudentNavbar";
 import ParticipantTable from "@/components/ParticipantTable";
 
@@ -13,6 +14,7 @@ const Page = () => {
       </div>
     </div>
   );
+
 };
 
 export default Page;
