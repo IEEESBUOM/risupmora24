@@ -1,14 +1,17 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState,useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useForm, SubmitHandler, set } from "react-hook-form";
-import { IoMdEyeOff, IoMdEye } from "react-icons/io";
+import { IoMdEyeOff,IoMdEye } from "react-icons/io";
 import toast from "react-hot-toast";
 import { redirect, useRouter } from "next/navigation";
 import PageLoader from "../../../components/PageLoader";
 import { useSession } from "next-auth/react";
 import { signIn } from "next-auth/react";
+
+
+
 
 const SignIn = () => {
   type Inputs = {
@@ -26,41 +29,50 @@ const SignIn = () => {
   const [loading, setLoading] = useState(true);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  // useEffect(() => {
-  //   setLoading(true);
+  useEffect(() => {
+    setLoading(true);
+    
+    async function checkSession() {
+   
+      
+      
+      
+      if (status === "unauthenticated") {
+        setLoading(false);
+        return;
+      }
 
-  //   async function checkSession() {
-  //     if (status === "unauthenticated") {
-  //       setLoading(false);
-  //       return;
-  //     }
+      // if (status === "authenticated") {
+      //   const res = await fetch("/api/v1/user/getOneUser", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({
+      //       email: session.user?.email,
+      //     }),
+      //   });
+      //   if (!res.ok) {
+         
+      //     return;
+      //   }
+      //   const { data } = await res.json();
+      //   if (!data) return;
 
-  // if (status === "authenticated") {
-  //   const res = await fetch("/api/v1/user/getOneUser", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       email: session.user?.email,
-  //     }),
-  //   });
-  //   if (!res.ok) {
+       
+        
+        
+      // }
+      if(status==="authenticated"){
+        router.push("/")
+      }
+    }
+    checkSession();
+  }, [status, session, router]);
 
-  //     return;
-  //   }
-  //   const { data } = await res.json();
-  //   if (!data) return;
-
-  // }
-  // if (status === "authenticated") {
-  //   router.push("/");
-  // }
-  // }
-  //   checkSession();
-  // }, [status, session, router]);
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+    
     toast.promise(
       new Promise<void>(async (resolve, reject) => {
         fetch("/api/v1/user/signin", {
@@ -72,25 +84,16 @@ const SignIn = () => {
         })
           .then(async (res) => {
             if (res.ok) {
-              const signInData = await res.json();
-              console.log(signInData);
-              console.log(data.email, data.password);
+              console.log(data.email,data.password)
               const result = await signIn("credentials", {
+                redirect: false,
                 email: data.email,
                 password: data.password,
-                redirect: false,
               });
-              if (result?.ok) {
-                console.log(signInData.isCandidate);
-                console.log(signInData);
-                if (signInData.isCandidate) {
-                  console.log("candidate");
-                  router.push("/");
-                } else {
-                  router.push(`/candidate/registation/${signInData.userId}`);
-                  console.log("not candidate");
-                }
-              }
+              if(result?.ok){
+                router.push("/")
+              } 
+              
               resolve();
             } else {
               res.json().then((data) => {
@@ -110,87 +113,92 @@ const SignIn = () => {
         error: "Failed to sign in",
       }
     );
+   
+    
   };
+  
 
   return (
     <>
-      {/* {loading && <PageLoader />} */}
+    {loading && <PageLoader />}
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="grid font-poppins place-self-center  "
-      >
-        <h1 className=" text-center mb-6 font-medium text-neutral-800 text-3xl ">
-          Sign In
-        </h1>
-        <div className=" mb-6">
-          <label htmlFor="email" className="font-medium block mb-1">
-            Email
-          </label>
-          <input
-            {...register("email", { required: true })}
-            type="email"
-            name="email"
-            placeholder="Enter your email"
-            required
-            id="email"
-            className="w-full py-4 sm:py-3 pl-5 border-transparent rounded-full border-gray-300  border-2 placeholder:text-stone-500"
-            style={{
-              background: `linear-gradient(white, white) padding-box, 
+<form
+      onSubmit={handleSubmit(onSubmit)}
+      className="grid font-poppins place-self-center  "
+    >
+      <h1 className=" text-center mb-6 font-medium text-neutral-800 text-3xl ">
+        Sign In
+      </h1>
+      <div className=" mb-6">
+        <label htmlFor="email" className="font-medium block mb-1">
+          Email
+        </label>
+        <input
+          {...register("email",{required:true})}
+          type="email"
+          name="email"
+          placeholder="Enter your email"
+          required
+          id="email"
+          className="w-full py-4 sm:py-3 pl-5 border-transparent rounded-full border-gray-300  border-2 placeholder:text-stone-500"
+          style={{
+            background: `linear-gradient(white, white) padding-box, 
                      linear-gradient(90deg, rgba(241, 194, 50, 1) 5%, rgba(40, 168, 224, 1) 20%, rgba(12, 39, 53, 1) 40%, rgba(12, 39, 53, 1) 60%, rgba(40, 168, 224, 1) 80%, rgba(241, 194, 50, 1) 95%) border-box`,
-            }}
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="password" className="font-medium block mb-1">
-            Password
-          </label>
-          <div className="relative">
-            <input
-              {...register("password", { required: true })}
-              type={passwordVisible ? "text" : "password"}
-              name="password"
-              placeholder="Enter your passsword"
-              // required
-              id="password"
-              className="w-full py-4 sm:py-3 pl-5 border-transparent rounded-full border-gray-300  border-2 placeholder:text-stone-500"
-              style={{
-                background: `linear-gradient(white, white) padding-box, 
+          }}
+        />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="password" className="font-medium block mb-1">
+          Password
+        </label>
+        <div className="relative">
+        <input
+          {...register("password",{required:true})}
+          type={passwordVisible ? "text" : "password"}
+          name="password"
+          placeholder="Enter your passsword"
+          // required
+          id="password"
+          className="w-full py-4 sm:py-3 pl-5 border-transparent rounded-full border-gray-300  border-2 placeholder:text-stone-500"
+          style={{
+            background: `linear-gradient(white, white) padding-box, 
                      linear-gradient(90deg, rgba(241, 194, 50, 1) 5%, rgba(40, 168, 224, 1) 20%, rgba(12, 39, 53, 1) 40%, rgba(12, 39, 53, 1) 60%, rgba(40, 168, 224, 1) 80%, rgba(241, 194, 50, 1) 95%) border-box`,
-              }}
-            />
+          }}
+        />
 
-            <div
-              className="text-xs font-semibold cursor-pointer absolute right-4 top-1/2 transform -translate-y-1/2"
-              onClick={() => setPasswordVisible(!passwordVisible)}
-            >
-              {passwordVisible ? (
-                <IoMdEye size={26} />
-              ) : (
-                <IoMdEyeOff size={26} />
-              )}
-            </div>
+        
+        
+        
+        
+          <div
+            className="text-xs font-semibold cursor-pointer absolute right-4 top-1/2 transform -translate-y-1/2"
+            onClick={() => setPasswordVisible(!passwordVisible)}
+          >
+            {passwordVisible ? <IoMdEye size={26}/>: <IoMdEyeOff size={26} />}
           </div>
+          </div>
+      
+      </div>
+      {errorMessage && (
+        <div className="mb-4 text-red-500">
+          <p>{errorMessage}</p>
         </div>
-
       )}
       <div className="mb-4">
         <Link href="reset-password-request">
           <div className="text-center text-xs font-semibold hover:underline">
             Forgot password? Click Here!
-
-        {errorMessage && (
-          <div className="mb-4 text-red-500">
-            <p>{errorMessage}</p>
-
           </div>
-        )}
-        
-        <div className="mb-4  grid justify-center">
-          <Button variant={"auth"}>Sign In</Button>
-        </div>
-      </form>
+        </Link>
+      </div>
+      <div className="mb-4  grid justify-center">
+        <Button variant={"auth"}>Sign In</Button>
+      </div>
+    </form>
+
+
     </>
+    
   );
 };
 
