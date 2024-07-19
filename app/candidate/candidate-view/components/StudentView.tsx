@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import StudentFooter from "@/components/StudentFooter";
 import StudentNavbar from "@/components/StudentNavbar";
