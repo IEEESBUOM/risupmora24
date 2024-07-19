@@ -2,123 +2,40 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
+ 
 generator client {
   provider = "prisma-client-js"
 }
-
+ 
 model User {
-  id                   String                @id @default(cuid())
-  name                 String?
-  email                String                @unique
-  emailVerified        DateTime?
-  image                String?
-  accounts             Account[]
-  sessions             Session[]
-  Authenticator        Authenticator[]
-  password             String?
-  emailVerifyStatus    Boolean               @default(false)
-  createdAt            DateTime?             @default(now())
-  updatedAt            DateTime?             @updatedAt
-  candidate            Candidate?
-  company_cordnator    CompanyCordinator?
-  department_cordnator DepartmentCordinator?
-  panelist             Panelist?
-  admin                Admin?
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  Authenticator Authenticator[]
+  password      String?
+  emailVerifyStatus Boolean @default(false)
+  firstName      String?
+  lastName      String?
+  nameWithInitials    String?
+  universityID String?
+  contactNo  Int?
+  degree    String?
+  department String?
+  photo    String?
+  cv   String?
+  passwordResetToken  String? @default("")
+  passwordResetTokenExpire  DateTime @default(now())
+
+
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-
-model Candidate {
-  candidate_id     String       @unique
-  firstName        String?
-  lastName         String?
-  nameWithInitials String?
-  universityID     String?      @unique
-  contactNo        String?
-  department       String?
-  degree           String?
-  cvUrl            String?
-  imgUrl           String?
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
-  feedback         Feedback[]
-  allocation       Allocation[]
-  user             User         @relation(fields: [candidate_id], references: [id])
-}
-
-model CompanyCordinator {
-  cordinator_id String    @unique
-  company_id    String    @unique
-  createdAt     DateTime? @default(now())
-  updatedAt     DateTime? @updatedAt
-  user          User      @relation(fields: [cordinator_id], references: [id])
-  company       Company   @relation(fields: [company_id], references: [company_id])
-}
-
-model DepartmentCordinator {
-  cordinator_id String     @unique
-  department    Department
-  createdAt     DateTime?  @default(now())
-  updatedAt     DateTime?  @updatedAt
-  user          User       @relation(fields: [cordinator_id], references: [id])
-}
-
-model Panelist {
-  panelist_id   String       @unique
-  pannel_number Int?
-  company_id    String
-  createdAt     DateTime?    @default(now())
-  updatedAt     DateTime?    @updatedAt
-  user          User         @relation(fields: [panelist_id], references: [id])
-  company       Company      @relation(fields: [company_id], references: [company_id])
-  allocation    Allocation[]
-
-  @@unique([pannel_number, company_id])
-}
-
-model Admin {
-  admin_id String @unique
-
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-  user      User      @relation(fields: [admin_id], references: [id])
-}
-
-model Company {
-  company_id        String             @id @default(cuid())
-  company_name      String
-  company_logo      String?
-  CompanyCordinator CompanyCordinator?
-  panalist          Panelist[]
-  feedback          Feedback[]
-  allocation        Allocation[]
-}
-
-model Feedback {
-  feedback_id  String    @id @default(cuid())
-  feedback     String
-  candidate_id String
-  company_id   String
-  candidate    Candidate @relation(fields: [candidate_id], references: [candidate_id])
-  company      Company   @relation(fields: [company_id], references: [company_id])
-}
-
-model Allocation {
-  allocation_id          String    @id @default(cuid())
-  allocation_date        String
-  allocation_timeSlot    String
-  allocated_panel_number Int
-  attendance             Boolean   @default(false)
-  allocation_status      String
-  candidate_id           String
-  company_id             String
-  panelist_id            String
-  candidate              Candidate @relation(fields: [candidate_id], references: [candidate_id])
-  company                Company   @relation(fields: [company_id], references: [company_id])
-  panelist               Panelist  @relation(fields: [panelist_id], references: [panelist_id])
-
-  @@unique([allocated_panel_number, allocation_date, allocation_timeSlot, company_id])
-}
-
+ 
 model Account {
   userId            String
   type              String
@@ -131,33 +48,38 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+ 
   @@id([provider, providerAccountId])
 }
-
+ 
 model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-
+ 
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
-
+ 
   @@id([identifier, token])
 }
 
+
+
+
+
+ 
 // Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
@@ -168,47 +90,8 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
-
+ 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+ 
   @@id([userId, credentialID])
-}
-
-enum Department {
-  Department_of_Architecture
-  Department_of_Building_Economics
-  Department_of_Town_and_Country_Planning
-  Department_of_Integrated_Design
-  Department_of_Facilities_Management
-  Chemical_and_Process_Engineering
-  Civil_Engineering
-  Computer_Science_and_Engineering
-  Department_of_Languages
-  Earth_Resources_Engineering
-  Electrical_Engineering
-  Electronic_and_Telecommunication_Engineering
-  Material_Science_and_Engineering
-  Mechanical_Engineering
-  Mathematics
-  Textile_and_Apparel_Engineering
-  Trnsport_Management_and_Logistics_Engineering
-  Industrial_Management
-  Management_of_Technology
-  Decision_Science
-  Department_of_Information_Trchnology
-  Department_of_Interdisciplinary_Studies
-  Department_of_Computational_Mathematics
-  Anotomy
-  Biochemistry_and_Clinical_Chemistry
-  Physiology
-  Pharmacology
-  Microbiology_and_Parasitology
-  Community_Medicine_and_Family_Medicine
-  Pathology_and_Foransic_Medicine
-  Medicine_and_Mental_Health
-  Surgery_and_Anaesthesia
-  Obterics_and_Gynaecology
-  Pediatrics_and_Neonatology
-  Medicine_Education
-  Medical_Techonology
 }
