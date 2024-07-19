@@ -30,7 +30,8 @@ export async function POST(req: NextRequest) {
         candidate_id: data.id,
       },
     });
-
+    console.log(isCandidate);
+    console.log(password, data.password);
     const isMatch = await comparePassword(password, data.password);
 
     if (!isMatch) {
@@ -55,6 +56,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(signInData, { status: 200 });
   } catch (e) {
+    console.log("💕💕💕" + e);
     return NextResponse.json(
       { message: "error of the server" },
       { status: 500 }

@@ -8,9 +8,7 @@ export async function GET(req: NextRequest, { params }: any) {
     console.log(userId);
     const candidate = await prisma.candidate.findFirst({
       where: {
-        user: {
-          id: userId, // Match the user ID with the id in the User table
-        },
+        candidate_id: userId,
       },
       include: {
         user: true, // Optionally include user details if needed
@@ -27,6 +25,7 @@ export async function GET(req: NextRequest, { params }: any) {
 
     return NextResponse.json(candidate, { status: 200 });
   } catch (e) {
+    console.log("💕💕💕" + e);
     return NextResponse.json(
       { message: "error of the server" },
       { status: 500 }

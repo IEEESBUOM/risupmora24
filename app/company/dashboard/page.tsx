@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import StudentNavbar from "@/components/StudentNavbar";
 import React, { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -55,7 +55,7 @@ const initialParticipants = [
     degree: "BSc. Computer Science",
     allocatedTime: "10:00 AM - 11:00 AM",
     attended: false,
-  }
+  },
 ];
 
 const Page = () => {
@@ -73,6 +73,7 @@ const Page = () => {
   return (
     <div>
       <StudentNavbar />
+
       <div className="container mx-auto p-4">
         <Table className="w-full">
           <TableHeader className="bg-stv-dark-blue text-stv-yellow">
