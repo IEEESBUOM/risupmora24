@@ -1,24 +1,10 @@
 import prisma from "@/lib/prisma";
+import { RegistrationFormDataSendType } from "@/Type";
 import { NextRequest, NextResponse } from "next/server";
-
-type Request = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  nameWithInitials: string;
-  universityID: string;
-  contactNo: number;
-  degree: string;
-  department: string;
-  cv: FileList;
-  photo: FileList;
-  email: string;
-};
 
 export async function POST(req: NextRequest) {
   try {
     const {
-      id,
       firstName,
       lastName,
       nameWithInitials,
@@ -26,13 +12,12 @@ export async function POST(req: NextRequest) {
       contactNo,
       degree,
       department,
-      cv,
-      photo,
-      email,
-    }: Request = await req.json();
+      cvUrl,
+      imgUrl,
+      userId,
+    }: RegistrationFormDataSendType = await req.json();
 
     const data = {
-      id,
       firstName,
       lastName,
       nameWithInitials,
@@ -40,16 +25,24 @@ export async function POST(req: NextRequest) {
       contactNo,
       degree,
       department,
-      cv,
-      photo,
-      email,
+      cvUrl,
+      imgUrl,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
     };
-    console.log(data);
 
-    // const data = await prisma.user.findMany();
+    const response = await prisma.candidate.create({
+      data: data,
+    });
 
-    return NextResponse.json({ data });
+    console.log(response);
+
+    return NextResponse.json({ response });
   } catch (e) {
+    console.log(e);
     return NextResponse.json(
       { message: "error of the server" },
       { status: 500 }

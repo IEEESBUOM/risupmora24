@@ -17,13 +17,19 @@ export async function POST(req: NextRequest) {
         email,
       },
     });
-    console.log("data")
+
     if (!data || !data.password) {
       return NextResponse.json(
         { message: "Invalid user name or password" },
         { status: 404 }
       );
     }
+
+    const isCandidate = await prisma.candidate.findUnique({
+      where: {
+        candidate_id: data.id,
+      },
+    });
 
     const isMatch = await comparePassword(password, data.password);
 
@@ -34,14 +40,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if(!data.emailVerifyStatus){
-        return NextResponse.json(
-            {message:"Please verify your email"},
-            {status:404}
-        )
+    if (!data.emailVerifyStatus) {
+      return NextResponse.json(
+        { message: "Please verify your email" },
+        { status: 404 }
+      );
     }
 
-    return NextResponse.json({ message: "success" }, { status: 200 });
+    const signInData = {
+      isCandidate: isCandidate ? true : false,
+      userId: data.id,
+      message: "success",
+    };
+
+    return NextResponse.json(signInData, { status: 200 });
   } catch (e) {
     console.log("error")
     return NextResponse.json(

@@ -4,7 +4,7 @@ import TostifyProvider from "@/provider/TostifyProvider";
 import AuthProvider from "./AuthProvider";
 import { Metadata } from "next";
 import { Inter, Poppins, Quicksand, Roboto } from "next/font/google";
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({ weight: ["400", "500", "600"], subsets: ["latin"] });
@@ -27,20 +27,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
       <body
         className={`${inter.className} ${poppins.className} ${quicksand.className} ${roboto.className}`}
       >

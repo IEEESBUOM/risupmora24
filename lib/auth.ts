@@ -1,6 +1,3 @@
-
-
-
 import { NextAuthOptions, Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -10,11 +7,9 @@ import { JWT } from "next-auth/jwt";
 import prisma from "./prisma";
 import { compare } from "bcrypt";
 
-
-
 export async function comparePassword(password: string, hashPassword: string) {
   const isValid = await compare(password, hashPassword);
-  
+
   return isValid;
 }
 
@@ -39,11 +34,10 @@ export const authOptions: NextAuthOptions = {
         }
 
         const user = await prisma.user.findUnique({
-            where:{
-                email:credentials.email
-            }
-        })
-        
+          where: {
+            email: credentials.email,
+          },
+        });
 
         if (!user) {
           return null;
@@ -52,31 +46,29 @@ export const authOptions: NextAuthOptions = {
         return user;
       },
     }),
-
-
- 
   ],
   callbacks: {
-    async signIn({
-      user,
-      account,
-    }: {
-      user: any;
-      account: any;
-    }): Promise<boolean> {
-    
-      return true;
+    // async signIn({
+    //   user,
+    //   account,
+    // }: {
+    //   user: any;
+    //   account: any;
+    // }): Promise<boolean> {
+    //   // if (user) {
+    //   //   return true;
+    //   // }
+
+    //   return true;
+    // },
+
+    async session({ session, token }: { session: Session; token: JWT }) {
+      session.user.email = token.email;
+      session.user.name = token.name;
+      session.user.id = token.id;
+      session.user.token = token;
+      return session;
     },
-
-    
-    async session(params: { session: any; token: JWT; user: any }) {
-      
-
-      params.session.user.email = params.token.email;
-      params.session.user.name = params.token.name;
-      return params.session;
-    },
-
 
     async jwt(params: {
       token: any;
@@ -89,7 +81,7 @@ export const authOptions: NextAuthOptions = {
       if (params.user) {
         params.token.id = params.user._id;
         params.token.name = params.user.name;
-
+        params.token.id = params.user.id;
         // Handle user-related logic here
       } else {
         // Handle the case when the user is undefined
@@ -99,7 +91,7 @@ export const authOptions: NextAuthOptions = {
   },
 
   pages: {
-    signIn: "/auth/login",
+    signIn: "/auth/signin",
     signOut: "/auth/signout",
   },
   session: {
