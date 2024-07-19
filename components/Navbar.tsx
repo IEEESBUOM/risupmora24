@@ -30,7 +30,8 @@ import {
 import { cn } from "@/lib/utils";
 import PrimaryButtonSmall from "./ui/PrimaryButtonSmall";
 import HamburgerButton from "./ui/HamburgerButton";
-import { signOut, useSession, } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import NavBarProfile from "./NavBarProfile";
 
 interface SectionRefs {
   heroSectionRef: MutableRefObject<HTMLDivElement | null>;
@@ -45,6 +46,20 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   const [active, setActive] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session, status } = useSession();
+  console.log(session);
+
+  const [showProfile, setShowProfile] = useState<boolean>(false);
+
+  const user = {
+    email: session?.user.email as string,
+    image: "dsdsds",
+    firstName: session?.user.name as string,
+    _id: session?.user.id as string,
+  };
+
+  function clickLogoutBtn() {
+    signOut();
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -107,185 +122,205 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
     setIsMobileMenuOpen(false);
   };
 
+  const handleUserProfile = () => {
+    setShowProfile(true);
+  };
   return (
-    <div className=" fixed  grid w-full bg-white   sm:overflow-hidden  sm:h-24    max-md:max-w-full z-20   ">
-      <div className="flex sm:h-[90px] h-[65px]  justify-between sm:justify-around font-poppins  lg:px-24   ">
-        <div
-          className="z-20  sm:grid content-center w-28 cursor-pointer hidden   "
-          onClick={() => handleScroll("home")}
-        >
-          <Image
-            src="/images/navbar-logo-large.png"
-            alt="riseupmora-logo"
-            width={145}
-            height={145}
-            className=""
-            quality={100}
-          />
-        </div>
-        <div
-          onClick={hamburgerClick}
-          className="grid content-center cursor-pointer sm:hidden"
-        >
-          <HamburgerButton />
-        </div>
+    <>
+      <div className=" fixed  grid w-full bg-white   sm:overflow-hidden  sm:h-24    max-md:max-w-full z-20   ">
+        <div className="flex sm:h-[90px] h-[65px]  justify-between sm:justify-around font-poppins  lg:px-24   ">
+          <div
+            className="z-20  sm:grid content-center w-28 cursor-pointer hidden   "
+            onClick={() => handleScroll("home")}
+          >
+            <Image
+              src="/images/navbar-logo-large.png"
+              alt="riseupmora-logo"
+              width={145}
+              height={145}
+              className=""
+              quality={100}
+            />
+          </div>
+          <div
+            onClick={hamburgerClick}
+            className="grid content-center cursor-pointer sm:hidden"
+          >
+            <HamburgerButton />
+          </div>
 
-        {/* desktop view */}
-        <NavigationMenu className="max-sm:hidden">
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                onClick={() => handleScroll("home")}
-                className={clsx(navigationMenuTriggerStyle(), {
-                  "after:w-full after:scale-x-100 ": pathname === "/",
-                })}
-              >
-                Home
-                {active == "home" && (
-                  <div className=" grid   justify-center">
-                    <div className="size-1.5 bg-white rounded-full"></div>
-                  </div>
-                )}
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                onClick={() => handleScroll("about")}
-                className={clsx(navigationMenuTriggerStyle(), {
-                  "after:w-full after:scale-x-100": pathname === "/",
-                })}
-              >
-                About
-                {active == "about" && (
-                  <div className=" grid   justify-center">
-                    <div className="size-1.5 bg-white rounded-full"></div>
-                  </div>
-                )}
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                onClick={() => handleScroll("timeline")}
-                className={clsx(navigationMenuTriggerStyle(), {
-                  "after:w-full after:scale-x-100": pathname === "/",
-                })}
-              >
-                Timeline
-                {active == "timeline" && (
-                  <div className=" grid   justify-center">
-                    <div className="size-1.5 bg-white rounded-full"></div>
-                  </div>
-                )}
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                onClick={() => handleScroll("contact")}
-                className={clsx(navigationMenuTriggerStyle(), {
-                  "after:w-full after:scale-x-100 ": pathname === "/",
-                })}
-              >
-                Contact Us
-                {active == "contact" && (
-                  <div className=" grid   justify-center">
-                    <div className="size-1.5 bg-white rounded-full"></div>
-                  </div>
-                )}
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
+          {/* desktop view */}
+          <NavigationMenu className="max-sm:hidden">
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  onClick={() => handleScroll("home")}
+                  className={clsx(navigationMenuTriggerStyle(), {
+                    "after:w-full after:scale-x-100 ": pathname === "/",
+                  })}
+                >
+                  Home
+                  {active == "home" && (
+                    <div className=" grid   justify-center">
+                      <div className="size-1.5 bg-white rounded-full"></div>
+                    </div>
+                  )}
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  onClick={() => handleScroll("about")}
+                  className={clsx(navigationMenuTriggerStyle(), {
+                    "after:w-full after:scale-x-100": pathname === "/",
+                  })}
+                >
+                  About
+                  {active == "about" && (
+                    <div className=" grid   justify-center">
+                      <div className="size-1.5 bg-white rounded-full"></div>
+                    </div>
+                  )}
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  onClick={() => handleScroll("timeline")}
+                  className={clsx(navigationMenuTriggerStyle(), {
+                    "after:w-full after:scale-x-100": pathname === "/",
+                  })}
+                >
+                  Timeline
+                  {active == "timeline" && (
+                    <div className=" grid   justify-center">
+                      <div className="size-1.5 bg-white rounded-full"></div>
+                    </div>
+                  )}
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  onClick={() => handleScroll("contact")}
+                  className={clsx(navigationMenuTriggerStyle(), {
+                    "after:w-full after:scale-x-100 ": pathname === "/",
+                  })}
+                >
+                  Contact Us
+                  {active == "contact" && (
+                    <div className=" grid   justify-center">
+                      <div className="size-1.5 bg-white rounded-full"></div>
+                    </div>
+                  )}
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
 
-        {status == "authenticated" ? (
-          
-            <div className="grid " onClick={()=>signOut()}>
-              <PrimaryButtonSmall  text="Sign Out" />
+          {status == "authenticated" ? (
+            //  }
+            <div onClick={handleUserProfile} className="grid ">
+              <PrimaryButtonSmall text={session?.user.name as string} />
             </div>
-          
-          
-        ) : (
-          <Link href="/auth/signin" passHref className=" grid ">
-            <PrimaryButtonSmall text="Sign In" />
-          </Link>
+          ) : (
+            <Link href="/auth/signin" passHref className=" grid ">
+              <PrimaryButtonSmall text="Sign In" />
+            </Link>
+          )}
+        </div>
+
+        <div
+          className=" h-[5px] w-full self-end"
+          style={{
+            background:
+              "linear-gradient(to right, #0c2735 75%, #28a8e0 75%, #28a8e0 92%, #f1c232 92%, #f1c232 95%)",
+          }}
+        ></div>
+
+        {/* mobile view */}
+        {isMobileMenuOpen && (
+          <NavigationMenu className="sm:hidden  mt-[65px]  absolute grid justify-self-center    ">
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  onClick={() => handleScroll("home")}
+                  className={clsx(navigationMenuTriggerStyle(), {
+                    "after:w-full after:scale-x-100 ": pathname === "/",
+                  })}
+                >
+                  Home
+                  {active == "home" && (
+                    <div className=" grid   justify-center">
+                      <div className="size-1.5 bg-white rounded-full"></div>
+                    </div>
+                  )}
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  onClick={() => handleScroll("about")}
+                  className={clsx(navigationMenuTriggerStyle(), {
+                    "after:w-full after:scale-x-100": pathname === "/",
+                  })}
+                >
+                  About
+                  {active == "about" && (
+                    <div className=" grid   justify-center">
+                      <div className="size-1.5 bg-white rounded-full"></div>
+                    </div>
+                  )}
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  onClick={() => handleScroll("timeline")}
+                  className={clsx(navigationMenuTriggerStyle(), {
+                    "after:w-full after:scale-x-100": pathname === "/",
+                  })}
+                >
+                  Timeline
+                  {active == "timeline" && (
+                    <div className=" grid   justify-center">
+                      <div className="size-1.5 bg-white rounded-full"></div>
+                    </div>
+                  )}
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  onClick={() => handleScroll("contact")}
+                  className={clsx(navigationMenuTriggerStyle(), {
+                    "after:w-full after:scale-x-100 ": pathname === "/",
+                  })}
+                >
+                  Contact Us
+                  {active == "contact" && (
+                    <div className=" grid   justify-center">
+                      <div className="size-1.5 bg-white rounded-full"></div>
+                    </div>
+                  )}
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         )}
       </div>
-
-      <div
-        className=" h-[5px] w-full self-end"
-        style={{
-          background:
-            "linear-gradient(to right, #0c2735 75%, #28a8e0 75%, #28a8e0 92%, #f1c232 92%, #f1c232 95%)",
-        }}
-      ></div>
-
-      {/* mobile view */}
-      {isMobileMenuOpen && (
-        <NavigationMenu className="sm:hidden  mt-[65px]  absolute grid justify-self-center    ">
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                onClick={() => handleScroll("home")}
-                className={clsx(navigationMenuTriggerStyle(), {
-                  "after:w-full after:scale-x-100 ": pathname === "/",
-                })}
-              >
-                Home
-                {active == "home" && (
-                  <div className=" grid   justify-center">
-                    <div className="size-1.5 bg-white rounded-full"></div>
-                  </div>
-                )}
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                onClick={() => handleScroll("about")}
-                className={clsx(navigationMenuTriggerStyle(), {
-                  "after:w-full after:scale-x-100": pathname === "/",
-                })}
-              >
-                About
-                {active == "about" && (
-                  <div className=" grid   justify-center">
-                    <div className="size-1.5 bg-white rounded-full"></div>
-                  </div>
-                )}
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                onClick={() => handleScroll("timeline")}
-                className={clsx(navigationMenuTriggerStyle(), {
-                  "after:w-full after:scale-x-100": pathname === "/",
-                })}
-              >
-                Timeline
-                {active == "timeline" && (
-                  <div className=" grid   justify-center">
-                    <div className="size-1.5 bg-white rounded-full"></div>
-                  </div>
-                )}
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                onClick={() => handleScroll("contact")}
-                className={clsx(navigationMenuTriggerStyle(), {
-                  "after:w-full after:scale-x-100 ": pathname === "/",
-                })}
-              >
-                Contact Us
-                {active == "contact" && (
-                  <div className=" grid   justify-center">
-                    <div className="size-1.5 bg-white rounded-full"></div>
-                  </div>
-                )}
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-      )}
-    </div>
+      <div className="relative">
+        <div
+          className={`absolute ${
+            !showProfile
+              ? "hidden"
+              : "xl:w-3/12 lg:w-3/12 md:w-1/3 2xl:w-1/5 sm:block hidden"
+          } rounded-b-2xl top-20 right-0 z-50 opacity-00  bg-slate-100 text-white`}
+        >
+          {/* hello */}
+          <NavBarProfile
+            user={user}
+            clickLogoutBtn={clickLogoutBtn}
+            setShowProfile={setShowProfile}
+            showProfile={showProfile}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 
