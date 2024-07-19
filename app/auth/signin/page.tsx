@@ -185,7 +185,7 @@ const SignIn = () => {
         </div>
       )}
       <div className="mb-4">
-        <Link href="reset-password">
+        <Link href="reset-password-request">
           <div className="text-center text-xs font-semibold hover:underline">
             Forgot password? Click Here!
           </div>

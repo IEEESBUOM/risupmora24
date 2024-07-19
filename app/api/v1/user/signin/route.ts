@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
         email,
       },
     });
+    console.log("data")
     if (!data || !data.password) {
       return NextResponse.json(
         { message: "Invalid user name or password" },
@@ -42,6 +43,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ message: "success" }, { status: 200 });
   } catch (e) {
+    console.log("error")
     return NextResponse.json(
       { message: "error of the server" },
       { status: 500 }
