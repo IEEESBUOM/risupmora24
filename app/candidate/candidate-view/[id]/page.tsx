@@ -3,7 +3,7 @@ import StudentView from "./components/StudentView";
 
 const Student = () => {
   return (
-    <div>
+    <div >
       <StudentView />
     </div>
   );

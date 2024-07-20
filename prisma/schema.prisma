@@ -25,6 +25,10 @@ model User {
   department_cordnator DepartmentCordinator?
   panelist             Panelist?
   admin                Admin?
+  passwordResetToken       String?               @default("")
+  passwordResetTokenExpire DateTime              @default(now())
+
+
 }
 
 model Candidate {
@@ -43,6 +47,10 @@ model Candidate {
   feedback         Feedback[]
   allocation       Allocation[]
   user             User         @relation(fields: [candidate_id], references: [id])
+  prefCompany1     String?
+  prefCompany2     String?
+  prefCompany3     String?
+  prefCompany4     String?
 }
 
 model CompanyCordinator {
