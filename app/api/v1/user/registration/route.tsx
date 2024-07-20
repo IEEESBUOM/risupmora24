@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
       lastName,
       nameWithInitials,
       universityID,
-      contactNo: Number(contactNo),  // Convert contactNo to number
+      contactNo: contactNo.toString(),  // Ensure contactNo is a string
       degree,
       department,
       cvUrl,
