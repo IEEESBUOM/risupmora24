@@ -137,7 +137,7 @@ const RegisterCandidate: React.FC<Props> = ({ initialCandidates }) => {
           <table className="table-auto w-full text-gray-700 text-sm md:text-base">
             <thead>
               <tr className="text-sm border-b">
-                <th className="p-2">Index</th>
+                <th className="p-2 flex justify-center align-middle">Index</th>
                 <th className="p-2">Name</th>
                 <th className="p-2">Department</th>
                 <th className="p-2">Email</th>

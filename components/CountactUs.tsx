@@ -1,6 +1,7 @@
-"use client";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
+import gsap from "gsap";
+
 interface ProfileProps {
   image: string;
   name: string;
@@ -10,17 +11,41 @@ interface ProfileProps {
   telephone: string;
 }
 
-// Main ContactUs component
+// Main ContactUs component remains unchanged
 export default function ContactUs() {
+  const topicRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (topicRef.current) {
+      gsap.fromTo(
+        topicRef.current,
+        { transform: "translate3d(-100px, 0, 0)", opacity: 0.5 }, // Start off-screen to the left
+        {
+          transform: "translate3d(0, 0, 0)", // End at its final position
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: topicRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            scrub: true,
+            // Remove 'once: true' to allow re-triggering of the animation
+          },
+        }
+      );
+    }
+  }, []);
+
   return (
     <div className="h-auto w-auto pb-10">
-      <div className="flex justify-start p-10">
-        <div className="bg-[#0c2735] text-white font rounded-[10px] border-none cursor-pointer z-10 py-2 px-5 ml-1.5 mt-4  ">
-          <span className="font-poppins sm:text-[40px] line-height-1 sm:ml-3 ml-3 text-[30px]">
+      <div className="flex justify-start p-10" ref={topicRef}>
+        <div className="bg-[#0c2735] text-white font rounded-[10px] border-none cursor-pointer z-10 py-1 px-5 ml-1.5 mt-4">
+          <span className="font-poppins sm:text-[30px] line-height-1 sm:ml-3 ml-3 text-[30px]">
             Contact Us
           </span>
         </div>
-        <div className="absolute mt-8 mr-1 sm:mt-8 sm:mr-3 bg-[#f1c232] text-[#f1c232] rounded-[10px] border-none py-2.5 cursor-pointer sm:w-[290px] sm:h-[70px] w-[230px] h-[55px]"></div>
+        <div className="absolute mt-8 mr-1 sm:mt-6 sm:mr-3 bg-[#f1c232] text-[#f1c232] rounded-[10px] border-none py-4 cursor-pointer sm:w-[200px] sm:h-[50px] h-[30px]"></div>
       </div>
 
       {/* Profiles section */}
@@ -110,10 +135,55 @@ function Profile({
   email,
   telephone,
 }: ProfileProps) {
+  const imageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const shineEffect = (e: MouseEvent) => {
+      const target = e.currentTarget as HTMLDivElement;
+      gsap.fromTo(
+        target,
+        {
+          background: `linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%)`,
+          backgroundPosition: "100% 100%",
+        },
+        {
+          backgroundPosition: "-100% -100%",
+          duration: 1,
+          ease: "power2.out",
+        }
+      );
+    };
+
+    const shineReset = (e: MouseEvent) => {
+      const target = e.currentTarget as HTMLDivElement;
+      gsap.to(target, {
+        backgroundPosition: "100% 100%",
+        duration: 0.5,
+        ease: "power2.out",
+      });
+    };
+
+    const imageElement = imageRef.current;
+    if (imageElement) {
+      imageElement.addEventListener("mouseenter", shineEffect);
+      imageElement.addEventListener("mouseleave", shineReset);
+    }
+
+    return () => {
+      if (imageElement) {
+        imageElement.removeEventListener("mouseenter", shineEffect);
+        imageElement.removeEventListener("mouseleave", shineReset);
+      }
+    };
+  }, []);
+
   return (
     <div className="w-full lg:w-1/4 md:w-1/3 sm:w-1/2 p-4 h-auto my-12 mx-5">
       <div className="flex flex-col items-center text-center">
-        <div className="relative overflow-hidden shine">
+        <div
+          ref={imageRef}
+          className="relative overflow-hidden shine bg-white transition-all duration-300 ease-in-out"
+        >
           <Image
             src={image}
             alt={shortName}
@@ -125,16 +195,16 @@ function Profile({
         <div className="font-poppins font-normal text-2xl flex justify-center text-center">
           {name}
         </div>
-        <div className="text-black text-center font-poppins text-xl font-thin leading-[1.4]">
+        <div className="text-black text-center font-poppins text-lg font-lighter leading-[1.4]">
           {shortName}
         </div>
-        <div className="text-black text-center font-poppins text-xl font-thin leading-[1.4]">
+        <div className="text-black text-center font-poppins text-lg font-lighter leading-[1.4]">
           {details}
         </div>
-        <div className="text-black text-center font-poppins text-xl font-thin leading-[1.4]">
+        <div className="text-black text-center font-poppins text-lg font-lighter leading-[2.0]">
           {email}
         </div>
-        <div className="text-black text-center font-poppins text-xl font-thin leading-[1.4]">
+        <div className="text-black text-center font-poppins text-lg font-lighter leading-[1.4]">
           {telephone}
         </div>
       </div>

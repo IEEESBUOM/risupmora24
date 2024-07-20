@@ -1,19 +1,15 @@
-import React from 'react'
-import { Button } from './button'
+import React from "react";
+import { Button } from "./topicbutton";
 
-export default function Topic({text}:{text:string}) {
+export default function Topic({ text }: { text: string }) {
   return (
-    <div className='relative flex justify-center items-center font-poppins   px-3  '>
-        <Button  variant="secondary" size="default">
-            {text}
-        </Button>
-        <div  className='absolute mt-2 mr-2 sm:mt-3 sm:mr-3 bg-[#f1c232] text-[#f1c232] rounded-[10px] border-none  px-7 py-2.5  cursor-pointer  '>
+    <div className="relative flex justify-center items-center font-poppins px-3">
+      <Button variant="secondary" size="xl">
         {text}
-            </div>
-        
-        
-
-      
+      </Button>
+      <div className="absolute mt-2 mr-2 sm:mt-4  sm:mr-6 bg-[#f1c232] text-[#f1c232] rounded-[10px] border-none px-14 py-2 cursor-pointer text-[25px]">
+        {text}
+      </div>
     </div>
-  )
+  );
 }
