@@ -20,104 +20,13 @@ model User {
   passwordResetToken       String?               @default("")
   passwordResetTokenExpire DateTime              @default(now())
   accounts                 Account[]
-  admin                    Admin?
+  Admin                    Admin?
   Authenticator            Authenticator[]
-  candidate                Candidate?
-  company_cordnator        CompanyCordinator?
-  department_cordnator     DepartmentCordinator?
-  panelist                 Panelist?
+  Candidate                Candidate?
+  CompanyCordinator        CompanyCordinator?
+  DepartmentCordinator     DepartmentCordinator?
+  Panelist                 Panelist?
   sessions                 Session[]
-}
-
-model Candidate {
-  candidate_id     String       @unique
-  firstName        String?
-  lastName         String?
-  nameWithInitials String?
-  universityID     String?      @unique
-  contactNo        String?
-  department       String?
-  degree           String?
-  cvUrl            String?
-  imgUrl           String?
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
-  allocation       Allocation[]
-  user             User         @relation(fields: [candidate_id], references: [id])
-  feedback         Feedback[]
-}
-
-model CompanyCordinator {
-  cordinator_id String    @unique
-  company_id    String    @unique
-  createdAt     DateTime? @default(now())
-  updatedAt     DateTime? @updatedAt
-  company       Company   @relation(fields: [company_id], references: [company_id])
-  user          User      @relation(fields: [cordinator_id], references: [id])
-}
-
-model DepartmentCordinator {
-  cordinator_id String     @unique
-  department    Department
-  createdAt     DateTime?  @default(now())
-  updatedAt     DateTime?  @updatedAt
-  user          User       @relation(fields: [cordinator_id], references: [id])
-}
-
-model Panelist {
-  panelist_id   String       @unique
-  pannel_number Int?
-  company_id    String
-  createdAt     DateTime?    @default(now())
-  updatedAt     DateTime?    @updatedAt
-  allocation    Allocation[]
-  company       Company      @relation(fields: [company_id], references: [company_id])
-  user          User         @relation(fields: [panelist_id], references: [id])
-
-  @@unique([pannel_number, company_id])
-}
-
-model Admin {
-  admin_id  String    @unique
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-  user      User      @relation(fields: [admin_id], references: [id])
-}
-
-model Company {
-  company_id        String             @id @default(cuid())
-  company_name      String
-  company_logo      String?
-  allocation        Allocation[]
-  CompanyCordinator CompanyCordinator?
-  feedback          Feedback[]
-  panalist          Panelist[]
-}
-
-model Feedback {
-  feedback_id  String    @id @default(cuid())
-  feedback     String
-  candidate_id String
-  company_id   String
-  candidate    Candidate @relation(fields: [candidate_id], references: [candidate_id])
-  company      Company   @relation(fields: [company_id], references: [company_id])
-}
-
-model Allocation {
-  allocation_id          String    @id @default(cuid())
-  allocation_date        String
-  allocation_timeSlot    String
-  allocated_panel_number Int
-  attendance             Boolean   @default(false)
-  allocation_status      String
-  candidate_id           String
-  company_id             String
-  panelist_id            String
-  candidate              Candidate @relation(fields: [candidate_id], references: [candidate_id])
-  company                Company   @relation(fields: [company_id], references: [company_id])
-  panelist               Panelist  @relation(fields: [panelist_id], references: [panelist_id])
-
-  @@unique([allocated_panel_number, allocation_date, allocation_timeSlot, company_id])
 }
 
 model Account {
@@ -168,6 +77,97 @@ model Authenticator {
   user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
+}
+
+model Admin {
+  admin_id  String    @unique
+  createdAt DateTime? @default(now())
+  updatedAt DateTime?
+  User      User      @relation(fields: [admin_id], references: [id])
+}
+
+model Allocation {
+  allocation_id          String    @id
+  allocation_date        String
+  allocation_timeSlot    String
+  allocated_panel_number Int
+  attendance             Boolean   @default(false)
+  allocation_status      String
+  candidate_id           String
+  company_id             String
+  panelist_id            String
+  Candidate              Candidate @relation(fields: [candidate_id], references: [candidate_id])
+  Company                Company   @relation(fields: [company_id], references: [company_id])
+  Panelist               Panelist  @relation(fields: [panelist_id], references: [panelist_id])
+
+  @@unique([allocated_panel_number, allocation_date, allocation_timeSlot, company_id])
+}
+
+model Candidate {
+  candidate_id     String       @unique
+  firstName        String?
+  lastName         String?
+  nameWithInitials String?
+  universityID     String?      @unique
+  contactNo        String?
+  department       String?
+  degree           String?
+  cvUrl            String?
+  imgUrl           String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime
+  Allocation       Allocation[]
+  User             User         @relation(fields: [candidate_id], references: [id])
+  Feedback         Feedback[]
+}
+
+model Company {
+  company_id        String             @id
+  company_name      String
+  company_logo      String?
+  Allocation        Allocation[]
+  CompanyCordinator CompanyCordinator?
+  Feedback          Feedback[]
+  Panelist          Panelist[]
+}
+
+model CompanyCordinator {
+  cordinator_id String    @unique
+  company_id    String    @unique
+  createdAt     DateTime? @default(now())
+  updatedAt     DateTime?
+  Company       Company   @relation(fields: [company_id], references: [company_id])
+  User          User      @relation(fields: [cordinator_id], references: [id])
+}
+
+model DepartmentCordinator {
+  cordinator_id String     @unique
+  department    Department
+  createdAt     DateTime?  @default(now())
+  updatedAt     DateTime?
+  User          User       @relation(fields: [cordinator_id], references: [id])
+}
+
+model Feedback {
+  feedback_id  String    @id
+  feedback     String
+  candidate_id String
+  company_id   String
+  Candidate    Candidate @relation(fields: [candidate_id], references: [candidate_id])
+  Company      Company   @relation(fields: [company_id], references: [company_id])
+}
+
+model Panelist {
+  panelist_id   String       @unique
+  pannel_number Int?
+  company_id    String
+  createdAt     DateTime?    @default(now())
+  updatedAt     DateTime?
+  Allocation    Allocation[]
+  Company       Company      @relation(fields: [company_id], references: [company_id])
+  User          User         @relation(fields: [panelist_id], references: [id])
+
+  @@unique([pannel_number, company_id])
 }
 
 enum Department {

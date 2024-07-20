@@ -1,5 +1,5 @@
 "use server";
-import { RegistrationFormDataSendType, RegistrationFormDataType } from "@/Type";
+// import { RegistrationFormDataSendType, RegistrationFormDataType } from "@/Type";
 import axios from "axios";
 import toast from "react-hot-toast";
 
