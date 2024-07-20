@@ -11,7 +11,7 @@ export async function GET(req: NextRequest, { params }: any) {
         candidate_id: userId,
       },
       include: {
-        User: true, // Optionally include user details if needed
+        user: true, // Optionally include user details if needed
       },
     });
     console.log(candidate);
