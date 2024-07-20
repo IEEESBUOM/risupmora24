@@ -42,8 +42,8 @@ const StudentView = () => {
   };
 
   return (
-    <div className="w-full block 2xl:flex 2xl:justify-center 2xl:items-center px-5 md:px-12 lg:px-28 h-100 mb-10">
-      <div className="w-full lg:w-7/12">
+    <div className="w-full block 2xl:flex 2xl:justify-center 2xl:items-center  px-5 md:px-12 lg:px-28 h-100 mb-10">
+      <div className="w-full ">
         <div className="w-full">
           <StudentNavbar />
           <div className="w-full justify-center flex items-center">

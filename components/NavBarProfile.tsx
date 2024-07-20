@@ -31,31 +31,30 @@ interface NavBarProfileProps {
   showProfile: boolean;
   setShowProfile: Dispatch<SetStateAction<boolean>>;
   clickLogoutBtn: () => void;
+  isInSheet: boolean;
 }
-// type Organization = {
-//   organization: OrganizationProps[];
-// };
+
 
 const NavBarProfile = memo(function NavBarProfile({
   user,
   showProfile,
   setShowProfile,
   clickLogoutBtn,
+  isInSheet,
 }: NavBarProfileProps) {
-  // const [isOrganizationShowButton, setIsOrganizationShowButton] =
-  //   useState<boolean>(false);
+ 
 
-  // const { organization } = useAuth() as unknown as Organization;
+ 
   const profileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // console.log(organization)
+   
     const handleClickOutside = (event: MouseEvent) => {
       if (
         profileRef.current &&
         !profileRef.current.contains(event.target as Node)
       ) {
-        // Clicked outside of modal, so close it
+     
         setShowProfile(false);
       }
     };
@@ -76,16 +75,14 @@ const NavBarProfile = memo(function NavBarProfile({
 
   return (
     <>
-      <div ref={profileRef} className="bg-slate-100 text-black .modal-content">
-        <div className="z-50 flex m-3 items-center justify-end">
-          {/* <div className="2xl:text-base  xl:text-base lg:text-xs text-xs	 font-medium	">
-            {user?.email}
-          </div> */}
+      <div ref={profileRef} className=" text-white font-poppins">
+        {!isInSheet && <div className="z-50 flex m-3 items-center justify-end">
+        
           <button onClick={() => setShowProfile(false)}>
             <AiOutlineClose />
           </button>
-        </div>
-        <div className="flex  items-center  gap-2">
+        </div>}
+        {!isInSheet && <div className="flex  pl-3 items-center  gap-2">
           <div>
             <Image
               src={
@@ -101,41 +98,31 @@ const NavBarProfile = memo(function NavBarProfile({
             <div>{user.firstName}</div>
             <div> {user?.email}</div>
           </div>
-        </div>
-        <div>
-          {/* <div className="font-medium	">{`Hi ${user?.firstName} !`}</div> */}
-
-          {/* <Link href={""}>
-            <button
-              onClick={() => setShowProfile(false)}
-              className="rounded-full 2xl:text-base py-2 px-2 md:px-1 md:py-1 md:text-sm lg:text-sm xl:text-base xl:py-1 xl:px-2 lg:px-2 bg-gray-200 text-gray-600 font-semibold  shadow-md hover:bg-gray-300 "
-            >
-              Manage your account
-            </button>
-          </Link> */}
-        </div>
+        </div>}
+        
         <div className=" mt-5 mb-5 md:p-3 lg:p-0 w-full flex xl:w-full  justify-center">
-          <div className="z-20  w-full max-w-sm bg-gray-200  divide-gray-50 rounded-lg shadow  ">
-            <div className="  px-4 py-2 font-medium items-center flex justify-between text-gray-700 rounded-full bg-gray-200 ">
-              <Link href={`/candidate/candidate-view/${user._id}`}>
-                <div className="flex gap-2  items-center">
-                  <MdOutlineManageAccounts size={25} />
-                  <div className="2xl:text-base xl:text-base   md:text-sm">
-                    Manage accounts
+          <div className="z-20  w-full max-w-sm   ounded-lg shadow  ">
+            <Link  href={`/candidate/candidate-view/${user._id}`}><div className="  px-4 py-2 font-medium items-center flex justify-between text-white hover:bg-slate-600 transition duration-300 ease-in-out  ">
+              
+                <div className="flex gap-2   items-center">
+                  {!isInSheet && <MdOutlineManageAccounts size={25} />}
+                  <div className="2xl:text-base xl:text-base  ] md:text-sm">
+                    Manage account
                   </div>
                 </div>
-              </Link>
-            </div>
-            <div className="h-1 w-full bg-white"></div>
+              
+            </div></Link>
+            {!isInSheet && <div className="h-[2px] w-full bg-white"></div>}
 
-            <button className="" onClick={clickLogoutBtn}>
-              <div className="items-center gap-2  flex px-4 py-2 font-medium  text-gray-700 rounded-t-lg bg-gray-200  2xl:text-base xl:text-base   md:text-sm text-sm">
-                <MdOutlineLogout size={23} />
+            <button className="w-full" onClick={clickLogoutBtn}>
+              <div className="items-center gap-2  flex px-4 py-2 font-medium  text-white hover:bg-slate-600 transition duration-300 ease-in-out">
+                {!isInSheet && <MdOutlineLogout size={23} />}
                 Sign out
               </div>
             </button>
           </div>
         </div>
+        {isInSheet && <div className="ml-4">{user.email}</div>}
       </div>
     </>
   );

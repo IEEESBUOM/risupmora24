@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 import { useForm,SubmitHandler } from "react-hook-form";
 import { IoMdEyeOff,IoMdEye } from "react-icons/io";
 import toast from "react-hot-toast";
+import {useRouter } from "next/navigation";
 
 
 export default function Page() {
+  const router = useRouter();
   type Inputs = {
         username: string,
         email: string,
@@ -32,6 +34,7 @@ export default function Page() {
               .then((res) => {
                 if (res.ok) {
                   resolve();
+                  router.push("/auth/signin");
                 } else {
                   res.json().then((data) => {
                     setErrorMessage(data.message);

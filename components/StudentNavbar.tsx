@@ -1,8 +1,17 @@
+'use client'
 import Image from "next/image";
 import React from "react";
 import PrimaryButtonSmall from "./ui/PrimaryButtonSmall";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 
 const StudentNavbar = () => {
+  const router = useRouter();
+  const handleSignOut = () => {
+    signOut();
+    router.push("/");
+  };
   return (
     <div>
       <div className="flex flex-col md:flex-row items-center justify-between pt-5 md:pt-0">
@@ -23,7 +32,9 @@ const StudentNavbar = () => {
           alt="logo"
         />
         {/* <div> */}
-        <PrimaryButtonSmall text="Sign out" />
+       <div className="" onClick={handleSignOut}>
+       <PrimaryButtonSmall text="Sign out" />
+       </div>
         {/* </div> */}
         {/* {!isMobile && ( */}
         {/* <div onClick={handleSignOut}>

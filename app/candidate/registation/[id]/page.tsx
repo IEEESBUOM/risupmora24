@@ -1,6 +1,7 @@
 import React from "react";
-import Registration from "./components/Registration";
+
 import MainBtn from "@/components/MainBtn";
+import Registration from "./components/Registration";
 // import PrimaryButtonSmall from "@/components/MainButton";
 
 const Page = () => {
