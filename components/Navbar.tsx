@@ -300,7 +300,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
           {status == "authenticated" ? (
             
             
-          <div onClick={handleUserProfile} className=" flex gap-2 ">
+          <div onClick={handleUserProfile} className=" flex gap-2 cursor-pointer">
             <div className="grid content-center font-poppins font-medium">{user.firstName}</div>
             <div className=" py-4 grid content-center">
             <Image

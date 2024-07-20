@@ -27,6 +27,7 @@ model User {
   DepartmentCordinator     DepartmentCordinator?
   Panelist                 Panelist?
   sessions                 Session[]
+  
 }
 
 model Account {
@@ -119,6 +120,10 @@ model Candidate {
   Allocation       Allocation[]
   User             User         @relation(fields: [candidate_id], references: [id])
   Feedback         Feedback[]
+  prefCompany1     String?
+  prefCompany2     String?
+  prefCompany3     String?
+  prefCompany4     String?
 }
 
 model Company {

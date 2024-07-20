@@ -87,7 +87,7 @@ const SignIn = () => {
                   console.log("candidate");
                   router.push("/");
                 } else {
-                  router.push(`/candidate/registation/${signInData.userId}`);
+                  router.push(`/candidate/registation/${signInData.id}`);
                   console.log("not candidate");
                 }
               }

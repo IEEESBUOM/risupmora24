@@ -14,6 +14,7 @@ import { CV } from "@/Type";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams } from "next/navigation";
+import CompanyPreference from "./CompanyPreference";
 
 const StudentView = () => {
   const {
@@ -184,6 +185,9 @@ const StudentView = () => {
                 </button>
               </div>
             </>
+            <CompanyPreference userEmail={data?.email} />
+
+            
             <div className="mt-8 text-lg md:text-xl">
               <b>Feedback:</b>
               {/* <div className="w-105 h-auto mt-2.5">
