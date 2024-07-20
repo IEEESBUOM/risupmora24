@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 
 import IFS from "../assets/img/ifs.png";
@@ -18,34 +18,40 @@ import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import Slideshow from "./ui/slideShow";
 import Topic from "./ui/topic";
 
-// registering gsap
+// Registering gsap
 gsap.registerPlugin(ScrollTrigger);
 
 function Partners() {
+  const topicRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    gsap.fromTo(
-      ".topicContainer",
-      { x: -200, opacity: 0 },
-      {
-        x: 0,
-        opacity: 1,
-        duration: 0.5,
-        scrollTrigger: {
-          trigger: ".partnersSection",
-          start: "top 100%",
-          end: "bottom 80%",
-          scrub: true,
-          once: true,
-          onEnter: () =>
-            gsap.to(".topicContainer", { x: 0, opacity: 1, duration: 0.05 }),
-        },
-      }
-    );
+    if (topicRef.current) {
+      gsap.fromTo(
+        topicRef.current,
+        { transform: "translate3d(-100px, 0, 0)", opacity: 0.5 }, // Start off-screen to the left
+        {
+          transform: "translate3d(0, 0, 0)", // End at its final position
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: topicRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            scrub: true,
+            // Remove 'once: true' to allow re-triggering of the animation
+          },
+        }
+      );
+    }
   }, []);
 
   return (
     <div className="m-8 partnersSection relative">
-      <div className="absolute top-2 left-2 sm:top-4 sm:left-4  topicContainer opacity-0 mb -10">
+      <div
+        className="absolute top-2 left-2 sm:top-4 sm:left-4 topicContainer opacity-0 mb -10"
+        ref={topicRef}
+      >
         <Topic text="Our Partners" />
       </div>
       <br />

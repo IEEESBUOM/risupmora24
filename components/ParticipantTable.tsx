@@ -132,20 +132,20 @@ const columns: ColumnDef<Participant, any>[] = [
       <Checkbox
         checked={row.original.attended}
         onChange={() => {
-            const newParticipants = table.options.data.map(
-                (participant, index) => {
-                    if (index === row.index) {
-                        return { ...participant, attended: !participant.attended };
-                    }
-                    return participant;
-                }
-            );
-            table.setOptions((prevOptions) => ({
-                ...prevOptions,
-                data: newParticipants,
-            }));
-            // this is for database update logic 
-            // updateParticipantInDatabase(newParticipants[row.index]);
+          const newParticipants = table.options.data.map(
+            (participant, index) => {
+              if (index === row.index) {
+                return { ...participant, attended: !participant.attended };
+              }
+              return participant;
+            }
+          );
+          table.setOptions((prevOptions) => ({
+            ...prevOptions,
+            data: newParticipants,
+          }));
+          // this is for database update logic
+          // updateParticipantInDatabase(newParticipants[row.index]);
         }}
       />
     ),
