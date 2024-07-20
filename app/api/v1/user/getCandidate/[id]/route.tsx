@@ -8,12 +8,12 @@ export async function GET(req: NextRequest, { params }: any) {
     console.log(userId);
     const candidate = await prisma.candidate.findFirst({
       where: {
-        User: {
+        user: {
           id: userId, // Match the user ID with the id in the User table
         },
       },
       include: {
-        User: true, // Optionally include user details if needed
+        user: true, // Optionally include user details if needed
       },
     });
     console.log(candidate);

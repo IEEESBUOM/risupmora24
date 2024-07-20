@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
   try {
     const data = await prisma.candidate.findMany({
       include: {
-        User: true,
+        user: true,
       },
     });
     return NextResponse.json({ data });
