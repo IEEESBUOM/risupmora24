@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import React,{useState} from "react";
 import { useForm,SubmitHandler } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const Page = () => {
   type Inputs = {
@@ -10,7 +11,35 @@ const Page = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = data => {
-    //sign up logic here
+    toast.promise(
+      new Promise<void>((resolve, reject) => {
+        fetch("/api/v1/user/requestResetPassword", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((res) => {
+            if (res.ok) {
+              resolve();
+            } else {
+              res.json().then((data) => {
+                setErrorMessage(data.message);
+                reject();
+              });
+            }
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      }),
+      {
+        loading: "loading...",
+        success: "Password reset link sent to your email",
+        error: "Failed to reset password"
+      }
+    )
   }
   return <form onSubmit={handleSubmit(onSubmit)} className="grid font-poppins place-self-center  " >
   <h1 className=" text-center mb-6 font-medium text-neutral-800 text-3xl ">

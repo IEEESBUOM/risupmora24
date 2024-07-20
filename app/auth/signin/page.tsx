@@ -87,7 +87,7 @@ const SignIn = () => {
                   console.log("candidate");
                   router.push("/");
                 } else {
-                  router.push(`/candidate/registation/${signInData.userId}`);
+                  router.push(`/candidate/registation/${signInData.id}`);
                   console.log("not candidate");
                 }
               }
@@ -178,7 +178,7 @@ const SignIn = () => {
           </div>
         )}
         <div className="mb-4">
-          <Link href="reset-password">
+          <Link href="reset-password-request">
             <div className="text-center text-xs font-semibold hover:underline">
               Forgot password? Click Here!
             </div>
@@ -186,6 +186,13 @@ const SignIn = () => {
         </div>
         <div className="mb-4  grid justify-center">
           <Button variant={"auth"}>Sign In</Button>
+        </div>
+        <div className="mb-4">
+          <Link href="/auth/register">
+            <div className="text-center text-xs font-semibold hover:underline">
+              If you dont have an account? register!
+            </div>
+          </Link>
         </div>
       </form>
     </>
