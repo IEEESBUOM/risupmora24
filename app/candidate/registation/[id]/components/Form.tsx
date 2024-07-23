@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import CloudinaryUpload from "@/components/cloudinaryWidget";
 export default function Form() {
   const {
     register,
@@ -20,7 +21,8 @@ export default function Form() {
     reset,
     formState: { errors },
   } = useForm<RegistrationFormDataType>();
-
+  const [imgUrl, setImgUrl] = useState<string>("");
+  const [cvUrl, setCvUrl] = useState<string>("");
   const session = useSession();
 
   const [uploading, setUploading] = useState<boolean>(false);
@@ -33,18 +35,29 @@ export default function Form() {
   // useEffect(() => {
   //   setValue("email", session.data?.user?.email as string); // Set initial value for "email"
   // }, [setValue]);
-
+  console.log(cvUrl, imgUrl);
   const onSubmit = handleSubmit(async (data) => {
+
+    console.log(data);
+    console.log(imgUrl)
+    console.log(cvUrl)
+
     // Replace with actual user ID
     setUploading(true);
-    let cvurl,
-      imageurl = "";
-    if (data.cv[0]) {
-      cvurl = await uploadFile(data.cv[0], userId, "cv");
-    }
+    // let cvurl,
+    //   imageurl = "";
+    // if (data.cv[0]) {
+    //   cvurl = await uploadFile(data.cv[0], userId, "cv");
+    // }
 
-    if (data.photo[0]) {
-      imageurl = await uploadFile(data.photo[0], userId, "image");
+    // if (data.photo[0]) {
+    //   imageurl = await uploadFile(data.photo[0], userId, "image");
+    // }
+
+    if (!imgUrl) {
+      alert("Image is required. Please upload a photo.");
+      setUploading(false);
+      return;
     }
     const userData = {
       firstName: data.firstName,
@@ -54,12 +67,12 @@ export default function Form() {
       contactNo: data.contactNo,
       degree: data.degree,
       department: data.department,
-      cvUrl: cvurl,
-      imgUrl: imageurl,
+      cvUrl: cvUrl,
+      imgUrl: imgUrl,
       userId: userId,
     };
 
-    console.log(cvurl, imageurl);
+    // console.log(cvurl, imageurl);
 
     Registration({ registrationData: userData });
     toast.success("Registration Success");
@@ -379,7 +392,7 @@ export default function Form() {
             Upload your CV (in PDF form)
           </label>
           <div className="lg:w-1/3 w-4/5 md:w-3/5 lg:ml-10 md:ml-0">
-            <Input
+            {/* <Input
               className="w-full    border-gray-300 rounded-lg"
               // onChange={handleFileChange}
               type="file"
@@ -391,7 +404,8 @@ export default function Form() {
                     "Only PDF files are allowed",
                 },
               })}
-            />
+            /> */}
+            <CloudinaryUpload setImgUrl={setCvUrl} />
             {errors.cv && (
               <div className="text-xs text-red-600">*{errors.cv.message}</div>
             )}
@@ -404,7 +418,7 @@ export default function Form() {
             Upload a Formal Photo of Yourself
           </label>
           <div className="lg:w-1/3 w-4/5 md:w-3/5 lg:ml-10 md:ml-0">
-            <Input
+            {/* <Input
               className="w-full   border-gray-300 rounded-lg"
               type="file"
               {...register("photo", {
@@ -415,7 +429,8 @@ export default function Form() {
                     "Only image files are allowed",
                 },
               })}
-            />
+            /> */}
+            <CloudinaryUpload setImgUrl={setImgUrl} />
             {errors.photo && (
               <div className="text-xs text-red-600">
                 *{errors.photo.message}
@@ -427,6 +442,7 @@ export default function Form() {
         {/* Register Button */}
         <div className="flex  justify-center md:justify-end mt-6">
           <button
+            onSubmit={onSubmit}
             type="submit"
             className={`w-4/5 md:w-1/3 lg:w-1/4 p-3 bg-[#0c2735] text-white font-bold rounded-full `}
           >

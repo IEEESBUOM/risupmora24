@@ -5,13 +5,18 @@ import {
   CloudinaryUploadWidgetResults,
 } from "next-cloudinary";
 import { FaCloudUploadAlt } from "react-icons/fa";
+import { set } from "react-hook-form";
 
-const CloudinaryUpload = () => {
+const CloudinaryUpload = ({
+  setImgUrl,
+}: {
+  setImgUrl: (url: string) => void;
+}) => {
   const [profileImage, setProfileImage] = useState("");
 
   console.log(profileImage);
- 
-  
+
+  setImgUrl(profileImage);
 
   return (
     <CldUploadWidget
@@ -64,13 +69,14 @@ const CloudinaryUpload = () => {
       {({ open }) => {
         return (
           <button
+            type="button"
             onClick={() => {
               open();
             }}
           >
             <div className="p-2 text-white font-semibold flex items-center justify-center gap-2 bg-slate-400 rounded-2xl w-full">
               <FaCloudUploadAlt />
-              Upload 
+              Upload
             </div>
           </button>
         );
