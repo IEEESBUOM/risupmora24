@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { RegistrationFormDataSendType } from "@/Type";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -16,6 +17,8 @@ export async function POST(req: NextRequest) {
       imgUrl,
       userId,
     }: RegistrationFormDataSendType = await req.json();
+
+    console.log(userId);
 
     const data = {
       firstName,
@@ -42,9 +45,20 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ response });
   } catch (e) {
-    console.log(e);
+    // if (e instanceof PrismaClientKnownRequestError && e.code === "P2025") {
+    //   console.log("Error: User not found.");
+    //   return NextResponse.json(
+    //     {
+    //       message:
+    //         "This universityId has been used before. Please enter new ID.",
+    //     },
+    //     { status: 400 }
+    //   );
+    // }
+
+    // console.log(e);
     return NextResponse.json(
-      { message: "error of the server" },
+      { message: "Internal server error" },
       { status: 500 }
     );
   }

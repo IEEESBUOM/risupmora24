@@ -37,10 +37,9 @@ export default function Form() {
   // }, [setValue]);
   console.log(cvUrl, imgUrl);
   const onSubmit = handleSubmit(async (data) => {
-
     console.log(data);
-    console.log(imgUrl)
-    console.log(cvUrl)
+    console.log(imgUrl);
+    console.log(cvUrl);
 
     // Replace with actual user ID
     setUploading(true);
@@ -54,6 +53,7 @@ export default function Form() {
     //   imageurl = await uploadFile(data.photo[0], userId, "image");
     // }
 
+    console.log(userId);
     if (!imgUrl) {
       alert("Image is required. Please upload a photo.");
       setUploading(false);
@@ -74,11 +74,21 @@ export default function Form() {
 
     // console.log(cvurl, imageurl);
 
-    Registration({ registrationData: userData });
-    toast.success("Registration Success");
-    reset();
-    setUploading(false);
-    router.push("/");
+    Registration(
+      { registrationData: userData },
+      {
+        onSuccess: () => {
+          toast.success("Registration Success");
+          reset();
+          setUploading(false);
+          router.push("/");
+        },
+        onError: () => {
+          toast.error("Registration failed");
+          setUploading(false);
+        },
+      }
+    );
   });
 
   const uploadFile = async (file: File, userId: string, fileType: string) => {
