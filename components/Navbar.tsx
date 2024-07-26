@@ -46,7 +46,6 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   const [active, setActive] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session, status } = useSession();
-  console.log(session);
 
   const [showProfile, setShowProfile] = useState<boolean>(false);
 
@@ -216,7 +215,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
               
           
             {/* <SheetFooter> */}
-            <div className="h-[2px] w-full bg-white"></div>
+            <div className="h-[2px]  w-full bg-white"></div>
               {user._id && <NavBarProfile
                 user={user}
                 clickLogoutBtn={clickLogoutBtn}
@@ -338,7 +337,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
       </div>
       <div className=" relative ">
         <div
-          className={` absolute top-[96px] ${
+          className={` fixed top-[96px] ${
             !showProfile
               ? "hidden"
               : "xl:w-3/12 lg:w-3/12 md:w-1/3 2xl:w-1/5 sm:block hidden"
