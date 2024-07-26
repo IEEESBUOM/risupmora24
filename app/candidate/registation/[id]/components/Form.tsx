@@ -1,19 +1,23 @@
 // components/Form.js
 
-// import { Input } from "@/components/ui/input";
-
-import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { RegistrationFormDataType } from "@/Type";
+import { Candidate, RegistrationFormDataType } from "@/Type";
 import { useUserRegistration } from "@/hooks/user/useUserRegistration";
 import toast from "react-hot-toast";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import CloudinaryUpload from "@/components/cloudinaryWidget";
-export default function Form() {
+import { checkUniId } from "@/service/checkUserId";
+import Link from "next/link";
+
+type FormProps = {
+  candidate?: Candidate | null;
+};
+
+export default function Form({ candidate }: FormProps) {
+  console.log(candidate);
   const {
     register,
     setValue,
@@ -23,7 +27,6 @@ export default function Form() {
   } = useForm<RegistrationFormDataType>();
   const [imgUrl, setImgUrl] = useState<string>("");
   const [cvUrl, setCvUrl] = useState<string>("");
-  const session = useSession();
 
   const [uploading, setUploading] = useState<boolean>(false);
   const params = useParams();
@@ -32,26 +35,27 @@ export default function Form() {
 
   const { Registration, isPending } = useUserRegistration();
 
-  // useEffect(() => {
-  //   setValue("email", session.data?.user?.email as string); // Set initial value for "email"
-  // }, [setValue]);
+  useEffect(() => {
+    if (candidate) {
+      setValue("firstName", candidate.firstName || "");
+      setValue("lastName", candidate.lastName || "");
+      setValue("nameWithInitials", candidate.nameWithInitials || "");
+      setValue("universityID", candidate.universityID || "");
+      setValue("contactNo", candidate.contactNo || "");
+      setValue("degree", candidate.degree || "");
+      setValue("department", candidate.department || "");
+      setImgUrl(candidate.imgUrl || "");
+      setCvUrl(candidate.cvUrl || "");
+    }
+  }, [candidate, setValue]);
+
   console.log(cvUrl, imgUrl);
   const onSubmit = handleSubmit(async (data) => {
     console.log(data);
     console.log(imgUrl);
     console.log(cvUrl);
 
-    // Replace with actual user ID
     setUploading(true);
-    // let cvurl,
-    //   imageurl = "";
-    // if (data.cv[0]) {
-    //   cvurl = await uploadFile(data.cv[0], userId, "cv");
-    // }
-
-    // if (data.photo[0]) {
-    //   imageurl = await uploadFile(data.photo[0], userId, "image");
-    // }
 
     console.log(userId);
     if (!imgUrl) {
@@ -72,7 +76,15 @@ export default function Form() {
       userId: userId,
     };
 
-    // console.log(cvurl, imageurl);
+    const uniIdExist = await checkUniId({ universityID: data.universityID });
+    console.log(uniIdExist);
+    if (uniIdExist) {
+      toast.error(
+        "This universityId has been used before. Please enter new ID."
+      );
+      setUploading(false);
+      return;
+    }
 
     Registration(
       { registrationData: userData },
@@ -90,26 +102,6 @@ export default function Form() {
       }
     );
   });
-
-  const uploadFile = async (file: File, userId: string, fileType: string) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("userId", userId);
-    formData.append("fileType", fileType);
-
-    const response = await fetch("/api/v1/upload", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      return data.url;
-    } else {
-      alert("Upload failed");
-    }
-  };
 
   return (
     <div className="flex w-full  justify-center px-5 md:px-20 py-16 shadow-lg rounded-lg">
@@ -450,26 +442,38 @@ export default function Form() {
         </div>
 
         {/* Register Button */}
-        <div className="flex  justify-center md:justify-end mt-6">
-          <button
-            onSubmit={onSubmit}
-            type="submit"
-            className={`w-4/5 md:w-1/3 lg:w-1/4 p-3 bg-[#0c2735] text-white font-bold rounded-full `}
-          >
-            {uploading || isPending ? (
-              <div className="w-full flex justify-center items-center">
-                <Image
-                  src="/spinner/loading.svg"
-                  width={28}
-                  height={28}
-                  alt="spinner"
-                />
-              </div>
-            ) : (
-              " Register"
-            )}
-          </button>
-        </div>
+
+        {candidate ? (
+          <Link href="/" className="flex  justify-center md:justify-end mt-6">
+            <button
+              className={`w-4/5 md:w-1/3 lg:w-1/4 p-3 bg-[#0c2735] text-white font-bold rounded-full `}
+            >
+              Home
+            </button>
+          </Link>
+        ) : (
+          <div className="flex  justify-center md:justify-end mt-6">
+            <button
+              onSubmit={onSubmit}
+              type="submit"
+              className={`w-4/5 md:w-1/3 lg:w-1/4 p-3 bg-[#0c2735] text-white font-bold rounded-full `}
+            >
+              {uploading || isPending ? (
+                <div className="w-full flex justify-center items-center">
+                  <Image
+                    src="/spinner/loading.svg"
+                    width={28}
+                    height={28}
+                    alt="spinner"
+                  />
+                </div>
+              ) : (
+                " Register"
+              )}
+            </button>
+          </div>
+        )}
+
         {/* <div className="mt-5 bg-red-200 rounded-lg">
           <Alert className="border-red-300" variant="destructive">
             <div className=" flex items-center gap-4">

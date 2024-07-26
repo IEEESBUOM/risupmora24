@@ -19,8 +19,19 @@ export async function POST(req: NextRequest) {
     }: RegistrationFormDataSendType = await req.json();
 
     console.log(userId);
+    const userExists = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    console.log(userExists);
+
+    if (!userExists) {
+      return NextResponse.json({ message: "User not found." }, { status: 404 });
+    }
 
     const data = {
+      candidate_id: userId, // Match the candidate_id with the user's id
       firstName,
       lastName,
       nameWithInitials,
@@ -30,11 +41,6 @@ export async function POST(req: NextRequest) {
       department,
       cvUrl,
       imgUrl,
-      user: {
-        connect: {
-          id: userId,
-        },
-      },
     };
 
     const response = await prisma.candidate.create({
@@ -56,7 +62,7 @@ export async function POST(req: NextRequest) {
     //   );
     // }
 
-    // console.log(e);
+    console.log(e);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }
