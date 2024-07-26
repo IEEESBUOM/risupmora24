@@ -15,6 +15,9 @@ type Request = {
   cv: FileList;
   photo: FileList;
   email: string;
+  userId: string;
+  cvUrl: string;
+  imgUrl: string;
 };
 
 export async function POST(req: NextRequest) {
@@ -31,6 +34,9 @@ export async function POST(req: NextRequest) {
       cv,
       photo,
       email,
+      userId,
+      cvUrl,
+      imgUrl,
     }: Request = await req.json();
 
     console.log(userId);

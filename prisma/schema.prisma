@@ -51,10 +51,6 @@ model Candidate {
   allocation       Allocation[]
   user             User         @relation(fields: [candidate_id], references: [id])
   feedback         Feedback[]
-  prefCompany1     String?
-  prefCompany2     String?
-  prefCompany3     String?
-  prefCompany4     String?
 }
 
 model CompanyCordinator {
