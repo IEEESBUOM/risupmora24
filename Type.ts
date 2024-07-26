@@ -30,16 +30,34 @@ export interface CV {
 
 export interface Candidate {
   candidate_id: string;
+  firstName: string;
+  lastName: string;
   nameWithInitials: string;
   universityID: string;
   contactNo: string;
-  degree: string;
   department: string;
+  degree: string;
   cvUrl: string;
   imgUrl: string;
-  firstName: string;
-  lastName: string;
-  user: {
-    email: string;
-  };
+  createdAt: string;
+  updatedAt: string;
+  prefCompany1: string | null;
+  prefCompany2: string | null;
+  prefCompany3: string | null;
+  prefCompany4: string | null;
+  user: User;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  emailVerified: string;
+  image: string | null;
+  password: string;
+  emailVerifyStatus: boolean;
+  createdAt: string;
+  updatedAt: string;
+  passwordResetToken: string;
+  passwordResetTokenExpire: string;
 }

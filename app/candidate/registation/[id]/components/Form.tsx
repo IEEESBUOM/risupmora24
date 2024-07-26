@@ -1,18 +1,23 @@
 // components/Form.js
 
-// import { Input } from "@/components/ui/input";
-
-import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { RegistrationFormDataType } from "@/Type";
+import { Candidate, RegistrationFormDataType } from "@/Type";
 import { useUserRegistration } from "@/hooks/user/useUserRegistration";
 import toast from "react-hot-toast";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-export default function Form() {
+import CloudinaryUpload from "@/components/cloudinaryWidget";
+import { checkUniId } from "@/service/checkUserId";
+import Link from "next/link";
+
+type FormProps = {
+  candidate?: Candidate | null;
+};
+
+export default function Form({ candidate }: FormProps) {
+  console.log(candidate);
   const {
     register,
     setValue,
@@ -20,8 +25,8 @@ export default function Form() {
     reset,
     formState: { errors },
   } = useForm<RegistrationFormDataType>();
-
-  const session = useSession();
+  const [imgUrl, setImgUrl] = useState<string>("");
+  const [cvUrl, setCvUrl] = useState<string>("");
 
   const [uploading, setUploading] = useState<boolean>(false);
   const params = useParams();
@@ -30,21 +35,33 @@ export default function Form() {
 
   const { Registration, isPending } = useUserRegistration();
 
-  // useEffect(() => {
-  //   setValue("email", session.data?.user?.email as string); // Set initial value for "email"
-  // }, [setValue]);
-
-  const onSubmit = handleSubmit(async (data) => {
-    // Replace with actual user ID
-    setUploading(true);
-    let cvurl,
-      imageurl = "";
-    if (data.cv[0]) {
-      cvurl = await uploadFile(data.cv[0], userId, "cv");
+  useEffect(() => {
+    if (candidate) {
+      setValue("firstName", candidate.firstName || "");
+      setValue("lastName", candidate.lastName || "");
+      setValue("nameWithInitials", candidate.nameWithInitials || "");
+      setValue("universityID", candidate.universityID || "");
+      setValue("contactNo", candidate.contactNo || "");
+      setValue("degree", candidate.degree || "");
+      setValue("department", candidate.department || "");
+      setImgUrl(candidate.imgUrl || "");
+      setCvUrl(candidate.cvUrl || "");
     }
+  }, [candidate, setValue]);
 
-    if (data.photo[0]) {
-      imageurl = await uploadFile(data.photo[0], userId, "image");
+  console.log(cvUrl, imgUrl);
+  const onSubmit = handleSubmit(async (data) => {
+    console.log(data);
+    console.log(imgUrl);
+    console.log(cvUrl);
+
+    setUploading(true);
+
+    console.log(userId);
+    if (!imgUrl) {
+      alert("Image is required. Please upload a photo.");
+      setUploading(false);
+      return;
     }
     const userData = {
       firstName: data.firstName,
@@ -54,39 +71,37 @@ export default function Form() {
       contactNo: data.contactNo,
       degree: data.degree,
       department: data.department,
-      cvUrl: cvurl,
-      imgUrl: imageurl,
+      cvUrl: cvUrl,
+      imgUrl: imgUrl,
       userId: userId,
     };
 
-    console.log(cvurl, imageurl);
-
-    Registration({ registrationData: userData });
-    toast.success("Registration Success");
-    reset();
-    setUploading(false);
-    router.push("/");
-  });
-
-  const uploadFile = async (file: File, userId: string, fileType: string) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("userId", userId);
-    formData.append("fileType", fileType);
-
-    const response = await fetch("/api/v1/upload", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      return data.url;
-    } else {
-      alert("Upload failed");
+    const uniIdExist = await checkUniId({ universityID: data.universityID });
+    console.log(uniIdExist);
+    if (uniIdExist) {
+      toast.error(
+        "This universityId has been used before. Please enter new ID."
+      );
+      setUploading(false);
+      return;
     }
-  };
+
+    Registration(
+      { registrationData: userData },
+      {
+        onSuccess: () => {
+          toast.success("Registration Success");
+          reset();
+          setUploading(false);
+          router.push("/");
+        },
+        onError: () => {
+          toast.error("Registration failed");
+          setUploading(false);
+        },
+      }
+    );
+  });
 
   return (
     <div className="flex w-full  justify-center px-5 md:px-20 py-16 shadow-lg rounded-lg">
@@ -374,12 +389,12 @@ export default function Form() {
         </div>
 
         {/* CV Upload */}
-        <div className="flex flex-wrap items-center mb-6">
+        <div className="flex flex-wrap  mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             Upload your CV (in PDF form)
           </label>
           <div className="lg:w-1/3 w-4/5 md:w-3/5 lg:ml-10 md:ml-0">
-            <Input
+            {/* <Input
               className="w-full    border-gray-300 rounded-lg"
               // onChange={handleFileChange}
               type="file"
@@ -391,7 +406,8 @@ export default function Form() {
                     "Only PDF files are allowed",
                 },
               })}
-            />
+            /> */}
+            <CloudinaryUpload setImgUrl={setCvUrl} />
             {errors.cv && (
               <div className="text-xs text-red-600">*{errors.cv.message}</div>
             )}
@@ -399,12 +415,12 @@ export default function Form() {
         </div>
 
         {/* Photo Upload */}
-        <div className="flex flex-wrap items-center mb-6">
+        <div className="flex flex-wrap  mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             Upload a Formal Photo of Yourself
           </label>
           <div className="lg:w-1/3 w-4/5 md:w-3/5 lg:ml-10 md:ml-0">
-            <Input
+            {/* <Input
               className="w-full   border-gray-300 rounded-lg"
               type="file"
               {...register("photo", {
@@ -415,7 +431,8 @@ export default function Form() {
                     "Only image files are allowed",
                 },
               })}
-            />
+            /> */}
+            <CloudinaryUpload setImgUrl={setImgUrl} />
             {errors.photo && (
               <div className="text-xs text-red-600">
                 *{errors.photo.message}
@@ -425,25 +442,38 @@ export default function Form() {
         </div>
 
         {/* Register Button */}
-        <div className="flex  justify-center md:justify-end mt-6">
-          <button
-            type="submit"
-            className={`w-4/5 md:w-1/3 lg:w-1/4 p-3 bg-[#0c2735] text-white font-bold rounded-full `}
-          >
-            {uploading || isPending ? (
-              <div className="w-full flex justify-center items-center">
-                <Image
-                  src="/spinner/loading.svg"
-                  width={28}
-                  height={28}
-                  alt="spinner"
-                />
-              </div>
-            ) : (
-              " Register"
-            )}
-          </button>
-        </div>
+
+        {candidate ? (
+          <Link href="/" className="flex  justify-center md:justify-end mt-6">
+            <button
+              className={`w-4/5 md:w-1/3 lg:w-1/4 p-3 bg-[#0c2735] text-white font-bold rounded-full `}
+            >
+              Home
+            </button>
+          </Link>
+        ) : (
+          <div className="flex  justify-center md:justify-end mt-6">
+            <button
+              onSubmit={onSubmit}
+              type="submit"
+              className={`w-4/5 md:w-1/3 lg:w-1/4 p-3 bg-[#0c2735] text-white font-bold rounded-full `}
+            >
+              {uploading || isPending ? (
+                <div className="w-full flex justify-center items-center">
+                  <Image
+                    src="/spinner/loading.svg"
+                    width={28}
+                    height={28}
+                    alt="spinner"
+                  />
+                </div>
+              ) : (
+                " Register"
+              )}
+            </button>
+          </div>
+        )}
+
         {/* <div className="mt-5 bg-red-200 rounded-lg">
           <Alert className="border-red-300" variant="destructive">
             <div className=" flex items-center gap-4">
