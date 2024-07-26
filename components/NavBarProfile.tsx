@@ -73,9 +73,9 @@ const NavBarProfile = memo(function NavBarProfile({
     };
   }, [showProfile, setShowProfile]);
 
-  return (
-    <>
-      <div ref={profileRef} className=" text-white font-poppins">
+  return ( 
+    <div className="">
+      <div ref={profileRef} className=" text-white  font-poppins">
         {!isInSheet && <div className="z-50 flex m-3 items-center justify-end">
         
           <button onClick={() => setShowProfile(false)}>
@@ -124,7 +124,7 @@ const NavBarProfile = memo(function NavBarProfile({
         </div>
         {isInSheet && <div className="ml-4">{user.email}</div>}
       </div>
-    </>
+    </div>
   );
 });
 
