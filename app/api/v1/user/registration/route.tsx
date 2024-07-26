@@ -3,9 +3,24 @@ import { RegistrationFormDataSendType } from "@/Type";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { NextRequest, NextResponse } from "next/server";
 
+type Request = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  nameWithInitials: string;
+  universityID: string;
+  contactNo: number;
+  degree: string;
+  department: string;
+  cv: FileList;
+  photo: FileList;
+  email: string;
+};
+
 export async function POST(req: NextRequest) {
   try {
     const {
+      id,
       firstName,
       lastName,
       nameWithInitials,
@@ -13,10 +28,10 @@ export async function POST(req: NextRequest) {
       contactNo,
       degree,
       department,
-      cvUrl,
-      imgUrl,
-      userId,
-    }: RegistrationFormDataSendType = await req.json();
+      cv,
+      photo,
+      email,
+    }: Request = await req.json();
 
     console.log(userId);
     const userExists = await prisma.user.findUnique({
@@ -42,14 +57,11 @@ export async function POST(req: NextRequest) {
       cvUrl,
       imgUrl,
     };
+    console.log(data);
 
-    const response = await prisma.candidate.create({
-      data: data,
-    });
+    // const data = await prisma.user.findMany();
 
-    console.log(response);
-
-    return NextResponse.json({ response });
+    return NextResponse.json({ data });
   } catch (e) {
     // if (e instanceof PrismaClientKnownRequestError && e.code === "P2025") {
     //   console.log("Error: User not found.");
@@ -63,6 +75,7 @@ export async function POST(req: NextRequest) {
     // }
 
     console.log(e);
+
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }
