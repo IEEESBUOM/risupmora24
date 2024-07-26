@@ -389,7 +389,7 @@ export default function Form({ candidate }: FormProps) {
         </div>
 
         {/* CV Upload */}
-        <div className="flex flex-wrap items-center mb-6">
+        <div className="flex flex-wrap  mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             Upload your CV (in PDF form)
           </label>
@@ -415,7 +415,7 @@ export default function Form({ candidate }: FormProps) {
         </div>
 
         {/* Photo Upload */}
-        <div className="flex flex-wrap items-center mb-6">
+        <div className="flex flex-wrap  mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             Upload a Formal Photo of Yourself
           </label>
