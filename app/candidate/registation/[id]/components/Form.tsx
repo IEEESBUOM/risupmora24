@@ -1,29 +1,106 @@
 // components/Form.js
 
-// import { Input } from "@/components/ui/input";
-
-import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import { RegistrationFormDataType } from "@/Type";
+import { Candidate, RegistrationFormDataType } from "@/Type";
 import { useUserRegistration } from "@/hooks/user/useUserRegistration";
 import toast from "react-hot-toast";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import CloudinaryUpload from "@/components/cloudinaryWidget";
+import { checkUniId } from "@/service/checkUserId";
+import Link from "next/link";
 
-export default function Form() {
+type FormProps = {
+  candidate?: Candidate | null;
+};
+
+export default function Form({ candidate }: FormProps) {
+  console.log(candidate);
   const {
     register,
     setValue,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<RegistrationFormDataType>();
+  const [imgUrl, setImgUrl] = useState<string>("");
+  const [cvUrl, setCvUrl] = useState<string>("");
+
+  const [uploading, setUploading] = useState<boolean>(false);
+  const params = useParams();
+  const userId = params.id as string;
+  const router = useRouter();
 
   const { Registration, isPending } = useUserRegistration();
 
+  useEffect(() => {
+    if (candidate) {
+      setValue("firstName", candidate.firstName || "");
+      setValue("lastName", candidate.lastName || "");
+      setValue("nameWithInitials", candidate.nameWithInitials || "");
+      setValue("universityID", candidate.universityID || "");
+      setValue("contactNo", candidate.contactNo || "");
+      setValue("degree", candidate.degree || "");
+      setValue("department", candidate.department || "");
+      setImgUrl(candidate.imgUrl || "");
+      setCvUrl(candidate.cvUrl || "");
+    }
+  }, [candidate, setValue]);
+
+  console.log(cvUrl, imgUrl);
   const onSubmit = handleSubmit(async (data) => {
     console.log(data);
-    Registration({ registrationData: data });
-    toast.success("Registration Success");
+    console.log(imgUrl);
+    console.log(cvUrl);
+
+    setUploading(true);
+
+    console.log(userId);
+    if (!imgUrl) {
+      alert("Image is required. Please upload a photo.");
+      setUploading(false);
+      return;
+    }
+    const userData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      nameWithInitials: data.nameWithInitials,
+      universityID: data.universityID,
+      contactNo: data.contactNo,
+      degree: data.degree,
+      department: data.department,
+      cvUrl: cvUrl,
+      imgUrl: imgUrl,
+      userId: userId,
+    };
+
+    const uniIdExist = await checkUniId({ universityID: data.universityID });
+    console.log(uniIdExist);
+    if (uniIdExist) {
+      toast.error(
+        "This universityId has been used before. Please enter new ID."
+      );
+      setUploading(false);
+      return;
+    }
+
+    Registration(
+      { registrationData: userData },
+      {
+        onSuccess: () => {
+          toast.success("Registration Success");
+          reset();
+          setUploading(false);
+          router.push("/");
+        },
+        onError: () => {
+          toast.error("Registration failed");
+          setUploading(false);
+        },
+      }
+    );
   });
 
   return (
@@ -148,6 +225,10 @@ export default function Form() {
                   value: 10,
                   message: "Contact number is not valid",
                 },
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: "Contact number must be numeric",
+                },
               })}
             />
             {errors.contactNo && (
@@ -159,13 +240,15 @@ export default function Form() {
         </div>
 
         {/* Email */}
-        <div className="flex flex-wrap items-center mb-6">
+        {/* <div className="flex flex-wrap items-center mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             Email
           </label>
           <div className="flex w-4/5 flex-col md:w-3/5 lg:w-1/3  lg:ml-10 md:ml-0">
             <input
               type="email"
+              disabled
+              defaultValue={session.data?.user?.email as string}
               className="w-full  lg:w-full px-3 py-2 border border-gray-300 focus:outline-blue-300 font-poppins rounded-lg"
               placeholder="Email"
               {...register("email", {
@@ -182,7 +265,7 @@ export default function Form() {
               </div>
             )}
           </div>
-        </div>
+        </div> */}
 
         {/* Degree */}
         <div className="flex flex-wrap items-center mb-6">
@@ -306,13 +389,14 @@ export default function Form() {
         </div>
 
         {/* CV Upload */}
-        <div className="flex flex-wrap items-center mb-6">
+        <div className="flex flex-wrap  mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             Upload your CV (in PDF form)
           </label>
           <div className="lg:w-1/3 w-4/5 md:w-3/5 lg:ml-10 md:ml-0">
-            <Input
+            {/* <Input
               className="w-full    border-gray-300 rounded-lg"
+              // onChange={handleFileChange}
               type="file"
               {...register("cv", {
                 required: "CV is required",
@@ -322,7 +406,8 @@ export default function Form() {
                     "Only PDF files are allowed",
                 },
               })}
-            />
+            /> */}
+            <CloudinaryUpload setImgUrl={setCvUrl} />
             {errors.cv && (
               <div className="text-xs text-red-600">*{errors.cv.message}</div>
             )}
@@ -330,12 +415,12 @@ export default function Form() {
         </div>
 
         {/* Photo Upload */}
-        <div className="flex flex-wrap items-center mb-6">
+        <div className="flex flex-wrap  mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             Upload a Formal Photo of Yourself
           </label>
           <div className="lg:w-1/3 w-4/5 md:w-3/5 lg:ml-10 md:ml-0">
-            <Input
+            {/* <Input
               className="w-full   border-gray-300 rounded-lg"
               type="file"
               {...register("photo", {
@@ -346,7 +431,8 @@ export default function Form() {
                     "Only image files are allowed",
                 },
               })}
-            />
+            /> */}
+            <CloudinaryUpload setImgUrl={setImgUrl} />
             {errors.photo && (
               <div className="text-xs text-red-600">
                 *{errors.photo.message}
@@ -356,22 +442,38 @@ export default function Form() {
         </div>
 
         {/* Register Button */}
-        <div className="flex  justify-center md:justify-end mt-6">
-          <button
-            type="submit"
-            className={`w-4/5 md:w-1/3 lg:w-1/4 p-3 bg-[#0c2735] text-white font-bold rounded-full `}
-          >
-            {/* <div className="w-full flex justify-center items-center">
-              <Image
-                src="/spinner/loading.svg"
-                width={28}
-                height={28}
-                alt="spinner"
-              />
-            </div> */}
-            Register
-          </button>
-        </div>
+
+        {candidate ? (
+          <Link href="/" className="flex  justify-center md:justify-end mt-6">
+            <button
+              className={`w-4/5 md:w-1/3 lg:w-1/4 p-3 bg-[#0c2735] text-white font-bold rounded-full `}
+            >
+              Home
+            </button>
+          </Link>
+        ) : (
+          <div className="flex  justify-center md:justify-end mt-6">
+            <button
+              onSubmit={onSubmit}
+              type="submit"
+              className={`w-4/5 md:w-1/3 lg:w-1/4 p-3 bg-[#0c2735] text-white font-bold rounded-full `}
+            >
+              {uploading || isPending ? (
+                <div className="w-full flex justify-center items-center">
+                  <Image
+                    src="/spinner/loading.svg"
+                    width={28}
+                    height={28}
+                    alt="spinner"
+                  />
+                </div>
+              ) : (
+                " Register"
+              )}
+            </button>
+          </div>
+        )}
+
         {/* <div className="mt-5 bg-red-200 rounded-lg">
           <Alert className="border-red-300" variant="destructive">
             <div className=" flex items-center gap-4">

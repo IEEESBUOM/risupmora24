@@ -17,7 +17,9 @@ function Page() {
               Registration
             </div>
           </div>
-          <div className="absolute top-1 left-0 mt-8 ml-1.5 sm:mt-8 sm:ml-3 bg-[#f1c232] text-[#f1c232] rounded-[10px] border-none py-2.5 cursor-pointer sm:w-[290px] sm:h-[70px] w-[230px] h-[55px]"></div>
+
+          <div className="absolute top-1 left-0 mt-8 ml-1.5 sm:mt-8 sm:ml-3 bg-[#f1c232] text-[#f1c232] rounded-[10px] border-none py-2.5 cursor-pointer sm:w-[260px] sm:h-[70px] w-[230px] h-[55px]"></div>
+
         </div>
       </div>
       <div className="bg-white rounded-lg p-10 max-w-2xl">

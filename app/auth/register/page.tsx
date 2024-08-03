@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 import { useForm,SubmitHandler } from "react-hook-form";
 import { IoMdEyeOff,IoMdEye } from "react-icons/io";
 import toast from "react-hot-toast";
+import {useRouter } from "next/navigation";
 
 
 export default function Page() {
+  const router = useRouter();
   type Inputs = {
         username: string,
         email: string,
@@ -32,6 +34,7 @@ export default function Page() {
               .then((res) => {
                 if (res.ok) {
                   resolve();
+                  router.push("/auth/signin");
                 } else {
                   res.json().then((data) => {
                     setErrorMessage(data.message);
@@ -86,10 +89,16 @@ export default function Page() {
         Email
       </label>
       <input
-        {...register("email")}
+          {...register("email", {
+            required: "Email is required",
+            pattern: {
+              value: /^[a-zA-Z0-9._%+-]+@uom\.lk$/,
+              message: "Please enter your UOM email",
+            }
+          })}
         type="email"
         name="email"
-        placeholder="Enter your email"
+        placeholder="Enter your email(ashan.21@uom.lk)"
         required
         id="email"
         className="w-full py-4 sm:py-3 pl-5 border-transparent rounded-full border-gray-300  border-2 placeholder:text-stone-500"
@@ -132,6 +141,7 @@ export default function Page() {
         <p>{errorMessage}</p>
         <p>
       {errors.username?.message}
+      {errors.email?.message}
     </p>
       </div>
  

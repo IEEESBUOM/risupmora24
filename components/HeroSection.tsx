@@ -21,14 +21,14 @@ const HeroSection = () => {
       />
 
       <div className=" grid justify-center">
-        {/* <Link href="/auth/signin"> */}
+        
         <button
           onMouseEnter={animate}
           onMouseLeave={reverseAnimate}
           className="  w-[140px] h-[50px] bg-custom-black font-quicksand text-white rounded-full border-none outline-none cursor-pointer  shadow-[0_15px_30px_rgba(0,0,0,0.5)] overflow-hidden"
         >
-          <span className=" grid  justify-center items-center gap-16 py-4 text-xs font-medium tracking-wider">
-            <div className="flex gap-3 custom-animation">
+          <Link href={"/auth/register"} className=" grid  justify-center items-center gap-16 py-4 text-xs font-medium tracking-wider">
+            <div className="flex gap-3  custom-animation">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -42,9 +42,9 @@ const HeroSection = () => {
               SIGN IN
             </div>
             <div className="custom-animation text-custom-yellow">WELCOME</div>
-          </span>
+          </Link>
         </button>
-        {/* </Link> */}
+      
       </div>
 
       {/* animated arrows */}
