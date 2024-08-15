@@ -13,7 +13,8 @@ export const uploadCandidateCv = async ({
   console.log("getCandidate");
   // export const getCandidate = async (data: string) => {
   // const data = "clyld3pa40000wb6y5trem706";
-  console.log(userId);
+  console.log("🤷‍♀️🤷‍♂️👌😊", cvUrl);
+  console.log("🤷‍♀️🤷‍♂️👌😊", userId);
   // if (!userId) return;
 
   try {
@@ -25,7 +26,7 @@ export const uploadCandidateCv = async ({
       }
     );
     if (response.data) {
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
     }
     toast.error("cv uoload failed");
