@@ -15,6 +15,8 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams } from "next/navigation";
 import CompanyPreference from "./CompanyPreference";
+import CloudinaryUpload from "@/components/cloudinaryWidget";
+import CvUpload from "@/components/CvUpload";
 
 const StudentView = () => {
   const {
@@ -28,6 +30,7 @@ const StudentView = () => {
   const { uploadCV, isUploading } = useUploadCV();
   const { candidate: data, isPending } = useCandidate({ userId });
   console.log(data);
+  const [cvUrl, setCvUrl] = useState<string>("");
 
   const formatTime = (dateTimeString: string) => {
     const parts = dateTimeString.split("T");
@@ -42,6 +45,20 @@ const StudentView = () => {
 
     return `${formattedTime}`;
   };
+
+  const handleUploadCV = handleSubmit(async (data: CV) => {
+    console.log(data);
+    // const formData = new FormData();
+    // formData.append("cv", data.cv[0]);
+    console.log(cvUrl);
+
+    try {
+      await uploadCV({ cvUrl });
+      toast.success("CV uploaded successfully");
+    } catch (error) {
+      toast.error("CV upload failed");
+    }
+  });
 
   return (
     <div className="w-full block 2xl:flex 2xl:justify-center 2xl:items-center  px-5 md:px-12 lg:px-28 h-100 mb-10">
@@ -163,7 +180,7 @@ const StudentView = () => {
                     </div>
                     <div className="flex md:flex-row flex-col md:gap-0 gap-4 mt-5">
                       <div className="fileInput">
-                        <Input
+                        {/* <Input
                           id="picture"
                           type="file"
                           {...register("cv", {
@@ -174,14 +191,15 @@ const StudentView = () => {
                                 "Only PDF files are allowed",
                             },
                           })}
-                        />
+                        /> */}
+                        <CvUpload setImgUrl={setCvUrl} />
                       </div>
                     </div>
                   </form>
                   <div className="md:ml-4 mt-4 md:block flex justify-center">
                     <button
                       className="bg-stv-dark-blue text-white py-2 px-5 rounded-lg cursor-pointer transition-colors duration-300"
-                      onClick={() => uploadCV({ cvUrl: data?.cvUrl })}
+                      onClick={() => handleUploadCV()}
                       disabled={isUploading}
                     >
                       {isUploading ? "Uploading..." : "Upload CV"}
