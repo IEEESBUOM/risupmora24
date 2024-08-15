@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import PrimaryButtonSmall from "./ui/PrimaryButtonSmall";
+import Link from "next/link";
 
 const StudentNavbar = () => {
   return (
@@ -22,9 +23,12 @@ const StudentNavbar = () => {
           src="/images/logo-large.png"
           alt="logo"
         />
-        {/* <div> */}
-        <PrimaryButtonSmall text="Sign out" />
-        {/* </div> */}
+        <div className="flex ">
+          <Link href="/">
+            <PrimaryButtonSmall text="Home" />
+          </Link>
+          <PrimaryButtonSmall text="Sign out" />
+        </div>
         {/* {!isMobile && ( */}
         {/* <div onClick={handleSignOut}>
             <PrimaryButtonSmall text="Sign out" />

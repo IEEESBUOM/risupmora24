@@ -9,7 +9,7 @@ type Request = {
   lastName: string;
   nameWithInitials: string;
   universityID: string;
-  contactNo: number;
+  contactNo: string;
   degree: string;
   department: string;
   cv: FileList;
@@ -67,7 +67,13 @@ export async function POST(req: NextRequest) {
 
     // const data = await prisma.user.findMany();
 
-    return NextResponse.json({ data });
+    const savedCandidate = await prisma.candidate.create({
+      data: data, // Wrap the data in a data property
+    });
+
+    return NextResponse.json({ savedCandidate });
+
+    // return NextResponse.json({ data });
   } catch (e) {
     // if (e instanceof PrismaClientKnownRequestError && e.code === "P2025") {
     //   console.log("Error: User not found.");
