@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { Value } from "@radix-ui/react-select";
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 
 export default function CompanyPreference({
   userEmail,
@@ -25,11 +26,39 @@ export default function CompanyPreference({
 
         fetchCompanyData();
     }, []);
-  const updateCompanyPreference = () => {
+  const updateCompanyPreference = async  () => {
     console.log(prefCompany1);
     console.log(prefCompany2);
     console.log(prefCompany3);
     console.log(prefCompany4);
+    if (!prefCompany1 || !prefCompany2 || !prefCompany3 || !prefCompany4) {
+      toast.error("Please select all preferences");
+      return;  
+    }
+
+    const data = {
+      email: userEmail,
+      prefCompany1,
+      prefCompany2,
+      prefCompany3,
+      prefCompany4,
+    };
+
+    
+      const response = await fetch("/api/v1/candidate/updateCompanyPreference", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const responseData = await response.json();
+      toast.success(responseData.message);
+   
+    
+    
+
+    
   }
   const [prefCompany1, setPrefCompany1] = useState("");
   const [prefCompany2, setPrefCompany2] = useState("");
@@ -43,12 +72,12 @@ export default function CompanyPreference({
   ];
   return (
     <div className="my-5">
-      <div className=" font-semibold">
+      <div className=" text-lg mb-5 font-semibold">
         choose your company preference from here{" "}
       </div>
       <div className=" grid gap-4">
         <div className="flex items-center space-x-4">
-          <div className="">preference 1</div>
+          <div className="">Preference 1</div>
           <Select
             value={prefCompany1}
             onValueChange={(value) => setPrefCompany1(value)}
@@ -70,7 +99,7 @@ export default function CompanyPreference({
         </div>
 
         <div className="flex items-center space-x-4">
-          <div className="">preference 2</div>
+          <div className="">Preference 2</div>
           <Select
             value={prefCompany2}
             onValueChange={(value) => setPrefCompany2(value)}
@@ -92,7 +121,7 @@ export default function CompanyPreference({
         </div>
 
         <div className="flex items-center space-x-4">
-          <div className="">preference 3</div>
+          <div className="">Preference 3</div>
           <Select
             value={prefCompany3}
             onValueChange={(value) => setPrefCompany3(value)}
@@ -114,7 +143,7 @@ export default function CompanyPreference({
         </div>
 
         <div className="flex items-center space-x-4">
-          <div className="">preference 4</div>
+          <div className="">Preference 4</div>
           <Select
             value={prefCompany4}
             onValueChange={(value) => setPrefCompany4(value)}

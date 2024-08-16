@@ -78,27 +78,27 @@ const StudentView = () => {
               </div>
               <div className="container w-full md:w-11/12 lg:w-10/12 xl:w-7/12 px-5 md:px-20 pt-16 pb-4 mx-auto mt-3.5 mb-10 bg-[#f4f4f4] shadow-custom rounded-3xl">
                 <div className="space-y-6">
-                  <div className="text-lg md:text-xl font-poppins flex gap-3">
+                  <div className=" md:text-md font-poppins flex gap-3">
                     <b>Name with Initials: </b>
                     <span>{data?.nameWithInitials}</span>
                   </div>
-                  <div className="text-lg md:text-xl font-poppins flex gap-3">
+                  <div className=" md:text-md font-poppins flex gap-3">
                     <b>Index No: </b>
                     <span>{data?.universityID}</span>
                   </div>
-                  <div className="text-lg md:text-xl font-poppins flex gap-3">
+                  <div className="md:text-md font-poppins flex gap-3">
                     <b>Contact No: </b>
                     <span>{data?.contactNo}</span>
                   </div>
-                  <div className="text-lg md:text-xl font-poppins flex gap-3">
+                  <div className="md:text-md font-poppins flex gap-3">
                     <b>Email: </b>
                     <span>{data?.user.email}</span>
                   </div>
-                  <div className="text-lg md:text-xl font-poppins flex gap-3">
+                  <div className="md:text-md font-poppins flex gap-3">
                     <b>Degree: </b>
                     <span>{data?.degree}</span>
                   </div>
-                  <div className="text-lg md:text-xl font-poppins flex gap-3">
+                  <div className="md:text-md font-poppins flex gap-3">
                     <b>WhatsApp Group: </b>
                     <span>
                       <a
@@ -111,7 +111,9 @@ const StudentView = () => {
                     </span>
                   </div>
                 </div>
-                <div className="mt-8 font-semibold text-center font-poppins text-xl md:text-2xl underline">
+                <div className="border-t-2 border-custom-black  h-0.5 w-full my-6"></div>
+                
+                <div className="mt-8 font-semibold text-center font-poppins text-lg  underline">
                   Company Allocation
                 </div>
                 <div className="overflow-x-auto border-2 border-stv-blue rounded-lg mt-2.5">
@@ -163,13 +165,16 @@ const StudentView = () => {
                   </tbody> */}
                     </table>
                   ) : (
-                    <div className="text-gray-600 mt-2.5 text-center">
+                    <div className="text-gray-400 my-2.5  text-center">
                       No allocated company information available.
                     </div>
                   )}
                 </div>
-                <div className="">
-                  <form className="mt-8">
+
+                <div className="border-t-2 border-custom-black  h-0.5 w-full my-6"></div>
+
+                <div className="flex ">
+                  <form className="  ">
                     <div>
                       <div className="flex gap-3 items-center">
                         <FaFilePdf size={22} />
@@ -178,7 +183,7 @@ const StudentView = () => {
                         </Link>
                       </div>
                     </div>
-                    <div className="flex md:flex-row flex-col md:gap-0 gap-4 mt-5">
+                    <div className="flex mt-3 md:flex-row flex-col md:gap-0 gap-4">
                       <div className="fileInput">
                         {/* <Input
                           id="picture"
@@ -194,26 +199,32 @@ const StudentView = () => {
                         /> */}
                         <CvUpload setImgUrl={setCvUrl} />
                       </div>
-                    </div>
-                  </form>
-                  <div className="md:ml-4 mt-4 md:block flex justify-center">
+                      <div className="md:ml-4 md:block flex md:justify-center">
                     <button
                       className="bg-stv-dark-blue text-white py-2 px-5 rounded-lg cursor-pointer transition-colors duration-300"
                       onClick={() => handleUploadCV()}
                       disabled={isUploading}
                     >
-                      {isUploading ? "Uploading..." : "Upload CV"}
+                      {isUploading ? "Saving..." : "Save"}
                       {/* Upload CV */}
                     </button>
                   </div>
+                    </div>
+                  </form>
+                  
+                  
                 </div>
-                <CompanyPreference userEmail={data?.email} />
 
-                <div className="mt-8 text-lg md:text-xl">
+                <div className="border-t-2 border-custom-black  h-0.5 w-full my-6"></div>
+                <CompanyPreference userEmail={data?.user.email} />
+
+                <div className="border-t-2 border-custom-black  h-0.5 w-full my-6"></div>
+
+                <div className="mt-8  md:text-xl">
                   <b>Feedback:</b>
-                  {/* <div className="w-105 h-auto mt-2.5">
+                  <div className="w-105 h-auto mt-2.5">
                 {data?.feedback && data.feedback.length > 0 ? (
-                  data.feedback.map((feedbackData, index) => (
+                  data.feedback.map(( index:any) => (
                     <div key={index} className="mb-2.5">
                       {data.allocatedCompany[index] &&
                         data.allocatedCompany[index].toLowerCase() !== "none" &&
@@ -226,11 +237,11 @@ const StudentView = () => {
                     </div>
                   ))
                 ) : (
-                  <div className="text-gray-600 mt-2.5 text-center">
+                  <div className="text-gray-400 py-2.5 text-base  text-center border-2 border-stv-blue rounded-lg">
                     No feedback available.
                   </div>
                 )}
-              </div> */}
+              </div>
                 </div>
               </div>
             </>
