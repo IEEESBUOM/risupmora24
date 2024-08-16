@@ -5,6 +5,7 @@ import {
   CloudinaryUploadWidgetResults,
 } from "next-cloudinary";
 import { FaCloudUploadAlt } from "react-icons/fa";
+import { FaRegFilePdf } from "react-icons/fa6";
 import Image from "next/image";
 
 const CloudinaryUpload = ({
@@ -39,16 +40,17 @@ const CloudinaryUpload = ({
           sources: ["local"],
           googleApiKey: "<image_search_google_api_key>",
           showAdvancedOptions: false,
-          cropping: true,
+          // cropping: true,
           multiple: false,
           showSkipCropButton: false,
-          croppingAspectRatio: 0.75,
-          croppingDefaultSelectionRatio: 0.75,
-          croppingShowDimensions: true,
-          croppingCoordinatesMode: "custom",
+          // croppingAspectRatio: 0.75,
+          // croppingDefaultSelectionRatio: 0.75,
+          // croppingShowDimensions: true,
+          // croppingCoordinatesMode: "custom",
           defaultSource: "local",
           resourceType: "image",
           folder: "organization",
+          cropping: false,
           styles: {
             palette: {
               window: "#ffffff",
@@ -91,9 +93,13 @@ const CloudinaryUpload = ({
               href={profileImage}
               target="_blank"
               rel="noopener noreferrer"
-              className="block w-24 h-24 text-center p-2 border border-gray-300 rounded-2xl bg-gray-100"
+              className="block h-16 text-center p-2 border border-gray-300 rounded-2xl bg-gray-100 flex items-center justify-center"
+              title="Preview PDF"
             >
-              View PDF
+              <FaRegFilePdf className="text-4xl text-gray-500" />
+              <span className="absolute inset-0 flex items-center justify-center text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                Preview PDF
+              </span>
             </a>
           ) : (
             <Image
