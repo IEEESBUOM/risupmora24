@@ -13,11 +13,16 @@ import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 
 export default function CompanyPreference({
-  userEmail,
+  userEmail,pref1,pref2,pref3,pref4
 }: {
   userEmail: string;
+  pref1:string;
+  pref2:string;
+  pref3:string;
+  pref4:string;
 }) {
     useEffect(() => {
+      console.log(pref1)
         
         const fetchCompanyData = async () => {
             const response = await fetch(`/api/v1/company/getAllCompany`);
@@ -27,10 +32,7 @@ export default function CompanyPreference({
         fetchCompanyData();
     }, []);
   const updateCompanyPreference = async  () => {
-    console.log(prefCompany1);
-    console.log(prefCompany2);
-    console.log(prefCompany3);
-    console.log(prefCompany4);
+    
     if (!prefCompany1 || !prefCompany2 || !prefCompany3 || !prefCompany4) {
       toast.error("Please select all preferences");
       return;  
@@ -60,10 +62,10 @@ export default function CompanyPreference({
 
     
   }
-  const [prefCompany1, setPrefCompany1] = useState("");
-  const [prefCompany2, setPrefCompany2] = useState("");
-  const [prefCompany3, setPrefCompany3] = useState("");
-  const [prefCompany4, setPrefCompany4] = useState("");
+  const [prefCompany1, setPrefCompany1] = useState(pref1 || "");
+  const [prefCompany2, setPrefCompany2] = useState(pref2 || "");
+  const [prefCompany3, setPrefCompany3] = useState(pref3 || "");
+  const [prefCompany4, setPrefCompany4] = useState(pref4 || "");
   const [companyData,setCompanyData] = useState([])
   const updatedCompanyList = [
     { com_name: "Company A", com_id: 1 },

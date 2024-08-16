@@ -216,7 +216,11 @@ const StudentView = () => {
                 </div>
 
                 <div className="border-t-2 border-custom-black  h-0.5 w-full my-6"></div>
-                <CompanyPreference userEmail={data?.user.email} />
+                <CompanyPreference userEmail={data?.user.email}  pref1={data.prefCompany1}
+                pref2={data.prefCompany2} 
+                pref3={data.prefCompany3}
+                pref4={data.prefCompany4}
+                />
 
                 <div className="border-t-2 border-custom-black  h-0.5 w-full my-6"></div>
 
