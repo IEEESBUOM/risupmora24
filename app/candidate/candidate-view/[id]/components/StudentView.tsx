@@ -76,7 +76,7 @@ const StudentView = () => {
                   className="rounded-full"
                 />
               </div>
-              <div className="container w-full md:w-11/12 lg:w-10/12 xl:w-7/12 px-5 md:px-20 pt-16 pb-4 mx-auto mt-3.5 mb-10 bg-[#f4f4f4] shadow-custom rounded-3xl">
+              <div className="container w-full md:w-11/12 lg:w-10/12 xl:w-7/12 px-5 md:px-20 pt-16  mx-auto mt-3.5 mb-10 bg-[#f4f4f4] shadow-custom rounded-3xl pb-16">
                 <div className="space-y-6">
                   <div className=" md:text-md font-poppins flex gap-3">
                     <b>Name with Initials: </b>
