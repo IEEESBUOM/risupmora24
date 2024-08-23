@@ -75,7 +75,7 @@ const CvUpload = ({ setImgUrl }: { setImgUrl: (url: string) => void }) => {
           >
             <div className="p-2 w-full   lg:w-full text-black font-semibold flex items-center justify-center gap-2 bg-[#ffffff]  rounded-2xl">
               <FaCloudUploadAlt />
-              Upload CV
+              Upload new CV
             </div>
           </button>
         )}

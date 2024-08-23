@@ -9,9 +9,9 @@ import { FaRegFilePdf } from "react-icons/fa6";
 import Image from "next/image";
 
 const CloudinaryUpload = ({
-  setImgUrl,
+  setImgUrl,type
 }: {
-  setImgUrl: (url: string) => void;
+  setImgUrl: (url: string) => void,type:string
 }) => {
   const [profileImage, setProfileImage] = useState("");
 
@@ -88,26 +88,27 @@ const CloudinaryUpload = ({
       </CldUploadWidget>
       {profileImage && (
         <div className="mt-4">
-          {profileImage.endsWith(".pdf") ? (
+          {profileImage.endsWith(".pdf") && type=="cv" && (
             <a
               href={profileImage}
               target="_blank"
               rel="noopener noreferrer"
-              className="block h-16 text-center p-2 border border-gray-300 rounded-2xl bg-gray-100 flex items-center justify-center"
-              title="Preview PDF"
+
+              className="block w-24 h-24 text-center p-2 border border-gray-300 rounded-md bg-gray-100"
             >
-              <FaRegFilePdf className="text-4xl text-gray-500" />
-              <span className="absolute inset-0 flex items-center justify-center text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                Preview PDF
-              </span>
+              View PDF
+              
+
             </a>
-          ) : (
+          )}
+          
+          {type=="image" &&(
             <Image
               src={profileImage}
               alt="Uploaded"
               width={200}
               height={200}
-              className="w-24 h-24 rounded-2xl"
+              className="w-36 h-36 object-none    rounded-md"
             />
           )}
         </div>
