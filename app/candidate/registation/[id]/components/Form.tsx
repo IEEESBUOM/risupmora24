@@ -407,7 +407,7 @@ export default function Form({ candidate }: FormProps) {
                 },
               })}
             /> */}
-            <CloudinaryUpload setImgUrl={setCvUrl} />
+            <CloudinaryUpload setImgUrl={setCvUrl} type={"cv"} />
             {errors.cv && (
               <div className="text-xs text-red-600">*{errors.cv.message}</div>
             )}
@@ -432,7 +432,7 @@ export default function Form({ candidate }: FormProps) {
                 },
               })}
             /> */}
-            <CloudinaryUpload setImgUrl={setImgUrl} />
+            <CloudinaryUpload setImgUrl={setImgUrl} type={"image"} />
             {errors.photo && (
               <div className="text-xs text-red-600">
                 *{errors.photo.message}

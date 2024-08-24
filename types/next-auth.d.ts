@@ -8,7 +8,8 @@ declare module "next-auth" {
       id: string;
       email: string;
       name?: string | null;
-      image?: string | null;
+      // image?: string | null;
+      picture?: string | null;
       token: JWT;
     } & DefaultSession["user"];
   }
@@ -23,5 +24,6 @@ declare module "next-auth/jwt" {
     id: string;
     name: string;
     email: string;
+    image: string;
   }
 }

@@ -8,7 +8,6 @@ datasource db {
 }
 
 model User {
-
   id                   String                @id @default(cuid())
   name                 String?
   email                String                @unique
@@ -103,6 +102,10 @@ model Company {
 model Feedback {
   feedback_id  String    @id @default(cuid())
   feedback     String
+  technicalSkill Int
+  communicationSkill Int
+  problemSolvingSkill Int
+  experienceAndProject   Int
   candidate_id String
   company_id   String
   candidate    Candidate @relation(fields: [candidate_id], references: [candidate_id])

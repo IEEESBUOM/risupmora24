@@ -5,14 +5,9 @@ import {
   CloudinaryUploadWidgetResults,
 } from "next-cloudinary";
 import { FaCloudUploadAlt } from "react-icons/fa";
-import { FaRegFilePdf } from "react-icons/fa6";
 import Image from "next/image";
 
-const CloudinaryUpload = ({
-  setImgUrl,type
-}: {
-  setImgUrl: (url: string) => void,type:string
-}) => {
+const CvUpload = ({ setImgUrl }: { setImgUrl: (url: string) => void }) => {
   const [profileImage, setProfileImage] = useState("");
 
   useEffect(() => {
@@ -40,17 +35,16 @@ const CloudinaryUpload = ({
           sources: ["local"],
           googleApiKey: "<image_search_google_api_key>",
           showAdvancedOptions: false,
-          // cropping: true,
+          cropping: true,
           multiple: false,
           showSkipCropButton: false,
-          // croppingAspectRatio: 0.75,
-          // croppingDefaultSelectionRatio: 0.75,
-          // croppingShowDimensions: true,
-          // croppingCoordinatesMode: "custom",
+          croppingAspectRatio: 0.75,
+          croppingDefaultSelectionRatio: 0.75,
+          croppingShowDimensions: true,
+          croppingCoordinatesMode: "custom",
           defaultSource: "local",
           resourceType: "image",
           folder: "organization",
-          cropping: false,
           styles: {
             palette: {
               window: "#ffffff",
@@ -81,40 +75,35 @@ const CloudinaryUpload = ({
           >
             <div className="p-2 w-full   lg:w-full text-black font-semibold flex items-center justify-center gap-2 bg-[#ffffff]  rounded-2xl">
               <FaCloudUploadAlt />
-              Upload
+              Upload new CV
             </div>
           </button>
         )}
       </CldUploadWidget>
-      {profileImage && (
+      {/* {profileImage && (
         <div className="mt-4">
-          {profileImage.endsWith(".pdf") && type=="cv" && (
+          {profileImage.endsWith(".pdf") ? (
             <a
               href={profileImage}
               target="_blank"
               rel="noopener noreferrer"
-
-              className="block w-24 h-24 text-center p-2 border border-gray-300 rounded-md bg-gray-100"
+              className="block w-24 h-24 text-center p-2 border border-gray-300 rounded-2xl bg-gray-100"
             >
               View PDF
-              
-
             </a>
-          )}
-          
-          {type=="image" &&(
+          ) : (
             <Image
               src={profileImage}
               alt="Uploaded"
               width={200}
               height={200}
-              className="w-36 h-36 object-none    rounded-md"
+              className="w-24 h-24 rounded-2xl"
             />
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 };
 
-export default CloudinaryUpload;
+export default CvUpload;

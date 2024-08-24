@@ -15,6 +15,7 @@ export const useCandidate = ({ userId }: { userId: string }) => {
     queryFn: () => getCandidate({ userId }),
     // queryFn: () => getCandidate(userId),
   });
+  console.log(candidate);
 
   // const { data: candidate, isPending } = useQuery({
   //   queryKey: ["candidate", userId],

@@ -47,6 +47,8 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session, status } = useSession();
 
+  console.log(session);
+
   const [showProfile, setShowProfile] = useState<boolean>(false);
 
   const user = {
@@ -141,93 +143,93 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
               quality={100}
             />
           </div>
-          <div
-            
-            className="grid content-center cursor-pointer sm:hidden"
-          >
+          <div className="grid content-center cursor-pointer sm:hidden">
             {/* mobile view */}
-        
-          <Sheet >
-          <SheetTrigger asChild>
-          <div className="" ><HamburgerButton /></div>
-          </SheetTrigger>
-          <SheetContent className=" bg-custom-black">
-            
-          
-            
+
+            <Sheet>
+              <SheetTrigger asChild>
+                <div className="">
+                  <HamburgerButton />
+                </div>
+              </SheetTrigger>
+              <SheetContent className=" bg-custom-black">
                 <div className="mx-4 grid gap-5 mb-8">
-                <div
-                  onClick={() => handleScroll("home")}
-                  className={clsx(navigationMenuTriggerStyle(), {
-                    "after:w-full after:scale-x-100 font-semibold ": pathname === "/",
-                  })}
-                >
-                  Home
-                  {active == "home" && (
-                    <div className=" grid   justify-center">
-                      <div className="size-1.5 bg-white rounded-full"></div>
-                    </div>
-                  )}
+                  <div
+                    onClick={() => handleScroll("home")}
+                    className={clsx(navigationMenuTriggerStyle(), {
+                      "after:w-full after:scale-x-100 font-semibold ":
+                        pathname === "/",
+                    })}
+                  >
+                    Home
+                    {active == "home" && (
+                      <div className=" grid   justify-center">
+                        <div className="size-1.5 bg-white rounded-full"></div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div
+                    onClick={() => handleScroll("about")}
+                    className={clsx(navigationMenuTriggerStyle(), {
+                      "after:w-full after:scale-x-100 font-semibold":
+                        pathname === "/",
+                    })}
+                  >
+                    About
+                    {active == "about" && (
+                      <div className=" grid   justify-center">
+                        <div className="size-1.5 bg-white rounded-full"></div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div
+                    onClick={() => handleScroll("timeline")}
+                    className={clsx(navigationMenuTriggerStyle(), {
+                      "after:w-full after:scale-x-100 font-semibold":
+                        pathname === "/",
+                    })}
+                  >
+                    Timeline
+                    {active == "timeline" && (
+                      <div className=" grid   justify-center">
+                        <div className="size-1.5 bg-white rounded-full"></div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div
+                    onClick={() => handleScroll("contact")}
+                    className={clsx(navigationMenuTriggerStyle(), {
+                      "after:w-full after:scale-x-100 font-semibold":
+                        pathname === "/",
+                    })}
+                  >
+                    Contact Us
+                    {active == "contact" && (
+                      <div className=" grid   justify-center">
+                        <div className="size-1.5 bg-white rounded-full"></div>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              
-                <div
-                  onClick={() => handleScroll("about")}
-                  className={clsx(navigationMenuTriggerStyle(), {
-                    "after:w-full after:scale-x-100 font-semibold": pathname === "/",
-                  })}
-                >
-                  About
-                  {active == "about" && (
-                    <div className=" grid   justify-center">
-                      <div className="size-1.5 bg-white rounded-full"></div>
-                    </div>
-                  )}
-                </div>
-              
-                <div
-                  onClick={() => handleScroll("timeline")}
-                  className={clsx(navigationMenuTriggerStyle(), {
-                    "after:w-full after:scale-x-100 font-semibold": pathname === "/",
-                  })}
-                >
-                  Timeline
-                  {active == "timeline" && (
-                    <div className=" grid   justify-center">
-                      <div className="size-1.5 bg-white rounded-full"></div>
-                    </div>
-                  )}
-                </div>
-              
-                <div
-                  onClick={() => handleScroll("contact")}
-                  className={clsx(navigationMenuTriggerStyle(), {
-                    "after:w-full after:scale-x-100 font-semibold": pathname === "/",
-                  })}
-                >
-                  Contact Us
-                  {active == "contact" && (
-                    <div className=" grid   justify-center">
-                      <div className="size-1.5 bg-white rounded-full"></div>
-                    </div>
-                  )}
-                </div>
-                </div>
-              
-          
-            {/* <SheetFooter> */}
-            <div className="h-[2px]  w-full bg-white"></div>
-              {user._id && <NavBarProfile
-                user={user}
-                clickLogoutBtn={clickLogoutBtn}
-                setShowProfile={setShowProfile}
-                showProfile={showProfile}
-                isInSheet={true}
-              />}
-              
-            {/* </SheetFooter> */}
-          </SheetContent>
-        </Sheet>
-            
+
+                {/* <SheetFooter> */}
+                <div className="h-[2px]  w-full bg-white"></div>
+                {user._id && (
+                  <NavBarProfile
+                    user={user}
+                    clickLogoutBtn={clickLogoutBtn}
+                    setShowProfile={setShowProfile}
+                    showProfile={showProfile}
+                    isInSheet={true}
+                  />
+                )}
+
+                {/* </SheetFooter> */}
+              </SheetContent>
+            </Sheet>
           </div>
 
           {/* desktop view */}
@@ -297,29 +299,28 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
           </NavigationMenu>
 
           {status == "authenticated" ? (
-            
-            
-          <div onClick={handleUserProfile} className=" flex gap-2 cursor-pointer">
-            <div className="grid content-center font-poppins font-medium">{user.firstName}</div>
-            <div className=" py-4 grid content-center">
-            <Image
-              src={
-                "https://res.cloudinary.com/dumh5befg/image/upload/v1720951327/users/clyld3pa40000wb6y5trem706/image.jpg"
-              }
-              alt="profile picture"
-              width={38}
-              height={15}
-              className="rounded-full w-auto h-auto"
-            />
+            <div
+              onClick={handleUserProfile}
+              className=" flex gap-2 cursor-pointer"
+            >
+              <div className="grid content-center font-poppins font-medium">
+                {user.firstName}
+              </div>
+              <div className=" py-4 grid content-center">
+                <Image
+                  src={
+                    "https://res.cloudinary.com/dumh5befg/image/upload/v1720951327/users/clyld3pa40000wb6y5trem706/image.jpg"
+                  }
+                  alt="profile picture"
+                  width={38}
+                  height={15}
+                  className="rounded-full w-auto h-auto"
+                />
+              </div>
             </div>
-          </div>
-          
-
-
-           
           ) : (
             <Link href="/auth/signin" passHref className=" grid ">
-              <PrimaryButtonSmall text="Sign In"  />
+              <PrimaryButtonSmall text="Sign In" />
             </Link>
           )}
         </div>
@@ -331,9 +332,6 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
               "linear-gradient(to right, #0c2735 75%, #28a8e0 75%, #28a8e0 92%, #f1c232 92%, #f1c232 95%)",
           }}
         ></div>
-
-        
-        
       </div>
       <div className=" relative ">
         <div
@@ -343,7 +341,6 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
               : "xl:w-3/12 lg:w-3/12 md:w-1/3 2xl:w-1/5 sm:block hidden"
           } rounded-b-2xl  right-0 z-50   bg-custom-black  `}
         >
-         
           <NavBarProfile
             user={user}
             clickLogoutBtn={clickLogoutBtn}
