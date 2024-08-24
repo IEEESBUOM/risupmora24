@@ -48,11 +48,11 @@ const Gallery = () => {
     },
   };
 
-  const item = (delay: number, i: number) => ({
-    hidden: { x: i * 800, opacity: 0 },
+  const item = (delay: number) => ({
+    hidden: { opacity: 0, scale: 0.8 },
     visible: {
-      x: 0,
       opacity: 1,
+      scale: 1,
       transition: {
         type: "tween",
         delay: delay * 0.1,
@@ -61,18 +61,24 @@ const Gallery = () => {
   });
 
   const images: ImageProps[] = [
-    { src: "/assets/img/wso2.png" },
-    { src: "/assets/img/pickme.png" },
-    { src: "/images/gallery/img3.jpg" },
-    { src: "/images/gallery/img4.jpg" },
-    { src: "/images/gallery/img5.jpg" },
-    { src: "/images/gallery/img6.jpg" },
-    { src: "/images/gallery/img7.jpg" },
-    { src: "/images/gallery/img8.jpg" },
-    { src: "/images/gallery/img9.jpg" },
-    { src: "/images/gallery/img10.jpg" },
-    { src: "/images/gallery/img11.jpg" },
-    { src: "/images/gallery/img12.jpg" },
+    {
+      src: "https://t3.ftcdn.net/jpg/06/48/40/06/240_F_648400633_xGkZpiwO8Dna5j0egnXVXPmdzMYup4K2.jpg",
+    },
+    {
+      src: "https://as1.ftcdn.net/v2/jpg/01/01/82/68/1000_F_101826895_tirkB5AVW8s4KfMz0kup4tWd0PjW3vym.jpg",
+    },
+    { src: "https://source.unsplash.com/random/300x300?forest" },
+    { src: "https://source.unsplash.com/random/300x300?beach" },
+    { src: "https://source.unsplash.com/random/300x300?mountains" },
+    { src: "https://source.unsplash.com/random/300x300?desert" },
+    { src: "https://source.unsplash.com/random/300x300?river" },
+    { src: "https://source.unsplash.com/random/300x300?wildlife" },
+    { src: "https://source.unsplash.com/random/300x300?architecture" },
+    { src: "https://source.unsplash.com/random/300x300?space" },
+    { src: "https://source.unsplash.com/random/300x300?waterfall" },
+    {
+      src: "/assets/img/gtn.png",
+    },
   ];
 
   useEffect(() => {
@@ -99,7 +105,7 @@ const Gallery = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 relative">
-      <div className="mb-64 absolute top-0 left-0 " ref={topicRef}>
+      <div className="mb-64 absolute top-0 left-0" ref={topicRef}>
         <Topic text="Gallery" />
       </div>
       <motion.div
@@ -113,10 +119,7 @@ const Gallery = () => {
           <motion.div
             className="relative"
             key={index}
-            variants={item(
-              Math.floor(Math.random() * 13),
-              Math.random() < 0.5 ? -1 : 1
-            )}
+            variants={item(index)}
             onClick={() => {
               toggleOverlay(true);
               setOverlayImage(image.src);
