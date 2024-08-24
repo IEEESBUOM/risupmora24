@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <div className="w-full bg-[#112735] pb-10 mt-10 relative overflow-hidden">
+    <div className="w-full bg-[#112735] pb-10 mt-5 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-full flex justify-end items-end">
         <Image
           src="/img/Group-5.png"
@@ -16,7 +16,7 @@ const Footer = () => {
       </div>
 
       <div className="ml-[5vw] lg:ml-[10vw] z-5 flex flex-col gap-8 relative lg:w-10/12 mx-auto">
-        <div className="flex flex-col items-center mx-40 justify-center gap-8 lg:w-8/12 -mt-12">
+        <div className="flex flex-col items-center mx-40 justify-center gap-8 lg:w-8/12 sm:-mt-20">
           <div className="flex flex-col lg:flex-row items-center mt-12 lg:mt-24 justify-center gap-8">
             <div className="relative w-72 mt-9 h-20 lg:mx-10 lg:w-64 lg:h-24">
               <Image

@@ -67,18 +67,19 @@ const Gallery = () => {
     {
       src: "https://as1.ftcdn.net/v2/jpg/01/01/82/68/1000_F_101826895_tirkB5AVW8s4KfMz0kup4tWd0PjW3vym.jpg",
     },
-    { src: "https://source.unsplash.com/random/300x300?forest" },
-    { src: "https://source.unsplash.com/random/300x300?beach" },
-    { src: "https://source.unsplash.com/random/300x300?mountains" },
-    { src: "https://source.unsplash.com/random/300x300?desert" },
-    { src: "https://source.unsplash.com/random/300x300?river" },
-    { src: "https://source.unsplash.com/random/300x300?wildlife" },
-    { src: "https://source.unsplash.com/random/300x300?architecture" },
-    { src: "https://source.unsplash.com/random/300x300?space" },
-    { src: "https://source.unsplash.com/random/300x300?waterfall" },
     {
-      src: "/assets/img/gtn.png",
+      src: "https://t3.ftcdn.net/jpg/06/48/40/06/240_F_648400633_xGkZpiwO8Dna5j0egnXVXPmdzMYup4K2.jpg",
     },
+    {
+      src: "https://as1.ftcdn.net/v2/jpg/01/01/82/68/1000_F_101826895_tirkB5AVW8s4KfMz0kup4tWd0PjW3vym.jpg",
+    },
+    {
+      src: "https://t3.ftcdn.net/jpg/06/48/40/06/240_F_648400633_xGkZpiwO8Dna5j0egnXVXPmdzMYup4K2.jpg",
+    },
+    {
+      src: "https://as1.ftcdn.net/v2/jpg/01/01/82/68/1000_F_101826895_tirkB5AVW8s4KfMz0kup4tWd0PjW3vym.jpg",
+    },
+    
   ];
 
   useEffect(() => {
