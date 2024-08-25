@@ -2,8 +2,17 @@ import Image from "next/image";
 import React from "react";
 import PrimaryButtonSmall from "./ui/PrimaryButtonSmall";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 const StudentNavbar = () => {
+
+  const logoutHandler = () => {
+    
+    signOut();
+    window.location.href = "/";
+    
+  }
+
   return (
     <div>
       <div className="flex flex-col md:flex-row items-center justify-between pt-5 md:pt-0">
@@ -27,7 +36,9 @@ const StudentNavbar = () => {
           <Link href="/">
             <PrimaryButtonSmall text="Home" />
           </Link>
-          <PrimaryButtonSmall text="Sign out" />
+          <div onClick={logoutHandler}>
+          <PrimaryButtonSmall text="Sign out"  />
+          </div>
         </div>
         {/* {!isMobile && ( */}
         {/* <div onClick={handleSignOut}>

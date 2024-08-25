@@ -6,7 +6,7 @@ export default function FeedBackComponent({company,communication,experience,prob
     <div className='bg-white rounded-md px-6 py-4 m-3 text-custom-black font-poppins text-sm    '>
         <div className="flex gap-2 ">
         <div className="">Company: </div>
-        <div className="">99x</div>
+        <div className="">{company}</div>
         </div>
         <div className=" grid grid-cols-2">
         

@@ -101,8 +101,7 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"),
-    require('flowbite/plugin')
+  plugins: [require("tailwindcss-animate")
   ],
 } satisfies Config;
 

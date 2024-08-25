@@ -16,9 +16,9 @@ const Footer = () => {
       </div>
 
       <div className="ml-[5vw] lg:ml-[10vw] z-5 flex flex-col gap-8 relative lg:w-10/12 mx-auto">
-        <div className="flex flex-col items-center mx-40 justify-center gap-8 lg:w-8/12 sm:-mt-20">
-          <div className="flex flex-col lg:flex-row items-center mt-12 lg:mt-24 justify-center gap-8">
-            <div className="relative w-72 mt-9 h-20 lg:mx-10 lg:w-64 lg:h-24">
+        <div className="flex flex-col items-center mx-40 justify-center gap-8 lg:w-8/12 lg:-mt-20">
+          <div className="flex flex-col lg:flex-row items-center mt-8 lg:mt-24 justify-center gap-8">
+            <div className="relative w-72  h-20 lg:mx-10 lg:w-64 lg:h-24">
               <Image
                 src="/img/IEEE STUDENT LOGO WHITE.png"
                 layout="fill"
@@ -26,7 +26,7 @@ const Footer = () => {
                 alt="IEEE Student Logo"
               />
             </div>
-            <div className="relative mt-9 w-72 h-20 lg:mx-10 lg:w-64 lg:h-24">
+            <div className="relative  w-72 h-20 lg:mx-10 lg:w-64 lg:h-24">
               <Image
                 src="/img/IEEEYoungProfessionalsLogoTM_White_Horiz.png"
                 layout="fill"
@@ -36,7 +36,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="text-white font-poppins text-center font-medium text-sm md:text-lg leading-6 lg:w-12/12 mt-8 px-4 lg:px-0">
+        <div className="text-white font-poppins text-center font-medium text-sm md:text-lg leading-6 lg:w-12/12  px-4 lg:px-0">
           The Institute of Electrical and Electronics Engineers (IEEE) is a
           professional organization dedicated to advancing technology for
           humanity. With over 400,000 members in over 160 countries, IEEE is the
