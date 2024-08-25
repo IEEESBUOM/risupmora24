@@ -153,7 +153,15 @@ const Gallery = () => {
         }}
       >
         {overlayImage && (
-          <img className="max-w-full max-h-full z-50" src={overlayImage} alt="" />
+          // <img className="max-w-full max-h-full z-50" src={overlayImage} alt="" />
+          <Image
+            width={1600}
+            height={1600}
+            className="w-full h-full object-cover z-50"
+            src={overlayImage}
+            quality={100}
+            alt=""
+          />
         )}
       </div>
     </div>

@@ -32,7 +32,7 @@ export default function Feedback({ candidateId }: { candidateId: string }) {
           <Carousel>
             <CarouselContent>
               {feedbackdata.map((feedback: any) => (
-                <CarouselItem>
+                <CarouselItem key={feedback.id}>
                   <FeedBackComponent
                     key={feedback.id}
                     company={feedback.company}
