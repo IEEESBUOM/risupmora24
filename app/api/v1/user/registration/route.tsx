@@ -71,6 +71,17 @@ export async function POST(req: NextRequest) {
       data: data, // Wrap the data in a data property
     });
 
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        image: imgUrl,
+      },
+    });
+
+
+
     return NextResponse.json({ savedCandidate });
 
     // return NextResponse.json({ data });

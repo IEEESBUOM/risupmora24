@@ -84,15 +84,14 @@ const NavBarProfile = memo(function NavBarProfile({
         </div>}
         {!isInSheet && <div className="flex  pl-3 items-center  gap-2">
           <div>
-            <Image
-              src={
-                "https://res.cloudinary.com/dumh5befg/image/upload/v1720951327/users/clyld3pa40000wb6y5trem706/image.jpg"
-              }
+            {user.image && (
+              <Image
+              src={user.image }
               alt="profile picture"
               width={40}
               height={15}
               className="rounded-full w-auto h-auto"
-            />
+            />)}
           </div>
           <div className="flex flex-col">
             <div>{user.firstName}</div>
