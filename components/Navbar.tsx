@@ -322,16 +322,16 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
               onClick={handleUserProfile}
               className=" flex gap-2 cursor-pointer"
             >
-              <div className="grid content-center font-poppins font-medium">
+              <div className="grid content-center font-quicksand font-semibold text-lg">
                 {user.firstName}
               </div>
-              <div className=" py-4 grid content-center">
+              <div className=" py-4 sm:py-2 grid content-center">
                 {userData.user && (
                 <Image
                   src={userData.user?.image}
                   alt="profile picture"
-                  width={38}
-                  height={15}
+                  width={50}
+                  height={50}
                   className="rounded-full w-auto h-auto"
                 />)}
               </div>

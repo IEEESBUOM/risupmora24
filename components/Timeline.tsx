@@ -37,7 +37,7 @@ const Timeline = () => {
   }, []);
 
   return (
-    <div className="m-8 partnersSection relative">
+    <div className="sm:m-8 partnersSection relative overflow-hidden">
       <div
         className="absolute top-2 left-2 sm:top-4 sm:left-4 topicContainer opacity-0"
         ref={topicRef}
