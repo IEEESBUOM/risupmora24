@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import { motion, useInView, useAnimationControls } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
@@ -135,7 +136,7 @@ const Gallery = () => {
             <Image
               width={600}
               height={600}
-              className="w-full h-full object-cover z-50 cursor-pointer"
+              className="w-full h-full  z-50 cursor-pointer"
               src={image.src}
               quality={100}
               alt=""
