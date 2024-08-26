@@ -52,74 +52,74 @@ export default function ContactUs() {
       <div className="flex justify-center flex-wrap">
         {/* Profile components */}
         <Profile
-          image="/images/pic 1.jpeg"
-          name="Chasila Withanage"
+          image="/contactUsImages/SenelEphraims.jpg"
+          name="Senel Charukya Perera Ephraims"
           shortName="Chairman"
           details="IEEE Student Branch of University Of Moratuwa"
-          email="chasilawithanage@ieee.org"
-          telephone="0712618255"
+          email="senel.ephraims@ieee.org"
+          telephone="0770410762"
         />
         <Profile
-          image="/images/pic 1.jpeg"
-          name="Hiruna Harankahadeniya"
+          image="/contactUsImages/YasithSenarath.jpg"
+          name="Yasith Deshan Senarath"
           shortName="Vice Chairman"
           details="IEEE Student Branch of University Of Moratuwa"
-          email="hirunaharankahadeniya@ieee.org"
-          telephone="0762675516"
+          email="yasithsenarath@ieee.org"
+          telephone="0715960336"
         />
         <Profile
-          image="/images/pic 1.jpeg"
-          name="Shehan Arampola"
+          image="/contactUsImages/ShehanLiyanage.jpg"
+          name="Kaluarachchi Liyanage Shehan Shanuka"
           shortName="Web Master"
           details="IEEE Student Branch of University Of Moratuwa"
-          email="shehanon1@gmail.com"
-          telephone="0767098514"
+          email="shehanshanuka99@gmail.com"
+          telephone="0701555080"
         />
       </div>
 
       <div className="flex justify-center flex-wrap">
         <Profile
-          image="/images/pic 1.jpeg"
-          name="Supul Heshan"
+          image="/contactUsImages/ruchith.jpg"
+          name="Ruchith Nusara"
           shortName="Event Co-Chairperson"
-          details="Rise Up Mora 2023"
-          email="supulheshan0926@gmail.com"
-          telephone="0713344150"
+          details="Rise Up Mora 2024"
+          email="ruchithsamarawickrama.sg@gmail.com"
+          telephone="0701118330"
         />
         <Profile
-          image="/images/pic 1.jpeg"
-          name="Sithum Siyambalapitiya"
+          image="/contactUsImages/PavanEpa.jpeg"
+          name="Pavan Tanusha Epa"
           shortName="Event Co-Chairperson"
-          details="Rise Up Mora 2023"
-          email="sithumnimesh735@gmail.com"
-          telephone="0778423916"
+          details="Rise Up Mora 2024"
+          email="pavantanusha@gmail.com"
+          telephone="0714332002"
         />
       </div>
 
       <div className="flex justify-center flex-wrap">
         <Profile
-          image="/images/pic 1.jpeg"
-          name="Malithi Abayadeera"
+          image="/contactUsImages/Thrishal Shavinda.jpg"
+          name="Hewa Palliyage Thrishal Shavinda"
           shortName="Event Co-Chairperson"
-          details="Rise Up Mora 2023"
-          email="Malithirumalka@gmail.com"
-          telephone="0776536321"
+          details="Rise Up Mora 2024"
+          email="thrishalshavinda5@gmail.com"
+          telephone="0769042770"
         />
         <Profile
-          image="/images/pic 1.jpeg"
-          name="Kalhara Jasin Arachchi"
+          image="/contactUsImages/Anupama Jayasekara.jpg"
+          name="Mawanane Hewa Anupama Indeewara Jayasekara"
           shortName="Event Co-Chairperson"
-          details="Rise Up Mora 2023"
-          email="kalhara.ja@gmail.com"
-          telephone="0711305808"
+          details="Rise Up Mora 2024"
+          email="anujayofficial@gmail.com"
+          telephone="0712324024"
         />
         <Profile
-          image="/images/pic 1.jpeg"
-          name="Ama Weerasinghe"
+          image="/contactUsImages/duthikaAruni.jpg"
+          name="Payagala Waduge Duthika Aruni Menusha Fernando"
           shortName="Event Co-Chairperson"
-          details="Rise Up Mora 2023"
-          email="amaweerasinghe99@gmail.com"
-          telephone="0714077272"
+          details="Rise Up Mora 2024"
+          email="menushafernando1123@gmail.com"
+          telephone="0774299887"
         />
       </div>
     </div>
@@ -187,8 +187,8 @@ function Profile({
           <Image
             src={image}
             alt={shortName}
-            width={230}
-            height={230}
+            width={500}
+            height={500}
             className="w-[230px] h-[230px] mb-2 rounded-full border border-[rgba(250,199,175,0.966)] mx-auto"
           />
         </div>

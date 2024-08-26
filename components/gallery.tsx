@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import { motion, useInView, useAnimationControls } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
@@ -62,22 +63,28 @@ const Gallery = () => {
 
   const images: ImageProps[] = [
     {
-      src: "https://t3.ftcdn.net/jpg/06/48/40/06/240_F_648400633_xGkZpiwO8Dna5j0egnXVXPmdzMYup4K2.jpg",
+      src: "/gallery/1.jpg",
     },
     {
-      src: "https://as1.ftcdn.net/v2/jpg/01/01/82/68/1000_F_101826895_tirkB5AVW8s4KfMz0kup4tWd0PjW3vym.jpg",
+      src: "/gallery/2.jpg",
     },
     {
-      src: "https://t3.ftcdn.net/jpg/06/48/40/06/240_F_648400633_xGkZpiwO8Dna5j0egnXVXPmdzMYup4K2.jpg",
+      src: "/gallery/3.jpg",
     },
     {
-      src: "https://as1.ftcdn.net/v2/jpg/01/01/82/68/1000_F_101826895_tirkB5AVW8s4KfMz0kup4tWd0PjW3vym.jpg",
+      src: "/gallery/4.jpg",
     },
     {
-      src: "https://t3.ftcdn.net/jpg/06/48/40/06/240_F_648400633_xGkZpiwO8Dna5j0egnXVXPmdzMYup4K2.jpg",
+      src: "/gallery/5.jpg",
     },
     {
-      src: "https://as1.ftcdn.net/v2/jpg/01/01/82/68/1000_F_101826895_tirkB5AVW8s4KfMz0kup4tWd0PjW3vym.jpg",
+      src: "/gallery/6.jpg",
+    },
+    {
+      src: "/gallery/7.jpg",
+    },
+    {
+      src: "/gallery/8.jpg",
     },
     
   ];
@@ -127,18 +134,18 @@ const Gallery = () => {
             }}
           >
             <Image
-              width={300}
-              height={300}
-              className="w-full h-full object-cover"
+              width={600}
+              height={600}
+              className="w-full h-full  z-50 cursor-pointer"
               src={image.src}
-              quality={60}
+              quality={100}
               alt=""
             />
           </motion.div>
         ))}
       </motion.div>
       <div
-        className={`fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center ${
+        className={`fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 ${
           overlay ? "block" : "hidden"
         }`}
         ref={overlayRef}
@@ -147,7 +154,15 @@ const Gallery = () => {
         }}
       >
         {overlayImage && (
-          <img className="max-w-full max-h-full" src={overlayImage} alt="" />
+          // <img className="max-w-full max-h-full z-50" src={overlayImage} alt="" />
+          <Image
+            width={1600}
+            height={1600}
+            className="w-full h-full object-cover z-50"
+            src={overlayImage}
+            quality={100}
+            alt=""
+          />
         )}
       </div>
     </div>

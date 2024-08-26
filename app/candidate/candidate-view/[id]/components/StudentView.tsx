@@ -16,7 +16,11 @@ import toast from "react-hot-toast";
 import { useParams } from "next/navigation";
 import CompanyPreference from "./CompanyPreference";
 import CloudinaryUpload from "@/components/cloudinaryWidget";
+import { FaCloudDownloadAlt } from "react-icons/fa";
 import CvUpload from "@/components/CvUpload";
+import { useCompanyAllocation } from "@/hooks/user/useCompanyAllocation";
+import FeedBackComponent from "./FeedBackComponent";
+import Feedback from "./Feedback";
 
 const StudentView = () => {
   const {
@@ -29,6 +33,7 @@ const StudentView = () => {
   const { data: session } = useSession();
   const { uploadCV, isUploading } = useUploadCV();
   const { candidate: data, isPending } = useCandidate({ userId });
+  const { CompanyAllocation:allocationDAta, isPending: isPendingCompanyAllocation} = useCompanyAllocation({ userId });
   console.log(data);
   const [cvUrl, setCvUrl] = useState<string>("");
 
@@ -55,6 +60,7 @@ const StudentView = () => {
     try {
       await uploadCV({ cvUrl });
       toast.success("CV uploaded successfully");
+      setCvUrl("");
     } catch (error) {
       toast.error("CV upload failed");
     }
@@ -110,15 +116,28 @@ const StudentView = () => {
                       </a>
                     </span>
                   </div>
+
+                  <Link
+                    className=" border-2 grid w-36 justify-center  border-custom-black bg-white rounded-2xl font-semibold p-2 "
+                    href={`${data?.cvUrl}`}
+                  >
+                    <div className="flex gap-2 items-center  ">
+                      <FaCloudDownloadAlt /> Download CV
+                    </div>
+                  </Link>
+
+                  {/* <button type="button" onClick={()=>{}}>
+      Go to Destination
+    </button> */}
                 </div>
                 <div className="border-t-2 border-custom-black  h-0.5 w-full my-6"></div>
-                
+
                 <div className="mt-8 font-semibold text-center font-poppins text-lg  underline">
                   Company Allocation
                 </div>
                 <div className="overflow-x-auto border-2 border-stv-blue rounded-lg mt-2.5">
-                  {data?.allocatedCompany &&
-                  data.allocatedCompany.length > 0 ? (
+                  {allocationDAta &&
+                  allocationDAta.length > 0 ? (
                     <table className="border-collapse w-full">
                       <thead>
                         <tr>
@@ -126,43 +145,35 @@ const StudentView = () => {
                             Company
                           </th>
                           <th className="py-2.5 font-poppins px-3 text-lg md:text-xl text-left">
+                            Date
+                          </th>
+                          <th className="py-2.5 font-poppins px-3 text-lg md:text-xl text-left">
                             Panel
                           </th>
+
                           <th className="py-2.5 font-poppins px-3 text-lg md:text-xl text-left">
                             Time
                           </th>
                         </tr>
                       </thead>
-                      {/* <tbody>
-                    {data.allocatedCompany.map((company, index) => {
-                      const panel = data.allocatedPanelNew[index] || "";
-                      const time = data.allocatedTime[index];
-
-                      if (
-                        company &&
-                        company.toLowerCase() !== "none" &&
-                        company !== "-"
-                      ) {
-                        return (
-                          <tr
-                            key={index}
-                            className="hover:bg-gray-400 transition-colors duration-300"
-                          >
-                            <td className="py-2.5 font-poppins px-3">
-                              {company}
+                      <tbody>
+                        {allocationDAta.map((allocation: any) => (
+                          <tr key={allocation.id}>
+                            <td className="py-2.5 px-3 text-left">
+                              {allocation.Company}
                             </td>
-                            <td className="py-2.5 font-poppins px-3">
-                              {panel}
+                            <td className="py-2.5 px-3 text-left">
+                              {allocation.allocation_date}
                             </td>
-                            <td className="py-2.5 font-poppins px-3">
-                              {formatTime(time)}
+                            <td className="py-2.5 px-3 text-left">
+                              {allocation.allocated_panel_number}
+                            </td>
+                            <td className="py-2.5 px-3 text-left">
+                              {formatTime(allocation.allocation_timeSlot)}
                             </td>
                           </tr>
-                        );
-                      }
-                      return null;
-                    })}
-                  </tbody> */}
+                        ))}
+                      </tbody>
                     </table>
                   ) : (
                     <div className="text-gray-400 my-2.5  text-center">
@@ -175,15 +186,7 @@ const StudentView = () => {
 
                 <div className="flex ">
                   <form className="  ">
-                    <div>
-                      <div className="flex gap-3 items-center">
-                        <FaFilePdf size={22} />
-                        <Link target="_blank" href={`${data?.cvUrl}`} passHref>
-                          {data?.nameWithInitials}.cv.pdf
-                        </Link>
-                      </div>
-                    </div>
-                    <div className="flex mt-3 md:flex-row flex-col md:gap-0 gap-4">
+                    <div className=" mt-3 md:flex-row flex-col md:gap-0 gap-4">
                       <div className="fileInput">
                         {/* <Input
                           id="picture"
@@ -199,54 +202,43 @@ const StudentView = () => {
                         /> */}
                         <CvUpload setImgUrl={setCvUrl} />
                       </div>
-                      <div className="md:ml-4 md:block flex md:justify-center">
-                    <button
-                      className="bg-stv-dark-blue text-white py-2 px-5 rounded-lg cursor-pointer transition-colors duration-300"
-                      onClick={() => handleUploadCV()}
-                      disabled={isUploading}
-                    >
-                      {isUploading ? "Saving..." : "Save"}
-                      {/* Upload CV */}
-                    </button>
-                  </div>
+                      {cvUrl && (
+                        <div className=" mt-4">
+                          <div className="flex gap-3 items-center">
+                            <FaFilePdf size={22} />
+                            <Link target="_blank" href={`${cvUrl}`} passHref>
+                              {data?.nameWithInitials}.cv.pdf
+                            </Link>
+                          </div>
+
+                          <div className="mt-1 md:block flex md:justify-center">
+                            <button
+                              className="bg-stv-dark-blue text-white py-2 px-5 rounded-lg cursor-pointer transition-colors duration-300"
+                              onClick={() => handleUploadCV()}
+                              disabled={isUploading}
+                            >
+                              {isUploading ? "Saving..." : "Save"}
+                              {/* Upload CV */}
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </form>
-                  
-                  
                 </div>
 
-                <div className="border-t-2 border-custom-black  h-0.5 w-full my-6"></div>
-                <CompanyPreference userEmail={data?.user.email}  pref1={data.prefCompany1}
-                pref2={data.prefCompany2} 
-                pref3={data.prefCompany3}
-                pref4={data.prefCompany4}
+                
+                <CompanyPreference
+                  userEmail={data?.user.email}
+                  pref1={data.prefCompany1}
+                  pref2={data.prefCompany2}
+                  pref3={data.prefCompany3}
+                  pref4={data.prefCompany4}
                 />
 
                 <div className="border-t-2 border-custom-black  h-0.5 w-full my-6"></div>
 
-                <div className="mt-8  md:text-xl">
-                  <b>Feedback:</b>
-                  <div className="w-105 h-auto mt-2.5">
-                {data?.feedback && data.feedback.length > 0 ? (
-                  data.feedback.map(( index:any) => (
-                    <div key={index} className="mb-2.5">
-                      {data.allocatedCompany[index] &&
-                        data.allocatedCompany[index].toLowerCase() !== "none" &&
-                        data.allocatedCompany[index] !== "-" && (
-                          <span className="font-bold text-stv-blue">
-                            {data.allocatedCompany[index]}:{" "}
-                            {data.feedback[index]}
-                          </span>
-                        )}
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-gray-400 py-2.5 text-base  text-center border-2 border-stv-blue rounded-lg">
-                    No feedback available.
-                  </div>
-                )}
-              </div>
-                </div>
+                <Feedback candidateId={userId}/>
               </div>
             </>
           ) : (

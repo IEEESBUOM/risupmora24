@@ -53,7 +53,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
 
   const user = {
     email: session?.user.email as string,
-    image: "dsdsds",
+    image: session?.user.image as string,
     firstName: session?.user.name as string,
     _id: session?.user.id as string,
   };
@@ -307,15 +307,14 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
                 {user.firstName}
               </div>
               <div className=" py-4 grid content-center">
+                {user.image && (
                 <Image
-                  src={
-                    "https://res.cloudinary.com/dumh5befg/image/upload/v1720951327/users/clyld3pa40000wb6y5trem706/image.jpg"
-                  }
+                  src={user.image}
                   alt="profile picture"
                   width={38}
                   height={15}
                   className="rounded-full w-auto h-auto"
-                />
+                />)}
               </div>
             </div>
           ) : (
