@@ -32,6 +32,7 @@ import PrimaryButtonSmall from "./ui/PrimaryButtonSmall";
 import HamburgerButton from "./ui/HamburgerButton";
 import { signOut, useSession } from "next-auth/react";
 import NavBarProfile from "./NavBarProfile";
+import { useGetUserData } from "@/hooks/user/useGetUserData";
 
 interface SectionRefs {
   heroSectionRef: MutableRefObject<HTMLDivElement | null>;
@@ -46,6 +47,10 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   const [active, setActive] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session, status } = useSession();
+  // const [userData, setUserData] = useState<any>(null);
+ 
+
+
 
   console.log(session);
 
@@ -57,10 +62,21 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
     firstName: session?.user.name as string,
     _id: session?.user.id as string,
   };
+  const userData = useGetUserData({ userEmail: user.email });
+  console.log(userData)
 
   function clickLogoutBtn() {
     signOut();
   }
+
+  // useEffect(() => {
+  //   const userData = useGetUserData({ userEmail: user.email });
+  //   if (user.email) {
+  //     setUserData(userData);
+  //   }
+
+  // }, [user.email]);
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -217,9 +233,12 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
 
                 {/* <SheetFooter> */}
                 <div className="h-[2px]  w-full bg-white"></div>
-                {user._id && (
+                {userData && (
                   <NavBarProfile
-                    user={user}
+                    id={userData.user?.id}
+                    name={userData.user?.name}
+                    email={userData.user?.email}
+                    image={userData.user?.image || ""}
                     clickLogoutBtn={clickLogoutBtn}
                     setShowProfile={setShowProfile}
                     showProfile={showProfile}
@@ -298,7 +317,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
             </NavigationMenuList>
           </NavigationMenu>
 
-          {status == "authenticated" ? (
+          {status == "authenticated" && userData.user ? (
             <div
               onClick={handleUserProfile}
               className=" flex gap-2 cursor-pointer"
@@ -307,9 +326,9 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
                 {user.firstName}
               </div>
               <div className=" py-4 grid content-center">
-                {user.image && (
+                {userData.user && (
                 <Image
-                  src={user.image}
+                  src={userData.user?.image}
                   alt="profile picture"
                   width={38}
                   height={15}
@@ -341,12 +360,15 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
           } rounded-b-2xl  right-0 z-50   bg-custom-black  `}
         >
           <NavBarProfile
-            user={user}
-            clickLogoutBtn={clickLogoutBtn}
-            setShowProfile={setShowProfile}
-            showProfile={showProfile}
-            isInSheet={false}
-          />
+                    id={userData.user?.id}
+                    name={userData.user?.name}
+                    email={userData.user?.email}
+                    image={userData.user?.image || ""}
+                    clickLogoutBtn={clickLogoutBtn}
+                    setShowProfile={setShowProfile}
+                    showProfile={showProfile}
+                    isInSheet={false}
+                  />
         </div>
       </div>
     </>

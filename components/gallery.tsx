@@ -86,6 +86,9 @@ const Gallery = () => {
     {
       src: "/gallery/8.jpg",
     },
+    {
+      src: "/gallery/9.jpg",
+    },
     
   ];
 
@@ -136,7 +139,7 @@ const Gallery = () => {
             <Image
               width={600}
               height={600}
-              className="w-full h-full  z-50 cursor-pointer"
+              className="w-full h-full object-cover z-50 cursor-pointer"
               src={image.src}
               quality={100}
               alt=""
