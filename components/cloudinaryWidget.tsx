@@ -40,17 +40,16 @@ const CloudinaryUpload = ({
           sources: ["local"],
           googleApiKey: "<image_search_google_api_key>",
           showAdvancedOptions: false,
-          // cropping: true,
+          cropping: true,
           multiple: false,
           showSkipCropButton: false,
-          // croppingAspectRatio: 0.75,
-          // croppingDefaultSelectionRatio: 0.75,
-          // croppingShowDimensions: true,
-          // croppingCoordinatesMode: "custom",
+          croppingAspectRatio: 1,
+          croppingDefaultSelectionRatio: 1,
+          croppingShowDimensions: true,
+          croppingCoordinatesMode: "custom",
           defaultSource: "local",
           resourceType: "image",
           folder: "organization",
-          cropping: false,
           styles: {
             palette: {
               window: "#ffffff",
@@ -108,7 +107,7 @@ const CloudinaryUpload = ({
               alt="Uploaded"
               width={200}
               height={200}
-              className="w-36 h-36 object-none    rounded-md"
+              className="w-36 h-36 object-cover    rounded-md"
             />
           )}
         </div>
