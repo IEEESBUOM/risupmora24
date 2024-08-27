@@ -54,6 +54,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
 
   console.log(session);
 
+
   const [showProfile, setShowProfile] = useState<boolean>(false);
 
   const user = {
@@ -316,8 +317,47 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
+         {/* {if (status == "authenticated" && userData.user) {
+          <div
+          onClick={handleUserProfile}
+          className=" flex gap-2 cursor-pointer"
+        >
+          <div className="grid content-center font-quicksand font-semibold text-lg">
+            {user.firstName}
+          </div>
+          <div className=" py-4 sm:py-2 grid content-center">
+            {userData.user && (
+            <Image
+              src={userData.user?.image}
+              alt="profile picture"
+              width={50}
+              height={50}
+              className="rounded-full w-auto h-auto"
+            />)}
+          </div>
+        </div>
+         }else if (status == "unauthenticated") {
+          <div></div>
+            
 
-          {status == "authenticated" && userData.user ? (
+
+         }
+         else {
+            <div className="grid content-center font-quicksand font-semibold text-lg">
+                loading
+              </div>
+         }
+
+
+         } */}
+
+
+
+
+
+
+          <div className="  grid content-center min-w-36 justify-center">
+          {status == "authenticated" && userData.user && (
             <div
               onClick={handleUserProfile}
               className=" flex gap-2 cursor-pointer"
@@ -336,11 +376,32 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
                 />)}
               </div>
             </div>
-          ) : (
-            <Link href="/auth/signin" passHref className=" grid ">
-              <PrimaryButtonSmall text="Sign In" />
-            </Link>
+          ) }
+
+
+          {status == "unauthenticated" && (
+              <Link href="/auth/signin" passHref className=" grid ">
+                <PrimaryButtonSmall text="Sign In" />
+              </Link>
+            )}
+
+          {status != "authenticated" && status !="unauthenticated" && (
+            <Image
+            src="/spinner/loading-black.svg"
+            width={28}
+            height={28}
+            alt="spinner"
+          />
           )}
+          {status == "authenticated" && !userData.user && (
+            <Image
+            src="/spinner/loading-black.svg"
+            width={28}
+            height={28}
+            alt="spinner"
+          />)
+            }
+          </div>
         </div>
 
         <div

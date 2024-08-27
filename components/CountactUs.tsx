@@ -53,7 +53,7 @@ export default function ContactUs() {
         {/* Profile components */}
         <Profile
           image="/contactUsImages/SenelEphraims.jpg"
-          name="Senel Charukya Perera Ephraims"
+          name="Senel Perera "
           shortName="Chairman"
           details="IEEE Student Branch of University Of Moratuwa"
           email="senel.ephraims@ieee.org"
@@ -61,7 +61,7 @@ export default function ContactUs() {
         />
         <Profile
           image="/contactUsImages/YasithSenarath.jpg"
-          name="Yasith Deshan Senarath"
+          name="Yasith Senarath"
           shortName="Vice Chairman"
           details="IEEE Student Branch of University Of Moratuwa"
           email="yasithsenarath@ieee.org"
@@ -88,7 +88,7 @@ export default function ContactUs() {
         />
         <Profile
           image="/contactUsImages/PavanEpa.jpeg"
-          name="Pavan Tanusha Epa"
+          name="Pavan Epa"
           shortName="Event Co-Chairperson"
           details="Rise Up Mora 2024"
           email="pavantanusha@gmail.com"
@@ -99,7 +99,7 @@ export default function ContactUs() {
       <div className="flex justify-center flex-wrap">
         <Profile
           image="/contactUsImages/Thrishal Shavinda.jpg"
-          name="Hewa Palliyage Thrishal Shavinda"
+          name="Thrishal Shavinda"
           shortName="Event Co-Chairperson"
           details="Rise Up Mora 2024"
           email="thrishalshavinda5@gmail.com"
@@ -107,7 +107,7 @@ export default function ContactUs() {
         />
         <Profile
           image="/contactUsImages/Anupama Jayasekara.jpg"
-          name="Mawanane Hewa Anupama Indeewara Jayasekara"
+          name=" Anupama Jayasekara"
           shortName="Event Co-Chairperson"
           details="Rise Up Mora 2024"
           email="anujayofficial@gmail.com"
@@ -115,7 +115,7 @@ export default function ContactUs() {
         />
         <Profile
           image="/contactUsImages/duthikaAruni.jpg"
-          name="Payagala Waduge Duthika Aruni Menusha Fernando"
+          name="Duthika Fernando"
           shortName="Event Co-Chairperson"
           details="Rise Up Mora 2024"
           email="menushafernando1123@gmail.com"
