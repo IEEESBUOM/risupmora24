@@ -63,6 +63,7 @@ const Timeline = () => {
             topic="Session 03 BY IFS"
             subtopic="How to face in Interview."
             description="- 6.00 PM - September 10th, 2024 (Via Zoom)-"
+            
           />
         </div>
       </div>
