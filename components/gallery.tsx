@@ -137,8 +137,8 @@ const Gallery = () => {
             }}
           >
             <Image
-              width={600}
-              height={600}
+              width={1000}
+              height={1000}
               className="w-full h-full object-cover z-50 cursor-pointer"
               src={image.src}
               quality={100}
