@@ -48,7 +48,7 @@ model Candidate {
   prefCompany3     String?
   prefCompany4     String?
   allocation       Allocation[]
-  user             User         @relation(fields: [candidate_id], references: [id])
+  user             User         @relation(fields: [candidate_id], references: [id], onDelete: Cascade)
   feedback         Feedback[]
 }
 
@@ -57,8 +57,8 @@ model CompanyCordinator {
   company_id    String    @unique
   createdAt     DateTime? @default(now())
   updatedAt     DateTime? @updatedAt
-  company       Company   @relation(fields: [company_id], references: [company_id])
-  user          User      @relation(fields: [cordinator_id], references: [id])
+  company       Company   @relation(fields: [company_id], references: [company_id], onDelete: Cascade)
+  user          User      @relation(fields: [cordinator_id], references: [id], onDelete: Cascade)
 }
 
 model DepartmentCordinator {
@@ -66,7 +66,7 @@ model DepartmentCordinator {
   department    Department
   createdAt     DateTime?  @default(now())
   updatedAt     DateTime?  @updatedAt
-  user          User       @relation(fields: [cordinator_id], references: [id])
+  user          User       @relation(fields: [cordinator_id], references: [id], onDelete: Cascade)
 }
 
 model Panelist {
@@ -76,8 +76,8 @@ model Panelist {
   createdAt     DateTime?    @default(now())
   updatedAt     DateTime?    @updatedAt
   allocation    Allocation[]
-  company       Company      @relation(fields: [company_id], references: [company_id])
-  user          User         @relation(fields: [panelist_id], references: [id])
+  company       Company      @relation(fields: [company_id], references: [company_id], onDelete: Cascade)
+  user          User         @relation(fields: [panelist_id], references: [id], onDelete: Cascade)
 
   @@unique([pannel_number, company_id])
 }
@@ -86,7 +86,7 @@ model Admin {
   admin_id  String    @unique
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
-  user      User      @relation(fields: [admin_id], references: [id])
+  user      User      @relation(fields: [admin_id], references: [id], onDelete: Cascade)
 }
 
 model Company {
@@ -108,8 +108,8 @@ model Feedback {
   experienceAndProject   Int
   candidate_id String
   company_id   String
-  candidate    Candidate @relation(fields: [candidate_id], references: [candidate_id])
-  company      Company   @relation(fields: [company_id], references: [company_id])
+  candidate    Candidate @relation(fields: [candidate_id], references: [candidate_id], onDelete: Cascade)
+  company      Company   @relation(fields: [company_id], references: [company_id], onDelete: Cascade)
 }
 
 model Allocation {
@@ -122,9 +122,9 @@ model Allocation {
   candidate_id           String
   company_id             String
   panelist_id            String
-  candidate              Candidate @relation(fields: [candidate_id], references: [candidate_id])
-  company                Company   @relation(fields: [company_id], references: [company_id])
-  panelist               Panelist  @relation(fields: [panelist_id], references: [panelist_id])
+  candidate              Candidate @relation(fields: [candidate_id], references: [candidate_id], onDelete: Cascade)
+  company                Company   @relation(fields: [company_id], references: [company_id], onDelete: Cascade)
+  panelist               Panelist  @relation(fields: [panelist_id], references: [panelist_id], onDelete: Cascade)
 
   @@unique([allocated_panel_number, allocation_date, allocation_timeSlot, company_id])
 }

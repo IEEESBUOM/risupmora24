@@ -22,11 +22,13 @@ export default function CompanyPreference({
   pref4:string;
 }) {
     useEffect(() => {
-      console.log(pref1)
+      
         
         const fetchCompanyData = async () => {
             const response = await fetch(`/api/v1/company/getAllCompany`);
-            console.log(response);
+            const responseData = await response.json();
+            setUpdatedCompanyList(responseData.companies);
+
         };
 
         fetchCompanyData();
@@ -67,13 +69,15 @@ export default function CompanyPreference({
   const [prefCompany3, setPrefCompany3] = useState(pref3 || "");
   const [prefCompany4, setPrefCompany4] = useState(pref4 || "");
   const [companyData,setCompanyData] = useState([])
-  const updatedCompanyList = [
+  const [updatedCompanyList,setUpdatedCompanyList] = useState([
     { com_name: "Company A", com_id: 1 },
     { com_name: "Company B", com_id: 2 },
     { com_name: "Company C", com_id: 3 },
-  ];
-  return (
+  ]);
+  return (updatedCompanyList.length === 0) ? <div className=" ">
+</div> : (
     <div className="my-5">
+      <div className="border-t-2 border-custom-black  h-0.5 w-full my-6"></div>
       <div className=" text-lg mb-5 font-semibold">
         choose your company preference from here{" "}
       </div>

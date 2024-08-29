@@ -1,4 +1,4 @@
-import React from "react";
+
 
 import { useMutation } from "@tanstack/react-query";
 import { userRegistration } from "@/service/userRegistration";
@@ -14,7 +14,7 @@ export const useUserRegistration = () => {
     mutationFn: ({ registrationData }: RegistrationHookType) =>
       userRegistration(registrationData),
     onSuccess: () => {
-      toast.success("Registration Success");
+      // toast.success("Registration Success");
     },
     onError: (error) => {
       console.error("Registration error:", error);

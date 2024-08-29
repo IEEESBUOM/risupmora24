@@ -417,7 +417,10 @@ export default function Form({ candidate }: FormProps) {
         {/* Photo Upload */}
         <div className="flex flex-wrap  mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
+            <div className="">
             Upload a Formal Photo of Yourself
+            </div>
+            <div className=" text-xs font-light">*Uploaded images will be visible to companies conducting interviews.</div>
           </label>
           <div className="lg:w-1/3 w-4/5 md:w-3/5 lg:ml-10 md:ml-0">
             {/* <Input
