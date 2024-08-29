@@ -1,100 +1,133 @@
+import React, { useState, useEffect } from "react";
 import { useAlocateInterviewees } from "@/hooks/user/useAlocateInterviweers";
-import { Candidate, Company } from "@/Type";
+import { Company } from "@/Type";
 import toast from "react-hot-toast";
 
+// Define an interface for row data
+interface RowData {
+  panel1: string;
+  company1: string;
+  time1: string;
+  panel2: string;
+  company2: string;
+  time2: string;
+  panel3: string;
+  company3: string;
+  time3: string;
+  panel4: string;
+  company4: string;
+  time4: string;
+}
+
 const CandidateData = (candidate: any) => {
+  console.log(candidate.department);
+  console.log(candidate.allocations);
   const { Allocation, isPending } = useAlocateInterviewees();
-  const handlePanelChange1 = (e: any) => {
-    console.log(e.target.value);
-  };
 
-  const handleCompanyChange1 = (e: any) => {
-    console.log(e.target.value);
-  };
+  // Initialize state with the RowData interface
+  const [rowData, setRowData] = useState<RowData>({
+    panel1: "",
+    company1: "",
+    time1: "",
+    panel2: "",
+    company2: "",
+    time2: "",
+    panel3: "",
+    company3: "",
+    time3: "",
+    panel4: "",
+    company4: "",
+    time4: "",
+  });
 
-  const handlePanelChange2 = (e: any) => {
-    console.log(e.target.value);
-  };
-
-  const handleCompanyChange2 = (e: any) => {
-    console.log(e.target.value);
-  };
-
-  const handlePanelChange3 = (e: any) => {
-    console.log(e.target.value);
-  };
-
-  const handleCompanyChange3 = (e: any) => {
-    console.log(e.target.value);
-  };
-
-  const handlePanelChange4 = (e: any) => {
-    console.log(e.target.value);
-  };
-
-  const handleCompanyChange4 = (e: any) => {
-    console.log(e.target.value);
-  };
-
-  const handleSubmit = () => {
-    const panel1 = (document.getElementById("panel1") as HTMLSelectElement)
-      .value;
-    const company1 = (document.getElementById("company1") as HTMLSelectElement)
-      .value;
-    const time1 = (document.getElementById("time1") as HTMLInputElement).value;
-
-    const panel2 = (document.getElementById("panel2") as HTMLSelectElement)
-      .value;
-    const company2 = (document.getElementById("company2") as HTMLSelectElement)
-      .value;
-    const time2 = (document.getElementById("time2") as HTMLInputElement).value;
-
-    const panel3 = (document.getElementById("panel3") as HTMLSelectElement)
-      .value;
-    const company3 = (document.getElementById("company3") as HTMLSelectElement)
-      .value;
-    const time3 = (document.getElementById("time3") as HTMLInputElement).value;
-
-    const panel4 = (document.getElementById("panel4") as HTMLSelectElement)
-      .value;
-    const company4 = (document.getElementById("company4") as HTMLSelectElement)
-      .value;
-    const time4 = (document.getElementById("time4") as HTMLInputElement).value;
-    console.log(candidate.candidate_id);
-    let pannel1Int = parseInt(panel1);
-    const formData = {
-      allocated_panel_number: pannel1Int,
-      company_id: company1,
-      allocation_timeSlot: time1,
-      allocation_date: "2021-10-10",
-      allocation_status: "pending",
-      candidate_id: candidate.candidate_id,
-      panelist_id: candidate.candidate_id,
-      //   panel2,
-      //   company2,
-      //   time2,
-      //   panel3,
-      //   company3,
-      //   time3,
-      //   panel4,
-      //   company4,
-      //   time4,
+  // Effect to map allocations to rowData based on candidate.candidate_id
+  useEffect(() => {
+    const newRowData: RowData = {
+      panel1: "",
+      company1: "",
+      time1: "",
+      panel2: "",
+      company2: "",
+      time2: "",
+      panel3: "",
+      company3: "",
+      time3: "",
+      panel4: "",
+      company4: "",
+      time4: "",
     };
 
-    console.log("Form Data:", formData);
+    let panelIndex = 1;
 
-    Allocation(
-      { allocationData: formData },
-      {
-        onSuccess: () => {
-          toast.success("Allocation Success");
-        },
-        onError: (error) => {
-          console.error("Allocation error:", error);
-          toast.error("Allocation failed");
-        },
+    candidate.allocations.forEach((allocation: any) => {
+      if (allocation.candidate_id === candidate.candidate_id) {
+        const panelKey = `panel${panelIndex}` as keyof RowData;
+        const companyKey = `company${panelIndex}` as keyof RowData;
+        const timeKey = `time${panelIndex}` as keyof RowData;
+
+        newRowData[panelKey] = allocation.allocated_panel_number.toString();
+        newRowData[companyKey] = allocation.company_id;
+        newRowData[timeKey] = allocation.allocation_timeSlot;
+
+        panelIndex++;
       }
-    );
+    });
+
+    setRowData(newRowData);
+  }, [candidate]);
+
+  // Handle input changes and update state
+  const handleChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
+    const { id, value } = e.target;
+    setRowData((prevState) => ({
+      ...prevState,
+      [id]: value,
+    }));
+  };
+
+  // Handle submit button click
+  const handleSubmit = () => {
+    const panels = [
+      { panel: "panel1", company: "company1", time: "time1" },
+      { panel: "panel2", company: "company2", time: "time2" },
+      { panel: "panel3", company: "company3", time: "time3" },
+      { panel: "panel4", company: "company4", time: "time4" },
+    ];
+
+    panels.forEach((panelInfo) => {
+      const panelValue = rowData[panelInfo.panel as keyof RowData];
+      const companyValue = rowData[panelInfo.company as keyof RowData];
+      const timeValue = rowData[panelInfo.time as keyof RowData];
+
+      // Skip if the company is empty
+      if (!companyValue) return;
+
+      const formData = {
+        allocated_panel_number: parseInt(panelValue),
+        company_id: companyValue,
+        allocation_timeSlot: timeValue,
+        allocation_date: "2021-10-10",
+        allocation_status: "pending",
+        candidate_id: candidate.candidate_id,
+        panelist_id: "clyu9qgs80000vulxcwnnj1uq",
+      };
+
+      console.log(formData);
+      Allocation(
+        { Allocation: formData },
+        {
+          onSuccess: () => {
+            toast.success("Allocation Success 1");
+          },
+          onError: (error) => {
+            console.error("Allocation error:", error);
+            toast.error("Allocation failed 1");
+          },
+        }
+      );
+    });
   };
 
   return (
@@ -116,9 +149,11 @@ const CandidateData = (candidate: any) => {
       <td className="p-2 border-l border-gray-300">
         <select
           id="panel1"
-          onChange={handlePanelChange1}
+          value={rowData.panel1}
+          onChange={handleChange}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
+          <option value="">Select Panel</option>
           <option value={1}>1</option>
           <option value={2}>2</option>
           <option value={3}>3</option>
@@ -128,10 +163,11 @@ const CandidateData = (candidate: any) => {
       <td className="p-2 border-l border-gray-300">
         <select
           id="company1"
-          onChange={handleCompanyChange1}
+          value={rowData.company1}
+          onChange={handleChange}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
-          <option value="none">None</option>
+          <option value="">None</option>
           {candidate.company.map((company: Company) => (
             <option key={company.company_id} value={company.company_id}>
               {company.company_name}
@@ -143,6 +179,8 @@ const CandidateData = (candidate: any) => {
         <input
           id="time1"
           type="time"
+          value={rowData.time1}
+          onChange={handleChange}
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </td>
@@ -150,9 +188,11 @@ const CandidateData = (candidate: any) => {
       <td className="p-2 border-l border-gray-300">
         <select
           id="panel2"
-          onChange={handlePanelChange2}
+          value={rowData.panel2}
+          onChange={handleChange}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
+          <option value="">Select Panel</option>
           <option value={1}>1</option>
           <option value={2}>2</option>
           <option value={3}>3</option>
@@ -162,10 +202,11 @@ const CandidateData = (candidate: any) => {
       <td className="p-2 border-l border-gray-300">
         <select
           id="company2"
-          onChange={handleCompanyChange2}
+          value={rowData.company2}
+          onChange={handleChange}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
-          <option value="none">None</option>
+          <option value="">None</option>
           {candidate.company.map((company: Company) => (
             <option key={company.company_id} value={company.company_id}>
               {company.company_name}
@@ -177,6 +218,8 @@ const CandidateData = (candidate: any) => {
         <input
           id="time2"
           type="time"
+          value={rowData.time2}
+          onChange={handleChange}
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </td>
@@ -184,9 +227,11 @@ const CandidateData = (candidate: any) => {
       <td className="p-2 border-l border-gray-300">
         <select
           id="panel3"
-          onChange={handlePanelChange3}
+          value={rowData.panel3}
+          onChange={handleChange}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
+          <option value="">Select Panel</option>
           <option value={1}>1</option>
           <option value={2}>2</option>
           <option value={3}>3</option>
@@ -196,10 +241,11 @@ const CandidateData = (candidate: any) => {
       <td className="p-2 border-l border-gray-300">
         <select
           id="company3"
-          onChange={handleCompanyChange3}
+          value={rowData.company3}
+          onChange={handleChange}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
-          <option value="none">None</option>
+          <option value="">None</option>
           {candidate.company.map((company: Company) => (
             <option key={company.company_id} value={company.company_id}>
               {company.company_name}
@@ -211,6 +257,8 @@ const CandidateData = (candidate: any) => {
         <input
           id="time3"
           type="time"
+          value={rowData.time3}
+          onChange={handleChange}
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </td>
@@ -218,9 +266,11 @@ const CandidateData = (candidate: any) => {
       <td className="p-2 border-l border-gray-300">
         <select
           id="panel4"
-          onChange={handlePanelChange4}
+          value={rowData.panel4}
+          onChange={handleChange}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
+          <option value="">Select Panel</option>
           <option value={1}>1</option>
           <option value={2}>2</option>
           <option value={3}>3</option>
@@ -230,10 +280,11 @@ const CandidateData = (candidate: any) => {
       <td className="p-2 border-l border-gray-300">
         <select
           id="company4"
-          onChange={handleCompanyChange4}
+          value={rowData.company4}
+          onChange={handleChange}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
-          <option value="none">None</option>
+          <option value="">None</option>
           {candidate.company.map((company: Company) => (
             <option key={company.company_id} value={company.company_id}>
               {company.company_name}
@@ -245,23 +296,22 @@ const CandidateData = (candidate: any) => {
         <input
           id="time4"
           type="time"
+          value={rowData.time4}
+          onChange={handleChange}
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </td>
-      <td className="p-2 border-l border-gray-300 "></td>
-      <td className="p-2 border-l border-gray-300 "></td>
-      <td className="p-2 border-l border-gray-300 "></td>
-      <td className="p-2 border-l border-gray-300 ">
-        <button className="border-2 p-2 border-blue-500 rounded text-blue-500">
-          Edit
-        </button>
-      </td>
-      <td className="p-2 border-l border-gray-300 ">
+      <td className="p-2 border-l border-gray-300"></td>
+      <td className="p-2 border-l border-gray-300"></td>
+      <td className="p-2 border-l border-gray-300"></td>
+      <td className="p-2 border-l border-gray-300"></td>
+      <td className="p-2 border-l border-gray-300">
         <button
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
           onClick={handleSubmit}
+          className="p-2 bg-blue-500 text-white rounded shadow-sm hover:bg-blue-600"
+          disabled={isPending}
         >
-          Save
+          {isPending ? "Submitting..." : "Submit"}
         </button>
       </td>
     </tr>

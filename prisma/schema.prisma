@@ -8,26 +8,25 @@ datasource db {
 }
 
 model User {
-  id                   String                @id @default(cuid())
-  name                 String?
-  email                String                @unique
-  emailVerified        DateTime?
-  image                String?
-  accounts             Account[]
-  sessions             Session[]
-  Authenticator        Authenticator[]
-  password             String?
-  emailVerifyStatus    Boolean               @default(false)
-  createdAt            DateTime?             @default(now())
-  updatedAt            DateTime?             @updatedAt
-  candidate            Candidate?
-  company_cordnator    CompanyCordinator?
-  department_cordnator DepartmentCordinator?
-  panelist             Panelist?
-  admin                Admin?
+  id                       String                @id @default(cuid())
+  name                     String?
+  email                    String                @unique
+  emailVerified            DateTime?
+  image                    String?
+  accounts                 Account[]
+  sessions                 Session[]
+  Authenticator            Authenticator[]
+  password                 String?
+  emailVerifyStatus        Boolean               @default(false)
+  createdAt                DateTime?             @default(now())
+  updatedAt                DateTime?             @updatedAt
+  candidate                Candidate?
+  company_cordnator        CompanyCordinator?
+  department_cordnator     DepartmentCordinator?
+  panelist                 Panelist?
+  admin                    Admin?
   passwordResetToken       String?               @default("")
   passwordResetTokenExpire DateTime              @default(now())
-
 }
 
 model Candidate {
@@ -100,16 +99,16 @@ model Company {
 }
 
 model Feedback {
-  feedback_id  String    @id @default(cuid())
-  feedback     String
-  technicalSkill Int
-  communicationSkill Int
-  problemSolvingSkill Int
-  experienceAndProject   Int
-  candidate_id String
-  company_id   String
-  candidate    Candidate @relation(fields: [candidate_id], references: [candidate_id])
-  company      Company   @relation(fields: [company_id], references: [company_id])
+  feedback_id          String    @id @default(cuid())
+  feedback             String
+  technicalSkill       Int
+  communicationSkill   Int
+  problemSolvingSkill  Int
+  experienceAndProject Int
+  candidate_id         String
+  company_id           String
+  candidate            Candidate @relation(fields: [candidate_id], references: [candidate_id])
+  company              Company   @relation(fields: [company_id], references: [company_id])
 }
 
 model Allocation {
@@ -126,7 +125,7 @@ model Allocation {
   company                Company   @relation(fields: [company_id], references: [company_id])
   panelist               Panelist  @relation(fields: [panelist_id], references: [panelist_id])
 
-  @@unique([allocated_panel_number, allocation_date, allocation_timeSlot, company_id])
+  @@unique([allocated_panel_number, allocation_date, allocation_timeSlot, company_id, candidate_id])
 }
 
 model Account {

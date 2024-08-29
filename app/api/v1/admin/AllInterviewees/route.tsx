@@ -13,14 +13,14 @@ export async function POST(req: NextRequest) {
     } = await req.json();
 
     // Log the received data for debugging purposes
-    console.log(
-      allocation_date,
-      allocation_timeSlot,
-      allocated_panel_number,
-      candidate_id,
-      company_id,
-      panelist_id
-    );
+    // console.log(
+    //   allocation_date,
+    //   allocation_timeSlot,
+    //   allocated_panel_number,
+    //   candidate_id,
+    //   company_id,
+    //   panelist_id
+    // );
 
     // Validate the required fields
     if (
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log(company_id, panelist_id, candidate_id);
+    // console.log(company_id, panelist_id, candidate_id);
 
     // Create the allocation record
     await prisma.allocation.create({
@@ -62,6 +62,35 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       { message: "Allocation created successfully" },
       { status: 201 }
+    );
+  } catch (e) {
+    console.log(e);
+    return NextResponse.json(
+      { message: "Server error occurred" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  console.log("DELETE request received");
+  try {
+    const { candidate_id } = await req.json();
+
+    if (!candidate_id) {
+      return NextResponse.json(
+        { message: "Candidate ID is required" },
+        { status: 400 }
+      );
+    }
+
+    await prisma.allocation.deleteMany({
+      where: { candidate_id: candidate_id },
+    });
+
+    return NextResponse.json(
+      { message: "Allocations deleted successfully" },
+      { status: 200 }
     );
   } catch (e) {
     console.log(e);

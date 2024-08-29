@@ -1,20 +1,21 @@
 import { getCandidates } from "@/service/getCandidates";
-import { Candidate, Company, Feedback } from "@/Type";
+import { Allocation, Candidate, Company, Feedback } from "@/Type";
 import AllInterviewers from "./components/allInterviewers";
 import { getFeedback } from "@/service/getFeedback";
 import { getCompany } from "@/service/getCompany";
 import { InterviewAllocation } from "@/service/InterviewAllocation";
+import { getAllocation } from "@/service/getInterviewAllocation";
 
 const AllInterviewersPage = async () => {
   const response = await getCandidates();
   const companyResponce = await getCompany();
   const feedbackResponse = await getFeedback();
+  const allAllocation = await getAllocation();
 
   let initialCandidates: Candidate[] = [];
   let feedback: Feedback[] = [];
   let company: Company[] = [];
-  console.log(response);
-  console.log(companyResponce);
+  let allocation: Allocation[] = [];
   if (response && response.data) {
     initialCandidates = response.data;
   } else {
@@ -28,17 +29,21 @@ const AllInterviewersPage = async () => {
   }
 
   if (companyResponce && companyResponce.data) {
-    console.log(companyResponce.data);
     company = companyResponce.data;
   } else {
     new Error("Failed to fetch company");
   }
-  console.log(company);
+  if (allAllocation && allAllocation.data) {
+    allocation = allAllocation.data;
+  } else {
+    new Error("Failed to fetch Allocations");
+  }
   return (
     <AllInterviewers
       initialCandidates={initialCandidates}
       feedbacks={feedback}
       company={company}
+      allocation={allocation}
     />
   );
 };

@@ -1,17 +1,19 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import CandidateData from "./candidateData";
-import { Candidate, Company, Feedback } from "@/Type";
+import { Allocation, Candidate, Company, Feedback } from "@/Type";
 interface Props {
   initialCandidates: Candidate[];
   feedbacks: Feedback[];
   company: Company[];
+  allocation: Allocation[];
 }
 
 const AllIntervieweesData: React.FC<Props> = ({
   initialCandidates,
   feedbacks,
   company,
+  allocation,
 }) => {
   interface RowData {
     id: number;
@@ -20,9 +22,13 @@ const AllIntervieweesData: React.FC<Props> = ({
     // Add other properties as needed
   }
   console.log(company);
+  console.log(allocation);
   const [rowData, setRowData] = useState<RowData[]>([]);
   const [editBtnId, setEditBtnId] = useState<string | undefined>();
-  const [searchField, setSearchField] = useState<string | undefined>();
+  const [searchField, setSearchField] = useState<string | undefined>("");
+  const [selectedDepartment, setSelectedDepartment] = useState<
+    string | undefined
+  >(""); // New state for sorting
   const [numCandidate, setNumCandidate] = useState<number | undefined>(501); // Set your initial candidate count
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -44,9 +50,24 @@ const AllIntervieweesData: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    // Assume getData() is a function that fetches data
-    // getData();
-  }, []);
+    // Filter and sort candidates based on search field and department
+    let filtered = initialCandidates;
+
+    if (searchField) {
+      const searchTerm = searchField.toLowerCase();
+      filtered = filtered.filter((candidate) =>
+        candidate.candidate_id.toString().includes(searchTerm)
+      );
+    }
+
+    if (selectedDepartment) {
+      filtered = filtered.filter(
+        (candidate) => candidate.department === selectedDepartment
+      );
+    }
+
+    setFilteredCandidates(filtered);
+  }, [searchField, selectedDepartment, initialCandidates]);
 
   const [AllCandidateData, setAllCandidateData] =
     useState<Candidate[]>(initialCandidates);
@@ -61,11 +82,11 @@ const AllIntervieweesData: React.FC<Props> = ({
   }
 
   function handleSearchClick() {
-    // Handle search click logic
+    // Handle search click logic if needed
   }
 
   function handleSortBy(e: React.ChangeEvent<HTMLSelectElement>) {
-    // Handle sort logic
+    setSelectedDepartment(e.target.value);
   }
 
   return (
@@ -102,7 +123,7 @@ const AllIntervieweesData: React.FC<Props> = ({
             className="form-select p-2 border border-gray-300 rounded shadow-sm"
             aria-label="Default select example"
           >
-            <option value="sort-by">Sort By Department</option>
+            <option value="">Sort By Department</option>
             <option value="Bio Medical Engineering">
               Bio Medical Engineering
             </option>
@@ -146,11 +167,11 @@ const AllIntervieweesData: React.FC<Props> = ({
           </select>
         </div>
         <div className="text-gray-700 font-semibold">
-          Number of candidates - {numCandidate}
+          Number of candidates - {filteredCandidates.length}
         </div>
       </div>
 
-      {rowData.length != 0 ? (
+      {rowData.length !== 0 ? (
         <div className="w-full p-4 text-center text-red-500 bg-red-100 rounded">
           No data found!
         </div>
@@ -251,6 +272,7 @@ const AllIntervieweesData: React.FC<Props> = ({
                   preference3={candidate.prefCompany3}
                   preference4={candidate.prefCompany4}
                   company={company}
+                  allocations={allocation}
                 />
               ))}
             </tfoot>
