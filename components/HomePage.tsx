@@ -47,7 +47,7 @@ const HomePage = () => {
         <Gallery />
       </div>
       <div ref={contactUsRef}>
-        <CompanyReg />
+        < CountactUs/>
       </div>
       <Footer />
     </div>
