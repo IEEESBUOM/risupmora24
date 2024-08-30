@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import bcrypt from "bcrypt";
+    import bcrypt from "bcrypt";
 import { sendVerificationEmail } from "@/lib/nodemailer";
 import crypto from "crypto";
 
