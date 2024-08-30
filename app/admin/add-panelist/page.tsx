@@ -1,12 +1,6 @@
 import React from "react";
 
 const Page = () => {
-  const updatedCompanyList = [
-    { com_name: "Company A", com_id: 1 },
-    { com_name: "Company B", com_id: 2 },
-    { com_name: "Company C", com_id: 3 },
-  ];
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative px-4 sm:px-0">
       <div className="absolute top-0 left-0 m-5 sm:m-10">
