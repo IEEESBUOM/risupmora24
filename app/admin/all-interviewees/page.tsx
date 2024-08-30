@@ -11,6 +11,8 @@ const AllInterviewersPage = async () => {
   const companyResponce = await getCompany();
   const feedbackResponse = await getFeedback();
   const allAllocation = await getAllocation();
+  console.log(feedbackResponse);
+  console.log(response);
 
   let initialCandidates: Candidate[] = [];
   let feedback: Feedback[] = [];
@@ -38,6 +40,7 @@ const AllInterviewersPage = async () => {
   } else {
     new Error("Failed to fetch Allocations");
   }
+  console.log(feedback);
   return (
     <AllInterviewers
       initialCandidates={initialCandidates}

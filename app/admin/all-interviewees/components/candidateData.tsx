@@ -22,6 +22,7 @@ interface RowData {
 const CandidateData = (candidate: any) => {
   console.log(candidate.department);
   console.log(candidate.allocations);
+  console.log(candidate.feedbacks);
   const { Allocation, isPending } = useAlocateInterviewees();
 
   // Initialize state with the RowData interface
@@ -39,6 +40,9 @@ const CandidateData = (candidate: any) => {
     company4: "",
     time4: "",
   });
+
+  // Initialize edit state
+  const [isEditing, setIsEditing] = useState(false);
 
   // Effect to map allocations to rowData based on candidate.candidate_id
   useEffect(() => {
@@ -130,6 +134,11 @@ const CandidateData = (candidate: any) => {
     });
   };
 
+  // Toggle edit mode
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+  };
+
   return (
     <tr className="border-b border-gray-300">
       <td className="p-2 border-l border-gray-300">{candidate.candidate_id}</td>
@@ -151,6 +160,7 @@ const CandidateData = (candidate: any) => {
           id="panel1"
           value={rowData.panel1}
           onChange={handleChange}
+          disabled={!isEditing}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">Select Panel</option>
@@ -165,6 +175,7 @@ const CandidateData = (candidate: any) => {
           id="company1"
           value={rowData.company1}
           onChange={handleChange}
+          disabled={!isEditing}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">None</option>
@@ -181,6 +192,7 @@ const CandidateData = (candidate: any) => {
           type="time"
           value={rowData.time1}
           onChange={handleChange}
+          disabled={!isEditing}
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </td>
@@ -190,6 +202,7 @@ const CandidateData = (candidate: any) => {
           id="panel2"
           value={rowData.panel2}
           onChange={handleChange}
+          disabled={!isEditing}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">Select Panel</option>
@@ -204,6 +217,7 @@ const CandidateData = (candidate: any) => {
           id="company2"
           value={rowData.company2}
           onChange={handleChange}
+          disabled={!isEditing}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">None</option>
@@ -220,6 +234,7 @@ const CandidateData = (candidate: any) => {
           type="time"
           value={rowData.time2}
           onChange={handleChange}
+          disabled={!isEditing}
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </td>
@@ -229,6 +244,7 @@ const CandidateData = (candidate: any) => {
           id="panel3"
           value={rowData.panel3}
           onChange={handleChange}
+          disabled={!isEditing}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">Select Panel</option>
@@ -243,6 +259,7 @@ const CandidateData = (candidate: any) => {
           id="company3"
           value={rowData.company3}
           onChange={handleChange}
+          disabled={!isEditing}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">None</option>
@@ -259,6 +276,7 @@ const CandidateData = (candidate: any) => {
           type="time"
           value={rowData.time3}
           onChange={handleChange}
+          disabled={!isEditing}
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </td>
@@ -268,6 +286,7 @@ const CandidateData = (candidate: any) => {
           id="panel4"
           value={rowData.panel4}
           onChange={handleChange}
+          disabled={!isEditing}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">Select Panel</option>
@@ -282,6 +301,7 @@ const CandidateData = (candidate: any) => {
           id="company4"
           value={rowData.company4}
           onChange={handleChange}
+          disabled={!isEditing}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">None</option>
@@ -298,21 +318,38 @@ const CandidateData = (candidate: any) => {
           type="time"
           value={rowData.time4}
           onChange={handleChange}
+          disabled={!isEditing}
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </td>
       <td className="p-2 border-l border-gray-300"></td>
       <td className="p-2 border-l border-gray-300"></td>
       <td className="p-2 border-l border-gray-300"></td>
-      <td className="p-2 border-l border-gray-300"></td>
+
       <td className="p-2 border-l border-gray-300">
-        <button
-          onClick={handleSubmit}
-          className="p-2 bg-blue-500 text-white rounded shadow-sm hover:bg-blue-600"
-          disabled={isPending}
-        >
-          {isPending ? "Submitting..." : "Submit"}
-        </button>
+        {isEditing ? (
+          <>
+            <button
+              onClick={handleSubmit}
+              className="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600"
+            >
+              Save
+            </button>
+            <button
+              onClick={toggleEdit}
+              className="px-4 py-2 bg-red-500 text-white rounded shadow hover:bg-red-600"
+            >
+              Cancel
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={toggleEdit}
+            className="px-4 py-2  text-blue-500 rounded shadow hover:bg-blue-500 border-2 border-blue-500 hover:text-white"
+          >
+            Edit
+          </button>
+        )}
       </td>
     </tr>
   );
