@@ -1,6 +1,12 @@
 import React from "react";
 
 const Page = () => {
+  const updatedCompanyList = [
+    { com_name: "Company A", com_id: 1 },
+    { com_name: "Company B", com_id: 2 },
+    { com_name: "Company C", com_id: 3 },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative px-4 sm:px-0">
       <div className="absolute top-0 left-0 m-5 sm:m-10">
@@ -30,9 +36,40 @@ const Page = () => {
             />
           </div>
 
-          
+          <div className="flex flex-col sm:flex-row items-center sm:space-x-11 space-y-2 sm:space-y-0">
+            <label
+              htmlFor="comName"
+              className="text-lg font-bold text-black min-w-[150px]"
+            >
+              Panelist Company
+            </label>
+            <select
+              id="comName"
+              className="w-full sm:flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              <option value="">-- Select a Company --</option>
+              {updatedCompanyList.map((company) => (
+                <option key={company.com_id} value={company.com_name}>
+                  {company.com_name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          
+          <div className="flex flex-col sm:flex-row items-center sm:space-x-11 space-y-2 sm:space-y-0">
+            <label
+              htmlFor="panelNumber"
+              className="text-lg font-bold text-black min-w-[150px]"
+            >
+              Panel Number
+            </label>
+            <input
+              id="panelNumber"
+              type="text"
+              className="w-full sm:flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Panel Number"
+            />
+          </div>
 
           {/* Email Input */}
           <div className="flex flex-col sm:flex-row items-center sm:space-x-11 space-y-2 sm:space-y-0">
@@ -79,5 +116,4 @@ const Page = () => {
     </div>
   );
 };
-
 export default Page;

@@ -42,25 +42,7 @@ export default function Page() {
             />
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center sm:space-x-11 space-y-2 sm:space-y-0">
-            <label
-              htmlFor="comName"
-              className="text-lg font-bold text-black min-w-[150px]"
-            >
-              Coordinator Company
-            </label>
-            <select
-              id="comName"
-              className="w-full sm:flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            >
-              <option value="">-- Select a Company --</option>
-              {updatedCompanyList.map((company) => (
-                <option key={company.com_id} value={company.com_name}>
-                  {company.com_name}
-                </option>
-              ))}
-            </select>
-          </div>
+          
 
           <div className="flex flex-col sm:flex-row items-center sm:space-x-11 space-y-2 sm:space-y-0">
             <label
