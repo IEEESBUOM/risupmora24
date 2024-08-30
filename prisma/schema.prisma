@@ -25,6 +25,7 @@ model User {
   department_cordnator DepartmentCordinator?
   panelist             Panelist?
   admin                Admin?
+  role                 String?
   passwordResetToken       String?               @default("")
   passwordResetTokenExpire DateTime              @default(now())
 

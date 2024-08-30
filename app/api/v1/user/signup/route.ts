@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
         name: username,
         password: hashedPassword,
         email,
+        role: "candidate",
       },
     });
 
