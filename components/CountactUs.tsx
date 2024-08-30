@@ -68,11 +68,11 @@ export default function ContactUs() {
           telephone="0715960336"
         />
         <Profile
-          image="/contactUsImages/ShehanLiyanage.jpg"
-          name="Kaluarachchi Liyanage Shehan Shanuka"
-          shortName="Web Master"
+          image="/contactUsImages/Malithi.jpg"
+          name="Malithi Rumalka"
+          shortName="Assistant Secretary"
           details="IEEE Student Branch of University Of Moratuwa"
-          email="shehanshanuka99@gmail.com"
+          email="malithirumalka@gmail.com"
           telephone="0701555080"
         />
       </div>
