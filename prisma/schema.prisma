@@ -8,25 +8,26 @@ datasource db {
 }
 
 model User {
-  id                       String                @id @default(cuid())
-  name                     String?
   email                    String                @unique
-  emailVerified            DateTime?
-  image                    String?
-  accounts                 Account[]
-  sessions                 Session[]
-  Authenticator            Authenticator[]
-  password                 String?
-  emailVerifyStatus        Boolean               @default(false)
   createdAt                DateTime?             @default(now())
   updatedAt                DateTime?             @updatedAt
+  emailVerified            DateTime?
+  id                       String                @id @default(cuid())
+  image                    String?
+  name                     String?
+  emailVerifyStatus        Boolean               @default(false)
+  password                 String?
+  passwordResetToken       String?               @default("")
+  passwordResetTokenExpire DateTime              @default(now())
+  role                     String?
+  accounts                 Account[]
+  admin                    Admin?
+  Authenticator            Authenticator[]
   candidate                Candidate?
   company_cordnator        CompanyCordinator?
   department_cordnator     DepartmentCordinator?
   panelist                 Panelist?
-  admin                    Admin?
-  passwordResetToken       String?               @default("")
-  passwordResetTokenExpire DateTime              @default(now())
+  sessions                 Session[]
 }
 
 model Candidate {
@@ -47,7 +48,7 @@ model Candidate {
   prefCompany3     String?
   prefCompany4     String?
   allocation       Allocation[]
-  user             User         @relation(fields: [candidate_id], references: [id])
+  user             User         @relation(fields: [candidate_id], references: [id], onDelete: Cascade)
   feedback         Feedback[]
 }
 
@@ -56,8 +57,8 @@ model CompanyCordinator {
   company_id    String    @unique
   createdAt     DateTime? @default(now())
   updatedAt     DateTime? @updatedAt
-  company       Company   @relation(fields: [company_id], references: [company_id])
-  user          User      @relation(fields: [cordinator_id], references: [id])
+  company       Company   @relation(fields: [company_id], references: [company_id], onDelete: Cascade)
+  user          User      @relation(fields: [cordinator_id], references: [id], onDelete: Cascade)
 }
 
 model DepartmentCordinator {
@@ -65,7 +66,7 @@ model DepartmentCordinator {
   department    Department
   createdAt     DateTime?  @default(now())
   updatedAt     DateTime?  @updatedAt
-  user          User       @relation(fields: [cordinator_id], references: [id])
+  user          User       @relation(fields: [cordinator_id], references: [id], onDelete: Cascade)
 }
 
 model Panelist {
@@ -75,8 +76,8 @@ model Panelist {
   createdAt     DateTime?    @default(now())
   updatedAt     DateTime?    @updatedAt
   allocation    Allocation[]
-  company       Company      @relation(fields: [company_id], references: [company_id])
-  user          User         @relation(fields: [panelist_id], references: [id])
+  company       Company      @relation(fields: [company_id], references: [company_id], onDelete: Cascade)
+  user          User         @relation(fields: [panelist_id], references: [id], onDelete: Cascade)
 
   @@unique([pannel_number, company_id])
 }
@@ -85,7 +86,7 @@ model Admin {
   admin_id  String    @unique
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
-  user      User      @relation(fields: [admin_id], references: [id])
+  user      User      @relation(fields: [admin_id], references: [id], onDelete: Cascade)
 }
 
 model Company {
@@ -101,14 +102,14 @@ model Company {
 model Feedback {
   feedback_id          String    @id @default(cuid())
   feedback             String
-  technicalSkill       Int
-  communicationSkill   Int
-  problemSolvingSkill  Int
-  experienceAndProject Int
   candidate_id         String
   company_id           String
-  candidate            Candidate @relation(fields: [candidate_id], references: [candidate_id])
-  company              Company   @relation(fields: [company_id], references: [company_id])
+  communicationSkill   Int
+  experienceAndProject Int
+  problemSolvingSkill  Int
+  technicalSkill       Int
+  candidate            Candidate @relation(fields: [candidate_id], references: [candidate_id], onDelete: Cascade)
+  company              Company   @relation(fields: [company_id], references: [company_id], onDelete: Cascade)
 }
 
 model Allocation {
@@ -121,11 +122,11 @@ model Allocation {
   candidate_id           String
   company_id             String
   panelist_id            String
-  candidate              Candidate @relation(fields: [candidate_id], references: [candidate_id])
-  company                Company   @relation(fields: [company_id], references: [company_id])
-  panelist               Panelist  @relation(fields: [panelist_id], references: [panelist_id])
+  candidate              Candidate @relation(fields: [candidate_id], references: [candidate_id], onDelete: Cascade)
+  company                Company   @relation(fields: [company_id], references: [company_id], onDelete: Cascade)
+  panelist               Panelist  @relation(fields: [panelist_id], references: [panelist_id], onDelete: Cascade)
 
-  @@unique([allocated_panel_number, allocation_date, allocation_timeSlot, company_id, candidate_id])
+  @@unique([allocated_panel_number, allocation_date, allocation_timeSlot, company_id])
 }
 
 model Account {
