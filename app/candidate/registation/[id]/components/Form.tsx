@@ -424,18 +424,6 @@ export default function Form({ candidate }: FormProps) {
             </div>
           </label>
           <div className="lg:w-1/3 w-4/5 md:w-3/5 lg:ml-10 md:ml-0">
-            {/* <Input
-              className="w-full   border-gray-300 rounded-lg"
-              type="file"
-              {...register("photo", {
-                required: "Photo is required",
-                validate: {
-                  fileType: (value) =>
-                    value[0]?.type.startsWith("image/") ||
-                    "Only image files are allowed",
-                },
-              })}
-            /> */}
             <CloudinaryUpload
               croping={true}
               setImgUrl={setImgUrl}
