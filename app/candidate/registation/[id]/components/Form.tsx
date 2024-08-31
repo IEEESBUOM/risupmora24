@@ -407,7 +407,7 @@ export default function Form({ candidate }: FormProps) {
                 },
               })}
             /> */}
-            <CloudinaryUpload setImgUrl={setCvUrl} type={"cv"} />
+            <CloudinaryUpload croping={true} setImgUrl={setCvUrl} type={"cv"} />
             {errors.cv && (
               <div className="text-xs text-red-600">*{errors.cv.message}</div>
             )}
@@ -417,7 +417,11 @@ export default function Form({ candidate }: FormProps) {
         {/* Photo Upload */}
         <div className="flex flex-wrap  mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
-            Upload a Formal Photo of Yourself
+            <div className="">Upload a Formal Photo of Yourself</div>
+            <div className=" text-xs font-light">
+              *Uploaded images will be visible to companies conducting
+              interviews.
+            </div>
           </label>
           <div className="lg:w-1/3 w-4/5 md:w-3/5 lg:ml-10 md:ml-0">
             {/* <Input
@@ -432,7 +436,11 @@ export default function Form({ candidate }: FormProps) {
                 },
               })}
             /> */}
-            <CloudinaryUpload setImgUrl={setImgUrl} type={"image"} />
+            <CloudinaryUpload
+              croping={true}
+              setImgUrl={setImgUrl}
+              type={"image"}
+            />
             {errors.photo && (
               <div className="text-xs text-red-600">
                 *{errors.photo.message}

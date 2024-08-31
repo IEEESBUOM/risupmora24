@@ -32,6 +32,7 @@ import PrimaryButtonSmall from "./ui/PrimaryButtonSmall";
 import HamburgerButton from "./ui/HamburgerButton";
 import { signOut, useSession } from "next-auth/react";
 import NavBarProfile from "./NavBarProfile";
+import { useGetUserData } from "@/hooks/user/useGetUserData";
 
 interface SectionRefs {
   heroSectionRef: MutableRefObject<HTMLDivElement | null>;
@@ -46,21 +47,37 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   const [active, setActive] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session, status } = useSession();
+  // const [userData, setUserData] = useState<any>(null);
+ 
+
+
 
   console.log(session);
+
 
   const [showProfile, setShowProfile] = useState<boolean>(false);
 
   const user = {
     email: session?.user.email as string,
-    image: "dsdsds",
+    image: session?.user.image as string,
     firstName: session?.user.name as string,
     _id: session?.user.id as string,
   };
+  const userData = useGetUserData({ userEmail: user.email });
+  console.log(userData)
 
   function clickLogoutBtn() {
     signOut();
   }
+
+  // useEffect(() => {
+  //   const userData = useGetUserData({ userEmail: user.email });
+  //   if (user.email) {
+  //     setUserData(userData);
+  //   }
+
+  // }, [user.email]);
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -217,9 +234,12 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
 
                 {/* <SheetFooter> */}
                 <div className="h-[2px]  w-full bg-white"></div>
-                {user._id && (
+                {userData && (
                   <NavBarProfile
-                    user={user}
+                    id={userData.user?.id}
+                    name={userData.user?.name}
+                    email={userData.user?.email}
+                    image={userData.user?.image || ""}
                     clickLogoutBtn={clickLogoutBtn}
                     setShowProfile={setShowProfile}
                     showProfile={showProfile}
@@ -297,32 +317,91 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
+         {/* {if (status == "authenticated" && userData.user) {
+          <div
+          onClick={handleUserProfile}
+          className=" flex gap-2 cursor-pointer"
+        >
+          <div className="grid content-center font-quicksand font-semibold text-lg">
+            {user.firstName}
+          </div>
+          <div className=" py-4 sm:py-2 grid content-center">
+            {userData.user && (
+            <Image
+              src={userData.user?.image}
+              alt="profile picture"
+              width={50}
+              height={50}
+              className="rounded-full w-auto h-auto"
+            />)}
+          </div>
+        </div>
+         }else if (status == "unauthenticated") {
+          <div></div>
+            
 
-          {status == "authenticated" ? (
+
+         }
+         else {
+            <div className="grid content-center font-quicksand font-semibold text-lg">
+                loading
+              </div>
+         }
+
+
+         } */}
+
+
+
+
+
+
+          <div className="  grid content-center min-w-36 justify-center">
+          {status == "authenticated" && userData.user && (
             <div
               onClick={handleUserProfile}
               className=" flex gap-2 cursor-pointer"
             >
-              <div className="grid content-center font-poppins font-medium">
+              <div className="grid content-center font-quicksand font-semibold text-lg">
                 {user.firstName}
               </div>
-              <div className=" py-4 grid content-center">
+              <div className=" py-4 sm:py-2 grid content-center">
+                {userData.user && (
                 <Image
-                  src={
-                    "https://res.cloudinary.com/dumh5befg/image/upload/v1720951327/users/clyld3pa40000wb6y5trem706/image.jpg"
-                  }
+                  src={userData.user?.image}
                   alt="profile picture"
-                  width={38}
-                  height={15}
+                  width={50}
+                  height={50}
                   className="rounded-full w-auto h-auto"
-                />
+                />)}
               </div>
             </div>
-          ) : (
-            <Link href="/auth/signin" passHref className=" grid ">
-              <PrimaryButtonSmall text="Sign In" />
-            </Link>
+          ) }
+
+
+          {status == "unauthenticated" && (
+              <Link href="/auth/signin" passHref className=" grid ">
+                <PrimaryButtonSmall text="Sign In" />
+              </Link>
+            )}
+
+          {status != "authenticated" && status !="unauthenticated" && (
+            <Image
+            src="/spinner/loading-black.svg"
+            width={28}
+            height={28}
+            alt="spinner"
+          />
           )}
+          {status == "authenticated" && !userData.user && (
+            <Image
+            src="/spinner/loading-black.svg"
+            width={28}
+            height={28}
+            alt="spinner"
+          />)
+            }
+          </div>
         </div>
 
         <div
@@ -342,12 +421,15 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
           } rounded-b-2xl  right-0 z-50   bg-custom-black  `}
         >
           <NavBarProfile
-            user={user}
-            clickLogoutBtn={clickLogoutBtn}
-            setShowProfile={setShowProfile}
-            showProfile={showProfile}
-            isInSheet={false}
-          />
+                    id={userData.user?.id}
+                    name={userData.user?.name}
+                    email={userData.user?.email}
+                    image={userData.user?.image || ""}
+                    clickLogoutBtn={clickLogoutBtn}
+                    setShowProfile={setShowProfile}
+                    showProfile={showProfile}
+                    isInSheet={false}
+                  />
         </div>
       </div>
     </>

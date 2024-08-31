@@ -1,3 +1,4 @@
+"use client"
 import StudentFooter from "@/components/StudentFooter";
 import StudentNavbar from "@/components/StudentNavbar";
 import PrimaryButtonSmall from "@/components/ui/PrimaryButtonSmall";

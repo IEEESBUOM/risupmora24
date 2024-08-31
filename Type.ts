@@ -60,6 +60,7 @@ export interface User {
   updatedAt: string;
   passwordResetToken: string;
   passwordResetTokenExpire: string;
+  role: string;
 }
 
 export interface Company {

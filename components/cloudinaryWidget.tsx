@@ -9,9 +9,13 @@ import { FaRegFilePdf } from "react-icons/fa6";
 import Image from "next/image";
 
 const CloudinaryUpload = ({
-  setImgUrl,type
+  setImgUrl,
+  type,
+  croping,
 }: {
-  setImgUrl: (url: string) => void,type:string
+  setImgUrl: (url: string) => void;
+  type: string;
+  croping: boolean;
 }) => {
   const [profileImage, setProfileImage] = useState("");
 
@@ -40,17 +44,16 @@ const CloudinaryUpload = ({
           sources: ["local"],
           googleApiKey: "<image_search_google_api_key>",
           showAdvancedOptions: false,
-          // cropping: true,
+          cropping: croping,
           multiple: false,
           showSkipCropButton: false,
-          // croppingAspectRatio: 0.75,
-          // croppingDefaultSelectionRatio: 0.75,
-          // croppingShowDimensions: true,
-          // croppingCoordinatesMode: "custom",
+          croppingAspectRatio: 1,
+          croppingDefaultSelectionRatio: 1,
+          croppingShowDimensions: true,
+          croppingCoordinatesMode: "custom",
           defaultSource: "local",
           resourceType: "image",
           folder: "organization",
-          cropping: false,
           styles: {
             palette: {
               window: "#ffffff",
@@ -88,27 +91,24 @@ const CloudinaryUpload = ({
       </CldUploadWidget>
       {profileImage && (
         <div className="mt-4">
-          {profileImage.endsWith(".pdf") && type=="cv" && (
+          {profileImage.endsWith(".pdf") && type == "cv" && (
             <a
               href={profileImage}
               target="_blank"
               rel="noopener noreferrer"
-
               className="block w-24 h-24 text-center p-2 border border-gray-300 rounded-md bg-gray-100"
             >
               View PDF
-              
-
             </a>
           )}
-          
-          {type=="image" &&(
+
+          {type == "image" && (
             <Image
               src={profileImage}
               alt="Uploaded"
               width={200}
               height={200}
-              className="w-36 h-36 object-none    rounded-md"
+              className="w-36 h-36 object-cover    rounded-md"
             />
           )}
         </div>

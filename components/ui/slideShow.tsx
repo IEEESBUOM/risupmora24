@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import unileverBanner from "../../assets/img/ifs.png";
-import ifsBanner from "../../assets/img/ifs.png";
+import unileverBanner from "../../assets/img/mas.png";
+import ifsBanner from "../../assets/img/gtn.png";
 
 const slideimgs = [unileverBanner, ifsBanner];
 const delay = 2500;
