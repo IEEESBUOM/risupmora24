@@ -62,3 +62,41 @@ export interface User {
   passwordResetTokenExpire: string;
   role: string;
 }
+
+export interface Company {
+  company_id: string;
+  company_name: string;
+  feedback: Feedback[];
+}
+
+export interface Feedback {
+  feedback_id: string;
+  feedback: string;
+  candidate_id: string;
+  company_id: string;
+  Candidate: Candidate;
+  Company: Company;
+}
+
+export interface Panelist {
+  panelist_id: string;
+  pannel_number: Number;
+  company_id: string;
+  allocation: Allocation[];
+  company: Company;
+  user: User;
+}
+export interface Allocation {
+  allocation_id: string;
+  allocation_date: string;
+  allocation_timeSlot: string;
+  allocated_panel_number: string;
+  attendance: boolean;
+  allocation_status: string;
+  candidate_id: string;
+  company_id: string;
+  panelist_id: string;
+  Candidate: Candidate;
+  Company: Company;
+  Panelist: Panelist;
+}
