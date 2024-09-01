@@ -5,6 +5,7 @@ import { getFeedback } from "@/service/getFeedback";
 import { getCompany } from "@/service/getCompany";
 import { InterviewAllocation } from "@/service/InterviewAllocation";
 import { getAllocation } from "@/service/getInterviewAllocation";
+import { getPannels } from "@/service/getPanelsReleventToCompany";
 
 const AllInterviewersPage = async () => {
   const response = await getCandidates();

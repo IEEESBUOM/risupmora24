@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useAlocateInterviewees } from "@/hooks/user/useAlocateInterviweers";
-import { Company } from "@/Type";
+import { Company, Panelist } from "@/Type";
 import toast from "react-hot-toast";
+import { getPannels } from "@/service/getPanelsReleventToCompany";
 
 // Define an interface for row data
 interface RowData {
@@ -40,6 +41,20 @@ const CandidateData = (candidate: any) => {
     company4: "",
     time4: "",
   });
+
+  // Initialize state for panels
+  const [panelsForCompany1, setPanelsForCompany1] = useState<{
+    [key: string]: string;
+  }>({});
+  const [panelsForCompany2, setPanelsForCompany2] = useState<{
+    [key: string]: string;
+  }>({});
+  const [panelsForCompany3, setPanelsForCompany3] = useState<{
+    [key: string]: string;
+  }>({});
+  const [panelsForCompany4, setPanelsForCompany4] = useState<{
+    [key: string]: string;
+  }>({});
 
   // Initialize edit state
   const [isEditing, setIsEditing] = useState(false);
@@ -80,8 +95,24 @@ const CandidateData = (candidate: any) => {
     setRowData(newRowData);
   }, [candidate]);
 
-  // Handle input changes and update state
-  const handleChange = (
+  // Fetch panels relevant to the selected company
+  const fetchPanels = async (
+    companyId: string,
+    setPanels: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>
+  ) => {
+    const panels = await getPannels(companyId);
+    if (panels) {
+      const panelsMap: { [key: string]: string } = {};
+      panels.data.forEach((panel: Panelist) => {
+        panelsMap[panel.pannel_number.toString()] = panel.panelist_id;
+      });
+      setPanels(panelsMap);
+    } else {
+      setPanels({});
+    }
+  };
+
+  const handleChange = async (
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => {
     const { id, value } = e.target;
@@ -89,24 +120,75 @@ const CandidateData = (candidate: any) => {
       ...prevState,
       [id]: value,
     }));
+
+    if (id.startsWith("company")) {
+      const companyIndex = id.replace("company", "");
+      try {
+        switch (companyIndex) {
+          case "1":
+            await fetchPanels(value, setPanelsForCompany1);
+            break;
+          case "2":
+            await fetchPanels(value, setPanelsForCompany2);
+            break;
+          case "3":
+            await fetchPanels(value, setPanelsForCompany3);
+            break;
+          case "4":
+            await fetchPanels(value, setPanelsForCompany4);
+            break;
+          default:
+            break;
+        }
+      } catch (error) {
+        console.error("Error fetching panels:", error);
+      }
+    }
   };
 
-  // Handle submit button click
-  const handleSubmit = () => {
+  const handleSubmit = (rowData: RowData) => {
     const panels = [
-      { panel: "panel1", company: "company1", time: "time1" },
-      { panel: "panel2", company: "company2", time: "time2" },
-      { panel: "panel3", company: "company3", time: "time3" },
-      { panel: "panel4", company: "company4", time: "time4" },
+      {
+        panel: "panel1",
+        company: "company1",
+        time: "time1",
+        panelsMap: panelsForCompany1,
+      },
+      {
+        panel: "panel2",
+        company: "company2",
+        time: "time2",
+        panelsMap: panelsForCompany2,
+      },
+      {
+        panel: "panel3",
+        company: "company3",
+        time: "time3",
+        panelsMap: panelsForCompany3,
+      },
+      {
+        panel: "panel4",
+        company: "company4",
+        time: "time4",
+        panelsMap: panelsForCompany4,
+      },
     ];
 
-    panels.forEach((panelInfo) => {
-      const panelValue = rowData[panelInfo.panel as keyof RowData];
-      const companyValue = rowData[panelInfo.company as keyof RowData];
-      const timeValue = rowData[panelInfo.time as keyof RowData];
+    console.log("Submitting:", rowData);
 
-      // Skip if the company is empty
-      if (!companyValue) return;
+    panels.forEach((panelInfo) => {
+      const panelValue = rowData[panelInfo.panel as keyof typeof rowData];
+      const companyValue = rowData[panelInfo.company as keyof typeof rowData];
+      const timeValue = rowData[panelInfo.time as keyof typeof rowData];
+      const panelistId = panelInfo.panelsMap[panelValue];
+
+      console.log("Panel Value:", panelValue);
+      console.log("Company Value:", companyValue);
+      console.log("Panelist ID:", panelistId);
+      console.log("Panels Map:", panelInfo.panelsMap);
+
+      // Skip if either company or panelist ID is empty
+      if (!companyValue || !panelistId) return;
 
       const formData = {
         allocated_panel_number: parseInt(panelValue),
@@ -115,19 +197,21 @@ const CandidateData = (candidate: any) => {
         allocation_date: "2021-10-10",
         allocation_status: "pending",
         candidate_id: candidate.candidate_id,
-        panelist_id: "clyu9qgs80000vulxcwnnj1uq",
+        panelist_id: panelistId,
       };
 
-      console.log(formData);
+      console.log("Form Data:", formData);
+
+      // Submit the form data
       Allocation(
         { Allocation: formData },
         {
           onSuccess: () => {
-            toast.success("Allocation Success 1");
+            toast.success("Allocation Success");
           },
           onError: (error) => {
             console.error("Allocation error:", error);
-            toast.error("Allocation failed 1");
+            toast.error("Allocation failed");
           },
         }
       );
@@ -139,36 +223,17 @@ const CandidateData = (candidate: any) => {
     setIsEditing(!isEditing);
   };
 
+  const [isAttended, setIsAttended] = useState(false);
+
   return (
-    <tr className="border-b border-gray-300">
+    <tr>
       <td className="p-2 border-l border-gray-300">{candidate.candidate_id}</td>
       <td className="p-2 border-l border-gray-300">
         {candidate.firstName} {candidate.lastName}
       </td>
       <td className="p-2 border-l border-gray-300">
-        {candidate.preference1}
-        {" , "}
-        {candidate.preference2}
-        {" , "}
-        {candidate.preference3}
-        {" , "}
-        {candidate.preference4}
-        {" , "}
-      </td>
-      <td className="p-2 border-l border-gray-300">
-        <select
-          id="panel1"
-          value={rowData.panel1}
-          onChange={handleChange}
-          disabled={!isEditing}
-          className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
-        >
-          <option value="">Select Panel</option>
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-        </select>
+        {candidate.preference1}, {candidate.preference2},{" "}
+        {candidate.preference3}, {candidate.preference4}
       </td>
       <td className="p-2 border-l border-gray-300">
         <select
@@ -179,9 +244,31 @@ const CandidateData = (candidate: any) => {
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">None</option>
-          {candidate.company.map((company: Company) => (
+          {candidate.company.map((company: any) => (
             <option key={company.company_id} value={company.company_id}>
               {company.company_name}
+            </option>
+          ))}
+        </select>
+      </td>
+      <td className="p-2 border-l border-gray-300">
+        <select
+          id="panel1"
+          value={rowData.panel1}
+          onChange={handleChange}
+          disabled={!isEditing || !rowData.company1}
+          className={`p-2 border ${
+            !rowData.company1
+              ? "bg-blue-400 text-white hover:text-white"
+              : "bg-blue-400 text-white"
+          } rounded shadow-sm hover:bg-blue-500`}
+        >
+          <option value="">
+            {rowData.company1 ? rowData.panel1 : "Select Company 1 first"}
+          </option>
+          {Object.keys(panelsForCompany1).map((panel) => (
+            <option key={panel} value={panel}>
+              {panel}
             </option>
           ))}
         </select>
@@ -196,21 +283,14 @@ const CandidateData = (candidate: any) => {
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </td>
-      <td className="p-2 border-l border-gray-300"></td>
       <td className="p-2 border-l border-gray-300">
-        <select
-          id="panel2"
-          value={rowData.panel2}
-          onChange={handleChange}
+        <input
+          type="checkbox"
+          checked={isAttended}
+          onChange={() => setIsAttended(!isAttended)}
           disabled={!isEditing}
-          className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
-        >
-          <option value="">Select Panel</option>
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-        </select>
+          className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+        />
       </td>
       <td className="p-2 border-l border-gray-300">
         <select
@@ -221,9 +301,31 @@ const CandidateData = (candidate: any) => {
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">None</option>
-          {candidate.company.map((company: Company) => (
+          {candidate.company.map((company: any) => (
             <option key={company.company_id} value={company.company_id}>
               {company.company_name}
+            </option>
+          ))}
+        </select>
+      </td>
+      <td className="p-2 border-l border-gray-300">
+        <select
+          id="panel2"
+          value={rowData.panel2}
+          onChange={handleChange}
+          disabled={!isEditing || !rowData.company2}
+          className={`p-2 border ${
+            !rowData.company2
+              ? "bg-blue-400 text-white hover:text-white"
+              : "bg-blue-400 text-white"
+          } rounded shadow-sm hover:bg-blue-500`}
+        >
+          <option value="">
+            {rowData.company2 ? rowData.panel2 : "Select Company 2 first"}
+          </option>
+          {Object.keys(panelsForCompany2).map((panel) => (
+            <option key={panel} value={panel}>
+              {panel}
             </option>
           ))}
         </select>
@@ -238,21 +340,14 @@ const CandidateData = (candidate: any) => {
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </td>
-      <td className="p-2 border-l border-gray-300"></td>
       <td className="p-2 border-l border-gray-300">
-        <select
-          id="panel3"
-          value={rowData.panel3}
-          onChange={handleChange}
+        <input
+          type="checkbox"
+          checked={isAttended}
+          onChange={() => setIsAttended(!isAttended)}
           disabled={!isEditing}
-          className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
-        >
-          <option value="">Select Panel</option>
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-        </select>
+          className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+        />
       </td>
       <td className="p-2 border-l border-gray-300">
         <select
@@ -263,9 +358,31 @@ const CandidateData = (candidate: any) => {
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">None</option>
-          {candidate.company.map((company: Company) => (
+          {candidate.company.map((company: any) => (
             <option key={company.company_id} value={company.company_id}>
               {company.company_name}
+            </option>
+          ))}
+        </select>
+      </td>
+      <td className="p-2 border-l border-gray-300">
+        <select
+          id="panel3"
+          value={rowData.panel3}
+          onChange={handleChange}
+          disabled={!isEditing || !rowData.company3}
+          className={`p-2 border ${
+            !rowData.company3
+              ? "bg-blue-400 text-white hover:text-white"
+              : "bg-blue-400 text-white"
+          } rounded shadow-sm hover:bg-blue-500`}
+        >
+          <option value="">
+            {rowData.company3 ? rowData.panel3 : "Select Company 3 first"}
+          </option>
+          {Object.keys(panelsForCompany3).map((panel) => (
+            <option key={panel} value={panel}>
+              {panel}
             </option>
           ))}
         </select>
@@ -280,21 +397,14 @@ const CandidateData = (candidate: any) => {
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </td>
-      <td className="p-2 border-l border-gray-300"></td>
       <td className="p-2 border-l border-gray-300">
-        <select
-          id="panel4"
-          value={rowData.panel4}
-          onChange={handleChange}
+        <input
+          type="checkbox"
+          checked={isAttended}
+          onChange={() => setIsAttended(!isAttended)}
           disabled={!isEditing}
-          className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
-        >
-          <option value="">Select Panel</option>
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-        </select>
+          className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+        />
       </td>
       <td className="p-2 border-l border-gray-300">
         <select
@@ -305,9 +415,31 @@ const CandidateData = (candidate: any) => {
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">None</option>
-          {candidate.company.map((company: Company) => (
+          {candidate.company.map((company: any) => (
             <option key={company.company_id} value={company.company_id}>
               {company.company_name}
+            </option>
+          ))}
+        </select>
+      </td>
+      <td className="p-2 border-l border-gray-300">
+        <select
+          id="panel4"
+          value={rowData.panel4}
+          onChange={handleChange}
+          disabled={!isEditing || !rowData.company4}
+          className={`p-2 border ${
+            !rowData.company4
+              ? "bg-blue-400 text-white hover:text-white"
+              : "bg-blue-400 text-white"
+          } rounded shadow-sm hover:bg-blue-500`}
+        >
+          <option value="">
+            {rowData.company4 ? rowData.panel4 : "Select Company 4 first"}
+          </option>
+          {Object.keys(panelsForCompany4).map((panel) => (
+            <option key={panel} value={panel}>
+              {panel}
             </option>
           ))}
         </select>
@@ -322,18 +454,24 @@ const CandidateData = (candidate: any) => {
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </td>
-      <td className="p-2 border-l border-gray-300"></td>
-      <td className="p-2 border-l border-gray-300"></td>
-      <td className="p-2 border-l border-gray-300"></td>
-
+      <td className="p-2 border-l border-gray-300">
+        <input
+          type="checkbox"
+          checked={isAttended}
+          onChange={() => setIsAttended(!isAttended)}
+          disabled={!isEditing}
+          className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+        />
+      </td>
       <td className="p-2 border-l border-gray-300">
         {isEditing ? (
-          <>
+          <div className="flex space-x-2">
             <button
-              onClick={handleSubmit}
+              onClick={() => handleSubmit(rowData)} // Pass the rowData to handleSubmit
               className="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600"
+              disabled={isPending}
             >
-              Save
+              {isPending ? "Saving..." : "Save"}
             </button>
             <button
               onClick={toggleEdit}
@@ -341,11 +479,11 @@ const CandidateData = (candidate: any) => {
             >
               Cancel
             </button>
-          </>
+          </div>
         ) : (
           <button
             onClick={toggleEdit}
-            className="px-4 py-2  text-blue-500 rounded shadow hover:bg-blue-500 border-2 border-blue-500 hover:text-white"
+            className="px-4 py-2 text-blue-500 rounded shadow hover:bg-blue-500 border-2 border-blue-500 hover:text-white"
           >
             Edit
           </button>

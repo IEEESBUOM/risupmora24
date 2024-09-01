@@ -191,10 +191,10 @@ const AllIntervieweesData: React.FC<Props> = ({
                   Preferences
                 </th>
                 <th className="p-2 border border-gray-300 text-left">
-                  Pannel List 1
+                  Allocated Company 1
                 </th>
                 <th className="p-2 border border-gray-300 text-left">
-                  Allocated Company 1
+                  Pannel List 1
                 </th>
                 <th className="p-2 border border-gray-300 text-left">
                   Time Slot 1
@@ -203,10 +203,10 @@ const AllIntervieweesData: React.FC<Props> = ({
                   Feedback 1
                 </th>
                 <th className="p-2 border border-gray-300 text-left">
-                  Pannel List 2
+                  Allocated Company 2
                 </th>
                 <th className="p-2 border border-gray-300 text-left">
-                  Allocated Company 2
+                  Pannel List 2
                 </th>
                 <th className="p-2 border border-gray-300 text-left">
                   Time Slot 2
@@ -215,10 +215,10 @@ const AllIntervieweesData: React.FC<Props> = ({
                   Feedback 2
                 </th>
                 <th className="p-2 border border-gray-300 text-left">
-                  Pannel List 3
+                  Allocated Company 3
                 </th>
                 <th className="p-2 border border-gray-300 text-left">
-                  Allocated Company 3
+                  Pannel List 3
                 </th>
                 <th className="p-2 border border-gray-300 text-left">
                   Time Slot 3
@@ -227,10 +227,10 @@ const AllIntervieweesData: React.FC<Props> = ({
                   Feedback 3
                 </th>
                 <th className="p-2 border border-gray-300 text-left">
-                  Pannel List 4
+                  Allocated Company 4
                 </th>
                 <th className="p-2 border border-gray-300 text-left">
-                  Allocated Company 4
+                  Pannel List 4
                 </th>
                 <th className="p-2 border border-gray-300 text-left">
                   Time Slot 4
