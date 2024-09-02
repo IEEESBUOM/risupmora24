@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
                 email
             }
         });
+        console.log(excistUser);
         if(excistUser){
             return NextResponse.json({message: "A user already exists with this email"}, {status: 400});
         }
@@ -44,6 +45,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: "Already added a panelist for this panel" }, { status: 400 });
         }
 
+        console.log(existingPanelist);
         const user = await prisma.user.create({
             data: {
                 name: panelistName,

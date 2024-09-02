@@ -9,7 +9,10 @@ export async function GET(req: NextRequest, { params }: any) {
     const user  = await prisma.user.findFirst({
         where: {
             email: params.email,
-        },
+        },include:{
+            candidate:true
+        }
+        ,
     });
     console.log(user );
 

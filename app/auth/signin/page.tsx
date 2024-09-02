@@ -83,12 +83,22 @@ const SignIn = () => {
               if (result?.ok) {
                 console.log(signInData.isCandidate);
                 console.log(signInData);
-                if (signInData.isCandidate) {
-                  console.log("candidate");
-                  router.push("/");
-                } else {
+                if (!signInData.isCandidate && signInData.role==="candidate") {
                   router.push(`/candidate/registation/${signInData.id}`);
-                  console.log("not candidate");
+                  
+                } else if (signInData.isCandidate && signInData.role==="candidate") {
+                  router.push(`/`);
+                  
+                } else if (signInData.role==="admin") {
+                  router.push(`/admin/add-company/`);
+                }
+                else if (signInData.role==="departmentCoordinator" || signInData.role==="companyCoordinator") {
+                  router.push(`/admin/all-interviewees/`);
+                }else if (signInData.role==="panelist") {
+                  router.push(`/company/dashboard/`);
+                }
+                else {
+                  router.push(`/`);
                 }
               }
               resolve();

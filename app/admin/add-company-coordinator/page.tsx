@@ -1,10 +1,26 @@
 "use client";
 
+import PageLoader from '@/components/PageLoader';
+import { useGetUserData } from '@/hooks/user/useGetUserData';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import React,{useEffect,useState} from 'react'
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 
-export default function page() {
+
+export default function Page() {
+
+  const { data: session, status } = useSession();
+  console.log(session);
+  const userEmail = session?.user?.email;
+  const userData = useGetUserData({ userEmail: userEmail || "" });
+  const role = userData.user?.role;
+
+  
+
+ 
+
   const [updatedCompanyList,setUpdatedCompanyList] = useState<{ company_id: number; company_name: string; }[]>([]);
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -76,6 +92,24 @@ const onSubmit: SubmitHandler<Inputs> = (data) => {
     }
   )
 };
+
+if(userData.user?.role !== "admin"){
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-200">
+      <div className="max-w-md w-full text-center bg-white p-6 rounded-lg shadow-md">
+        <h1 className="text-3xl font-bold text-red-600">Access Denied</h1>
+        <p className="mt-4 text-gray-700">
+          You do not have permission to view this page.
+        </p>
+        
+      </div>
+    </div>
+  )
+}
+
+if(status === "loading" || userData.isPending){
+  return <PageLoader />
+}
 
 
 

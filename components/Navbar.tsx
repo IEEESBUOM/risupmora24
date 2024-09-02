@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
 import { AlignRight } from "lucide-react";
 import Image from "next/image";
@@ -33,6 +33,7 @@ import HamburgerButton from "./ui/HamburgerButton";
 import { signOut, useSession } from "next-auth/react";
 import NavBarProfile from "./NavBarProfile";
 import { useGetUserData } from "@/hooks/user/useGetUserData";
+import PageLoader from "./PageLoader";
 
 interface SectionRefs {
   heroSectionRef: MutableRefObject<HTMLDivElement | null>;
@@ -47,13 +48,14 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   const [active, setActive] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session, status } = useSession();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   // const [userData, setUserData] = useState<any>(null);
  
 
 
 
   console.log(session);
-
+  const router = useRouter();
 
   const [showProfile, setShowProfile] = useState<boolean>(false);
 
@@ -77,6 +79,40 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   //   }
 
   // }, [user.email]);
+
+  useEffect(() => {
+    setIsLoading(true)
+    if(userData.user){
+      console.log(userData)
+
+      if (!userData.user.candidate == null  && userData.user.role==="candidate") {
+        
+        router.push(`/candidate/registation/${userData.user.id}`);
+        
+      } else if (userData.user.isCandidate && userData.user.role==="candidate") {
+        setIsLoading(false)
+        
+      } else if (userData.user.role==="admin") {
+        router.push(`/admin/add-company/`);
+      }
+      else if (userData.user.role==="departmentCoordinator" || userData.user.role==="companyCoordinator") {
+        router.push(`/admin/all-interviewees/`);
+      }else if (userData.user.role==="panelist") {
+        router.push(`/company/dashboard/`);
+      }
+      else {
+        setIsLoading(false)
+      }
+      
+
+
+
+    }
+    setIsLoading(false)
+    
+    
+  }
+  ,[userData])
 
 
   useEffect(() => {
@@ -143,6 +179,11 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   const handleUserProfile = () => {
     setShowProfile(true);
   };
+  if ((status == "loading" || isLoading || userData.isPending) ) {
+    return (<PageLoader />)
+  }
+  
+  
   return (
     <>
       <div className=" fixed  grid w-full bg-white   sm:overflow-hidden  sm:h-24    max-md:max-w-full z-20   ">
@@ -366,7 +407,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
                 {user.firstName}
               </div>
               <div className=" py-4 sm:py-2 grid content-center">
-                {userData.user && (
+                {userData.user?.image && (
                 <Image
                   src={userData.user?.image}
                   alt="profile picture"

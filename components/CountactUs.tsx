@@ -68,7 +68,7 @@ export default function ContactUs() {
           telephone="0715960336"
         />
         <Profile
-          image="/contactUsImages/Malithi.jpg"
+          image="/contactUsImages/Malithi.jpeg"
           name="Malithi Rumalka"
           shortName="Assistant Secretary"
           details="IEEE Student Branch of University Of Moratuwa"

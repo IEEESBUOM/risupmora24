@@ -1,4 +1,8 @@
 "use client";
+import PageLoader from "@/components/PageLoader";
+import { useGetUserData } from "@/hooks/user/useGetUserData";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import React,{useState} from "react";
 import { useForm, SubmitHandler, set } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -58,6 +62,13 @@ export default function Page() {
     formState: { errors },
   } = useForm<Inputs>();
 
+
+  const { data: session, status } = useSession();
+  console.log(session);
+  const userEmail = session?.user?.email;
+  const userData = useGetUserData({ userEmail: userEmail || "" });
+  const role = userData.user?.role;
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log("data");
     console.log(data);
@@ -97,6 +108,25 @@ export default function Page() {
       }
     )
   };
+
+  if(userData.user?.role !== "admin"){
+    return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-200">
+      <div className="max-w-md w-full text-center bg-white p-6 rounded-lg shadow-md">
+        <h1 className="text-3xl font-bold text-red-600">Access Denied</h1>
+        <p className="mt-4 text-gray-700">
+          You do not have permission to view this page.
+        </p>
+        
+      </div>
+    </div>
+  )
+  }
+
+  if(status === "loading" || userData.isPending){
+    return <PageLoader />
+  }
+
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative px-4 sm:px-0">
