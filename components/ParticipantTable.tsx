@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ColumnDef,
   useReactTable,
@@ -18,93 +18,6 @@ import {
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-
-const initialParticipants = [
-  {
-    name: "John Doe",
-    degree: "BSc. Computer Science",
-    allocatedTime: "10:00 AM - 11:00 AM",
-    attended: false,
-  },
-  {
-    name: "Jane Doe",
-    degree: "BSc. Computer Science",
-    allocatedTime: "10:00 AM - 11:00 AM",
-    attended: false,
-  },
-  {
-    name: "John Doe",
-    degree: "BSc. Computer Science",
-    allocatedTime: "10:00 AM - 11:00 AM",
-    attended: false,
-  },
-  {
-    name: "Jane Doe",
-    degree: "BSc. Computer Science",
-    allocatedTime: "10:00 AM - 11:00 AM",
-    attended: false,
-  },
-  {
-    name: "John Doe",
-    degree: "BSc. Computer Science",
-    allocatedTime: "10:00 AM - 11:00 AM",
-    attended: false,
-  },
-  {
-    name: "Jane Doe",
-    degree: "BSc. Computer Science",
-    allocatedTime: "10:00 AM - 11:00 AM",
-    attended: false,
-  },
-  {
-    name: "John Doe",
-    degree: "BSc. Computer Science",
-    allocatedTime: "10:00 AM - 11:00 AM",
-    attended: false,
-  },
-  {
-    name: "Jane Doe",
-    degree: "BSc. Computer Science",
-    allocatedTime: "10:00 AM - 11:00 AM",
-    attended: false,
-  },
-  {
-    name: "John Doe",
-    degree: "BSc. Computer Science",
-    allocatedTime: "10:00 AM - 11:00 AM",
-    attended: false,
-  },
-  {
-    name: "Jane Doe",
-    degree: "BSc. Computer Science",
-    allocatedTime: "10:00 AM - 11:00 AM",
-    attended: false,
-  },
-  {
-    name: "John Doe",
-    degree: "BSc. Computer Science",
-    allocatedTime: "10:00 AM - 11:00 AM",
-    attended: false,
-  },
-  {
-    name: "Jane Doe",
-    degree: "BSc. Computer Science",
-    allocatedTime: "10:00 AM - 11:00 AM",
-    attended: false,
-  },
-  {
-    name: "John Doe",
-    degree: "BSc. Computer Science",
-    allocatedTime: "10:00 AM - 11:00 AM",
-    attended: false,
-  },
-  {
-    name: "Jane Doe",
-    degree: "BSc. Computer Science",
-    allocatedTime: "10:00 AM - 11:00 AM",
-    attended: false,
-  },
-];
 
 type Participant = {
   name: string;
@@ -131,7 +44,7 @@ const columns: ColumnDef<Participant, any>[] = [
     cell: ({ row, table }) => (
       <Checkbox
         checked={row.original.attended}
-        onChange={() => {
+        onChange={async () => {
           const newParticipants = table.options.data.map(
             (participant, index) => {
               if (index === row.index) {
@@ -140,20 +53,56 @@ const columns: ColumnDef<Participant, any>[] = [
               return participant;
             }
           );
+
           table.setOptions((prevOptions) => ({
             ...prevOptions,
             data: newParticipants,
           }));
-          // this is for database update logic
-          // updateParticipantInDatabase(newParticipants[row.index]);
+
+          // Update the database with the new attendance status
+          try {
+            await updateParticipantInDatabase(newParticipants[row.index]);
+          } catch (error) {
+            console.error("Failed to update participant attendance:", error);
+          }
         }}
       />
     ),
   },
 ];
 
+// Mock function to update participant attendance in the database
+async function updateParticipantInDatabase(participant: Participant) {
+  const response = await fetch("/api/updateParticipant", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(participant),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update participant");
+  }
+}
+
 const ParticipantTable = () => {
-  const [data, setData] = useState(initialParticipants);
+  const [data, setData] = useState<Participant[]>([]);
+
+  // Fetch data when component mounts
+  useEffect(() => {
+    const fetchParticipants = async () => {
+      try {
+        const response = await fetch("/api/getParticipants");
+        const participants = await response.json();
+        setData(participants);
+      } catch (error) {
+        console.error("Error fetching participants:", error);
+      }
+    };
+
+    fetchParticipants();
+  }, []);
 
   const table = useReactTable({
     data,
