@@ -117,6 +117,9 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
   const [attendanceState, setAttendanceState] = useState<{
     [key: string]: boolean;
   }>({});
+  const [updatingState, setUpdatingState] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   useEffect(() => {
     async function initializeAllocations() {
@@ -125,13 +128,16 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
         const participants = await fetchAllocations(candidateDetails);
         setData(participants);
 
-        // Initialize attendanceState
+        // Initialize attendanceState and updatingState
         const initialAttendanceState: { [key: string]: boolean } = {};
+        const initialUpdatingState: { [key: string]: boolean } = {};
         participants.forEach((participant) => {
           initialAttendanceState[participant.candidateId] =
             participant.attended;
+          initialUpdatingState[participant.candidateId] = false;
         });
         setAttendanceState(initialAttendanceState);
+        setUpdatingState(initialUpdatingState);
       } finally {
         setLoading(false);
       }
@@ -148,6 +154,12 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
       (participant) => participant.candidateId === candidateId
     );
     if (!updatedParticipant) return;
+
+    // Set updating state to true for the current row
+    setUpdatingState((prev) => ({
+      ...prev,
+      [candidateId]: true,
+    }));
 
     try {
       await updateParticipantAttendance({
@@ -169,6 +181,12 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
       );
     } catch (error) {
       console.error("Failed to update participant attendance:", error);
+    } finally {
+      // Set updating state back to false after the update is complete
+      setUpdatingState((prev) => ({
+        ...prev,
+        [candidateId]: false,
+      }));
     }
   };
 
@@ -190,6 +208,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
       header: "Attended",
       cell: ({ row }) => {
         const isChecked = attendanceState[row.original.candidateId] || false;
+        const isUpdating = updatingState[row.original.candidateId] || false;
         return (
           <div className="flex items-center">
             <Checkbox
@@ -197,6 +216,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
               onCheckedChange={() =>
                 handleCheckboxChange(row.original.candidateId, !isChecked)
               }
+              disabled={isUpdating} // Disable the checkbox while updating
             />
           </div>
         );
