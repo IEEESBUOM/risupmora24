@@ -19,6 +19,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 
+// Define the type for the candidate data
 type Candidate = {
   candidate_id: string;
   firstName: string;
@@ -38,12 +39,14 @@ type Candidate = {
   prefCompany4?: string | null;
 };
 
+// Define the type for the participant data
 type Participant = {
   name: string;
   degree: string;
   allocatedTime: string;
   attended: boolean;
   candidateId: string;
+  allocationId: string; // Add allocationId to track the specific allocation
 };
 
 // Table columns definition
@@ -66,22 +69,26 @@ const columns: ColumnDef<Participant, any>[] = [
       <Checkbox
         checked={row.original.attended}
         onChange={async () => {
-          const newParticipants = table.options.data.map(
-            (participant, index) => {
-              if (index === row.index) {
-                return { ...participant, attended: !participant.attended };
-              }
-              return participant;
-            }
+          const updatedParticipant = {
+            ...row.original,
+            attended: !row.original.attended,
+          };
+
+          const newParticipants = table.options.data.map((participant) =>
+            participant.candidateId === row.original.candidateId
+              ? updatedParticipant
+              : participant
           );
 
+          // Optimistically update the table data
           table.setOptions((prevOptions) => ({
             ...prevOptions,
             data: newParticipants,
           }));
 
+          // Update attendance in the database
           try {
-            await updateParticipantAttendance(newParticipants[row.index]);
+            await updateParticipantAttendance(updatedParticipant);
           } catch (error) {
             console.error("Failed to update participant attendance:", error);
           }
@@ -91,7 +98,7 @@ const columns: ColumnDef<Participant, any>[] = [
   },
 ];
 
-// Mock function to update participant attendance in the database
+// Function to update participant attendance in the database
 async function updateParticipantAttendance(participant: Participant) {
   const response = await fetch("/api/v1/candidate/updateAttendance", {
     method: "POST",
@@ -99,7 +106,7 @@ async function updateParticipantAttendance(participant: Participant) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      candidateId: participant.candidateId,
+      allocationId: participant.allocationId,
       attended: participant.attended,
     }),
   });
@@ -124,6 +131,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
         candidateDetails.map(async (candidate) => {
           let allocatedTime = "Not Specified";
           let attended = false;
+          let allocationId = ""; 
 
           try {
             const res = await fetch(
@@ -134,6 +142,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
               if (allocations.length > 0) {
                 allocatedTime = `${allocations[0].allocation_date} ${allocations[0].allocation_timeSlot}`;
                 attended = allocations[0].attendance;
+                allocationId = allocations[0].allocation_id; // Extract allocationId
               }
             }
           } catch (error) {
@@ -146,6 +155,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
             allocatedTime,
             attended,
             candidateId: candidate.candidate_id,
+            allocationId, 
           };
         })
       );
