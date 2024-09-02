@@ -19,7 +19,6 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 
-// Define the type for the candidate data
 type Candidate = {
   candidate_id: string;
   firstName: string;
@@ -39,16 +38,15 @@ type Candidate = {
   prefCompany4?: string | null;
 };
 
-// Define the type for the participant data
 type Participant = {
   name: string;
   degree: string;
   allocatedTime: string;
   attended: boolean;
-  allocationId: string;
+  candidateId: string;
 };
 
-// Define table columns
+// Table columns definition
 const columns: ColumnDef<Participant, any>[] = [
   {
     header: "Name",
@@ -83,7 +81,7 @@ const columns: ColumnDef<Participant, any>[] = [
           }));
 
           try {
-            await updateParticipantInDatabase(newParticipants[row.index]);
+            await updateParticipantAttendance(newParticipants[row.index]);
           } catch (error) {
             console.error("Failed to update participant attendance:", error);
           }
@@ -93,42 +91,26 @@ const columns: ColumnDef<Participant, any>[] = [
   },
 ];
 
-// Function to fetch participant allocation data from the server
-async function fetchParticipantAllocations(candidateId: string) {
-  const response = await fetch(
-    `/api/getAllocations?candidateId=${candidateId}`
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch participant allocations");
-  }
-  const data = await response.json();
-  return data.map((allocation: any) => ({
-    allocatedTime: `${allocation.allocation_date} ${allocation.allocation_timeSlot}`,
-    attended: allocation.attendance,
-    allocationId: allocation.allocation_id,
-  }));
-}
-
-// Function to update participant attendance in the database
-async function updateParticipantInDatabase(participant: Participant) {
-  const response = await fetch("/api/updateAttendance", {
+// Mock function to update participant attendance in the database
+async function updateParticipantAttendance(participant: Participant) {
+  const response = await fetch("/api/v1/candidate/updateAttendance", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      allocationId: participant.allocationId,
+      candidateId: participant.candidateId,
       attended: participant.attended,
     }),
   });
 
   if (!response.ok) {
-    throw new Error("Failed to update participant");
+    throw new Error("Failed to update participant attendance");
   }
 }
 
 type ParticipantTableProps = {
-  candidateDetails: Candidate;
+  candidateDetails: Candidate[];
 };
 
 const ParticipantTable: React.FC<ParticipantTableProps> = ({
@@ -137,26 +119,41 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
   const [data, setData] = useState<Participant[]>([]);
 
   useEffect(() => {
-    async function loadData() {
-      try {
-        // Fetch allocation data
-        const allocations = await fetchParticipantAllocations(
-          candidateDetails.candidate_id
-        );
+    async function fetchAllocations() {
+      const participants = await Promise.all(
+        candidateDetails.map(async (candidate) => {
+          let allocatedTime = "Not Specified";
+          let attended = false;
 
-        // Combine candidate details with allocation data
-        const participants = allocations.map((allocation: any) => ({
-          name: `${candidateDetails.firstName} ${candidateDetails.lastName}`, // Combine first and last name
-          degree: candidateDetails.degree,
-          ...allocation,
-        }));
+          try {
+            const res = await fetch(
+              `/api/v1/candidate/getAllocations?candidateId=${candidate.candidate_id}`
+            );
+            if (res.ok) {
+              const allocations = await res.json();
+              if (allocations.length > 0) {
+                allocatedTime = `${allocations[0].allocation_date} ${allocations[0].allocation_timeSlot}`;
+                attended = allocations[0].attendance;
+              }
+            }
+          } catch (error) {
+            console.error("Error fetching allocation data:", error);
+          }
 
-        setData(participants);
-      } catch (error) {
-        console.error("Error fetching participant data:", error);
-      }
+          return {
+            name: `${candidate.firstName} ${candidate.lastName}`,
+            degree: candidate.degree,
+            allocatedTime,
+            attended,
+            candidateId: candidate.candidate_id,
+          };
+        })
+      );
+
+      setData(participants);
     }
-    loadData();
+
+    fetchAllocations();
   }, [candidateDetails]);
 
   const table = useReactTable({
