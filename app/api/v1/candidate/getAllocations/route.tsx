@@ -54,6 +54,3 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export const config = {
-  runtime: "edge", // Specifies this API route should run on the edge
-};
