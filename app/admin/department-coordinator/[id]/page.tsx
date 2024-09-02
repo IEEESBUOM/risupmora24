@@ -25,12 +25,12 @@ const DepartmentCordinatorPage = async ({ params }: Paramms) => {
   console.log(user);
   // if that user is not a company coordinator, return 404
   if (user == null || user.role !== "departmentCoordinator") {
-    notFound();
+    return notFound();
   }
 
   // get company name of the company coordinator
   const departmentCoordinatorDepartmentName =
-    user.department_cordnator.department;
+    user.department_cordnator?.department;
   console.log(departmentCoordinatorDepartmentName);
 
   /////////////////////////// above code done by ruchith ///////////////////////////

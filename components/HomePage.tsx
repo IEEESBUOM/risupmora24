@@ -11,7 +11,6 @@ import { MutableRefObject } from "react";
 import SideNavbar from "./ui/SideNavbar";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Gallery from "./gallery";
-import CompanyReg from "../app/admin/add-company/page";
 
 const HomePage = () => {
   const heroSectionRef = useRef<HTMLDivElement>(null);
@@ -47,7 +46,7 @@ const HomePage = () => {
         <Gallery />
       </div>
       <div ref={contactUsRef}>
-        < CountactUs/>
+        <CountactUs />
       </div>
       <Footer />
     </div>
