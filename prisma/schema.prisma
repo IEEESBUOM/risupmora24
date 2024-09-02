@@ -8,27 +8,26 @@ datasource db {
 }
 
 model User {
-  id                   String                @id @default(cuid())
-  name                 String?
-  email                String                @unique
-  emailVerified        DateTime?
-  image                String?
-  accounts             Account[]
-  sessions             Session[]
-  Authenticator        Authenticator[]
-  password             String?
-  emailVerifyStatus    Boolean               @default(false)
-  createdAt            DateTime?             @default(now())
-  updatedAt            DateTime?             @updatedAt
-  candidate            Candidate?
-  company_cordnator    CompanyCordinator?
-  department_cordnator DepartmentCordinator?
-  panelist             Panelist?
-  admin                Admin?
-  role                 String?
+  email                    String                @unique
+  createdAt                DateTime?             @default(now())
+  updatedAt                DateTime?             @updatedAt
+  emailVerified            DateTime?
+  id                       String                @id @default(cuid())
+  image                    String?
+  name                     String?
+  emailVerifyStatus        Boolean               @default(false)
+  password                 String?
   passwordResetToken       String?               @default("")
   passwordResetTokenExpire DateTime              @default(now())
-
+  role                     String?
+  accounts                 Account[]
+  admin                    Admin?
+  Authenticator            Authenticator[]
+  candidate                Candidate?
+  company_cordnator        CompanyCordinator?
+  department_cordnator     DepartmentCordinator?
+  panelist                 Panelist?
+  sessions                 Session[]
 }
 
 model Candidate {
@@ -101,16 +100,16 @@ model Company {
 }
 
 model Feedback {
-  feedback_id  String    @id @default(cuid())
-  feedback     String
-  technicalSkill Int
-  communicationSkill Int
-  problemSolvingSkill Int
-  experienceAndProject   Int
-  candidate_id String
-  company_id   String
-  candidate    Candidate @relation(fields: [candidate_id], references: [candidate_id], onDelete: Cascade)
-  company      Company   @relation(fields: [company_id], references: [company_id], onDelete: Cascade)
+  feedback_id          String    @id @default(cuid())
+  feedback             String
+  candidate_id         String
+  company_id           String
+  communicationSkill   Int
+  experienceAndProject Int
+  problemSolvingSkill  Int
+  technicalSkill       Int
+  candidate            Candidate @relation(fields: [candidate_id], references: [candidate_id], onDelete: Cascade)
+  company              Company   @relation(fields: [company_id], references: [company_id], onDelete: Cascade)
 }
 
 model Allocation {

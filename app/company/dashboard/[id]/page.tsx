@@ -2,7 +2,21 @@ import React from "react";
 import StudentNavbar from "@/components/StudentNavbar";
 import ParticipantTable from "@/components/ParticipantTable";
 
-const Page = () => {
+type Paramms = {
+  params: {
+    id: string;
+  };
+};
+
+const Page = ({ params }: Paramms) => {
+  // get panalist id from params
+  const panalistId = params.id;
+
+  // get candidate details by panalist id from allocation table in database, it means tou have to create the api , that allocation table panalist_id eqaul to gettting panalistId, then you will get the candidate id, then you have to get the candidate details by candidate id
+
+  // after that you have to pass the candidate details to the ParticipantTable component
+  // happy coding
+
   return (
     <div>
       <div className="ml-20 mr-20">
@@ -14,7 +28,6 @@ const Page = () => {
       </div>
     </div>
   );
-
 };
 
 export default Page;

@@ -1,26 +1,26 @@
-import { getUser } from "@/service/getUser";
+// import { getCandidate } from "@/service/getCandidate";
+import { getAllCompany } from "@/service/company";
 import { useQuery } from "@tanstack/react-query";
 
 import { useSession } from "next-auth/react";
 // import { getMe } from "../services/candidateApi";
 
-export const useGetUserData = ({ userEmail }: { userEmail: string }) => {
+export const useGetAllCompany = () => {
   // const session = useSession();
 
   // const userId = session.data?.user?.token?.sub as string;
-  console.log(userEmail);
 
-  const { data: user, isPending } = useQuery({
-    queryKey: ["user", userEmail],
-    queryFn: () => getUser({ userEmail }),
+  const { data: company, isPending } = useQuery({
+    queryKey: ["all-company"],
+    queryFn: () => getAllCompany(),
     // queryFn: () => getCandidate(userId),
   });
-  console.log(user);
+  console.log(company);
 
   // const { data: candidate, isPending } = useQuery({
   //   queryKey: ["candidate", userId],
   //   queryFn: () => getCandidate(userId),
   // });
 
-  return { user, isPending };
+  return { company, isPending };
 };
