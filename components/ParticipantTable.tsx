@@ -46,11 +46,14 @@ type Participant = {
   allocatedTime: string;
   attended: boolean;
   candidateId: string;
-  allocationId: string; // Add allocationId to track the specific allocation
+  allocationId: string;
 };
+
+
 
 // Table columns definition
 const columns: ColumnDef<Participant, any>[] = [
+  
   {
     header: "Name",
     accessorKey: "name",
@@ -65,36 +68,54 @@ const columns: ColumnDef<Participant, any>[] = [
   },
   {
     header: "Attended",
-    cell: ({ row, table }) => (
-      <Checkbox
-        checked={row.original.attended}
-        onChange={async () => {
-          const updatedParticipant = {
-            ...row.original,
-            attended: !row.original.attended,
-          };
+    cell: ({ row, table }) => {
+      const [checked, setChecked] = useState(row.original.attended);
+      const [updating, setUpdating] = useState(false); 
 
-          const newParticipants = table.options.data.map((participant) =>
-            participant.candidateId === row.original.candidateId
-              ? updatedParticipant
-              : participant
-          );
+      const handleCheckboxChange = async () => {
+        setUpdating(true); 
+        const updatedParticipant = {
+          ...row.original,
+          attended: !checked, 
+        };
 
-          // Optimistically update the table data
+        try {
+          // Update attendance in the database
+          await updateParticipantAttendance(updatedParticipant);
+
+          // Update local state immediately
+          setChecked(updatedParticipant.attended);
+
           table.setOptions((prevOptions) => ({
             ...prevOptions,
-            data: newParticipants,
+            data: prevOptions.data.map((participant) =>
+              participant.candidateId === updatedParticipant.candidateId
+                ? { ...participant, attended: updatedParticipant.attended }
+                : participant
+            ),
           }));
+        } catch (error) {
+          console.error("Failed to update participant attendance:", error);
+        } finally {
+          setUpdating(false); 
+        }
+      };
 
-          // Update attendance in the database
-          try {
-            await updateParticipantAttendance(updatedParticipant);
-          } catch (error) {
-            console.error("Failed to update participant attendance:", error);
-          }
-        }}
-      />
-    ),
+      return (
+        <div className="flex items-center">
+          <Checkbox
+            checked={checked} 
+            onCheckedChange={handleCheckboxChange}
+            disabled={updating} 
+          />
+          {updating && (
+            <span className="ml-2 text-sm text-gray-500">
+              Updating attendance...
+            </span>
+          )}
+        </div>
+      );
+    },
   },
 ];
 
@@ -116,6 +137,46 @@ async function updateParticipantAttendance(participant: Participant) {
   }
 }
 
+// Function to fetch participant allocations
+async function fetchAllocations(
+  candidateDetails: Candidate[]
+): Promise<Participant[]> {
+  const participants = await Promise.all(
+    candidateDetails.map(async (candidate) => {
+      let allocatedTime = "Not Specified";
+      let attended = false;
+      let allocationId = "";
+
+      try {
+        const res = await fetch(
+          `/api/v1/candidate/getAllocations?candidateId=${candidate.candidate_id}`
+        );
+        if (res.ok) {
+          const allocations = await res.json();
+          if (allocations.length > 0) {
+            allocatedTime = `${allocations[0].allocation_date} ${allocations[0].allocation_timeSlot}`;
+            attended = allocations[0].attendance;
+            allocationId = allocations[0].allocation_id;
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching allocation data:", error);
+      }
+
+      return {
+        name: `${candidate.firstName} ${candidate.lastName}`,
+        degree: candidate.degree,
+        allocatedTime,
+        attended,
+        candidateId: candidate.candidate_id,
+        allocationId,
+      };
+    })
+  );
+
+  return participants;
+}
+
 type ParticipantTableProps = {
   candidateDetails: Candidate[];
 };
@@ -124,46 +185,21 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
   candidateDetails,
 }) => {
   const [data, setData] = useState<Participant[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  
 
   useEffect(() => {
-    async function fetchAllocations() {
-      const participants = await Promise.all(
-        candidateDetails.map(async (candidate) => {
-          let allocatedTime = "Not Specified";
-          let attended = false;
-          let allocationId = ""; 
-
-          try {
-            const res = await fetch(
-              `/api/v1/candidate/getAllocations?candidateId=${candidate.candidate_id}`
-            );
-            if (res.ok) {
-              const allocations = await res.json();
-              if (allocations.length > 0) {
-                allocatedTime = `${allocations[0].allocation_date} ${allocations[0].allocation_timeSlot}`;
-                attended = allocations[0].attendance;
-                allocationId = allocations[0].allocation_id; // Extract allocationId
-              }
-            }
-          } catch (error) {
-            console.error("Error fetching allocation data:", error);
-          }
-
-          return {
-            name: `${candidate.firstName} ${candidate.lastName}`,
-            degree: candidate.degree,
-            allocatedTime,
-            attended,
-            candidateId: candidate.candidate_id,
-            allocationId, 
-          };
-        })
-      );
-
-      setData(participants);
+    async function initializeAllocations() {
+      setLoading(true);
+      try {
+        const participants = await fetchAllocations(candidateDetails);
+        setData(participants);
+      } finally {
+        setLoading(false);
+      }
     }
 
-    fetchAllocations();
+    initializeAllocations();
   }, [candidateDetails]);
 
   const table = useReactTable({
@@ -176,43 +212,53 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
 
   return (
     <div>
-      <Table className="w-full">
-        <TableHeader className="bg-stv-dark-blue text-stv-yellow">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <Table className="w-full">
+          <TableHeader className="bg-stv-dark-blue text-stv-yellow">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
                 ))}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
       <div className="flex items-center justify-between py-2">
         <Button
           onClick={() => table.previousPage()}
