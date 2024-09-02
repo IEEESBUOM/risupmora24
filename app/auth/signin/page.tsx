@@ -92,10 +92,13 @@ const SignIn = () => {
                 } else if (signInData.role==="admin") {
                   router.push(`/admin/add-company/`);
                 }
-                else if (signInData.role==="departmentCoordinator" || signInData.role==="companyCoordinator") {
-                  router.push(`/admin/all-interviewees/`);
-                }else if (signInData.role==="panelist") {
-                  router.push(`/company/dashboard/`);
+                else if (signInData.role==="departmentCoordinator" ) {
+                  router.push(`/admin/department-coordinator/${signInData.id}`);
+                }else if (signInData.role==="companyCoordinator") {
+                  router.push(`/admin/company-coordinator/${signInData.id}`);
+                }
+                else if (signInData.role==="panelist") {
+                  router.push(`/company/dashboard/${signInData.id}`);
                 }
                 else {
                   router.push(`/`);

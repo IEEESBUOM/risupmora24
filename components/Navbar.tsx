@@ -48,11 +48,8 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   const [active, setActive] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session, status } = useSession();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   // const [userData, setUserData] = useState<any>(null);
- 
-
-
 
   console.log(session);
   const router = useRouter();
@@ -66,7 +63,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
     _id: session?.user.id as string,
   };
   const userData = useGetUserData({ userEmail: user.email });
-  console.log(userData)
+  console.log(userData);
 
   function clickLogoutBtn() {
     signOut();
@@ -81,39 +78,21 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   // }, [user.email]);
 
   useEffect(() => {
-    setIsLoading(true)
-    if(userData.user){
-      console.log(userData)
+    setIsLoading(true);
+    if (userData.user) {
+      console.log(userData);
 
-      if (!userData.user.candidate == null  && userData.user.role==="candidate") {
-        
+      if (
+        !userData.user.candidate == null &&
+        userData.user.role === "candidate"
+      ) {
         router.push(`/candidate/registation/${userData.user.id}`);
-        
-      } else if (userData.user.isCandidate && userData.user.role==="candidate") {
-        setIsLoading(false)
-        
-      } else if (userData.user.role==="admin") {
-        router.push(`/admin/add-company/`);
+      } else {
+        setIsLoading(false);
       }
-      else if (userData.user.role==="departmentCoordinator" || userData.user.role==="companyCoordinator") {
-        router.push(`/admin/all-interviewees/`);
-      }else if (userData.user.role==="panelist") {
-        router.push(`/company/dashboard/`);
-      }
-      else {
-        setIsLoading(false)
-      }
-      
-
-
-
     }
-    setIsLoading(false)
-    
-    
-  }
-  ,[userData])
-
+    setIsLoading(false);
+  }, [userData]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -179,11 +158,10 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   const handleUserProfile = () => {
     setShowProfile(true);
   };
-  if ((status == "loading" || isLoading || userData.isPending) ) {
-    return (<PageLoader />)
+  if (status == "loading" || isLoading || userData.isPending) {
+    return <PageLoader />;
   }
-  
-  
+
   return (
     <>
       <div className=" fixed  grid w-full bg-white   sm:overflow-hidden  sm:h-24    max-md:max-w-full z-20   ">
@@ -275,18 +253,19 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
 
                 {/* <SheetFooter> */}
                 <div className="h-[2px]  w-full bg-white"></div>
-                {userData && (
-                  <NavBarProfile
-                    id={userData.user?.id}
-                    name={userData.user?.name}
-                    email={userData.user?.email}
-                    image={userData.user?.image || ""}
-                    clickLogoutBtn={clickLogoutBtn}
-                    setShowProfile={setShowProfile}
-                    showProfile={showProfile}
-                    isInSheet={true}
-                  />
-                )}
+                {userData?.user?.role == "candidate" &&
+                  
+                    <NavBarProfile
+                      id={userData.user?.id}
+                      name={userData.user?.name}
+                      email={userData.user?.email}
+                      image={userData.user?.image || ""}
+                      clickLogoutBtn={clickLogoutBtn}
+                      setShowProfile={setShowProfile}
+                      showProfile={showProfile}
+                      isInSheet={true}
+                    />
+                  }
 
                 {/* </SheetFooter> */}
               </SheetContent>
@@ -358,7 +337,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
-         {/* {if (status == "authenticated" && userData.user) {
+          {/* {if (status == "authenticated" && userData.user) {
           <div
           onClick={handleUserProfile}
           className=" flex gap-2 cursor-pointer"
@@ -392,56 +371,70 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
 
          } */}
 
-
-
-
-
+         
 
           <div className="  grid content-center min-w-36 justify-center">
-          {status == "authenticated" && userData.user && (
-            <div
-              onClick={handleUserProfile}
-              className=" flex gap-2 cursor-pointer"
-            >
-              <div className="grid content-center font-quicksand font-semibold text-lg">
-                {user.firstName}
+            {status == "authenticated" && userData.user.role == "candidate" && (
+              <div
+                onClick={handleUserProfile}
+                className=" flex gap-2 cursor-pointer"
+              >
+                <div className="grid content-center font-quicksand font-semibold text-lg">
+                  {user.firstName}
+                </div>
+                <div className=" py-4 sm:py-2 grid content-center">
+                  {userData.user?.image && (
+                    <Image
+                      src={userData.user?.image}
+                      alt="profile picture"
+                      width={50}
+                      height={50}
+                      className="rounded-full w-auto h-auto"
+                    />
+                  )}
+                </div>
               </div>
-              <div className=" py-4 sm:py-2 grid content-center">
-                {userData.user?.image && (
-                <Image
-                  src={userData.user?.image}
-                  alt="profile picture"
-                  width={50}
-                  height={50}
-                  className="rounded-full w-auto h-auto"
-                />)}
-              </div>
-            </div>
-          ) }
+            )}
 
+            {status == "authenticated" && userData.user.role == "admin" && (
+              <Link href="/admin/add-company" passHref>
+                <PrimaryButtonSmall text="Admin >" />
+              </Link>
+            )}
+            {status == "authenticated" && userData.user.role == "companyCoordinator" && (
+              <Link href={`/admin/company-coordinator/${userData.user.id}`} passHref>
+                <PrimaryButtonSmall text="Coordinator >" />
+              </Link>
+            )}
 
-          {status == "unauthenticated" && (
+{status == "authenticated" && userData.user.role == "departmentCoordinator" && (
+              <Link href={`/admin/department-coordinator/${userData.user.id}`} passHref>
+                <PrimaryButtonSmall text="Coordinator >" />
+              </Link>
+            )}
+
+            {status == "unauthenticated" && (
               <Link href="/auth/signin" passHref className=" grid ">
                 <PrimaryButtonSmall text="Sign In" />
               </Link>
             )}
 
-          {status != "authenticated" && status !="unauthenticated" && (
-            <Image
-            src="/spinner/loading-black.svg"
-            width={28}
-            height={28}
-            alt="spinner"
-          />
-          )}
-          {status == "authenticated" && !userData.user && (
-            <Image
-            src="/spinner/loading-black.svg"
-            width={28}
-            height={28}
-            alt="spinner"
-          />)
-            }
+            {status != "authenticated" && status != "unauthenticated" && (
+              <Image
+                src="/spinner/loading-black.svg"
+                width={28}
+                height={28}
+                alt="spinner"
+              />
+            )}
+            {status == "authenticated" && !userData.user && (
+              <Image
+                src="/spinner/loading-black.svg"
+                width={28}
+                height={28}
+                alt="spinner"
+              />
+            )}
           </div>
         </div>
 
@@ -461,16 +454,21 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
               : "xl:w-3/12 lg:w-3/12 md:w-1/3 2xl:w-1/5 sm:block hidden"
           } rounded-b-2xl  right-0 z-50   bg-custom-black  `}
         >
-          <NavBarProfile
-                    id={userData.user?.id}
-                    name={userData.user?.name}
-                    email={userData.user?.email}
-                    image={userData.user?.image || ""}
-                    clickLogoutBtn={clickLogoutBtn}
-                    setShowProfile={setShowProfile}
-                    showProfile={showProfile}
-                    isInSheet={false}
-                  />
+         
+
+          {userData?.user?.role == "candidate" &&
+            
+              <NavBarProfile
+                id={userData.user?.id}
+                name={userData.user?.name}
+                email={userData.user?.email}
+                image={userData.user?.image || ""}
+                clickLogoutBtn={clickLogoutBtn}
+                setShowProfile={setShowProfile}
+                showProfile={showProfile}
+                isInSheet={false}
+              />
+            }
         </div>
       </div>
     </>
