@@ -39,14 +39,16 @@ type Candidate = {
   prefCompany4?: string | null;
 };
 
+// Define the type for the participant data
 type Participant = {
   name: string;
   degree: string;
   allocatedTime: string;
   attended: boolean;
+  allocationId: string;
 };
 
-// Table columns definition
+// Define table columns
 const columns: ColumnDef<Participant, any>[] = [
   {
     header: "Name",
@@ -80,7 +82,6 @@ const columns: ColumnDef<Participant, any>[] = [
             data: newParticipants,
           }));
 
-          
           try {
             await updateParticipantInDatabase(newParticipants[row.index]);
           } catch (error) {
@@ -92,14 +93,33 @@ const columns: ColumnDef<Participant, any>[] = [
   },
 ];
 
-// Mock function to update participant attendance in the database
+// Function to fetch participant allocation data from the server
+async function fetchParticipantAllocations(candidateId: string) {
+  const response = await fetch(
+    `/api/getAllocations?candidateId=${candidateId}`
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch participant allocations");
+  }
+  const data = await response.json();
+  return data.map((allocation: any) => ({
+    allocatedTime: `${allocation.allocation_date} ${allocation.allocation_timeSlot}`,
+    attended: allocation.attendance,
+    allocationId: allocation.allocation_id,
+  }));
+}
+
+// Function to update participant attendance in the database
 async function updateParticipantInDatabase(participant: Participant) {
-  const response = await fetch("/api/updateParticipant", {
+  const response = await fetch("/api/updateAttendance", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(participant),
+    body: JSON.stringify({
+      allocationId: participant.allocationId,
+      attended: participant.attended,
+    }),
   });
 
   if (!response.ok) {
@@ -108,24 +128,35 @@ async function updateParticipantInDatabase(participant: Participant) {
 }
 
 type ParticipantTableProps = {
-  candidateDetails: Candidate[];
+  candidateDetails: Candidate;
 };
 
 const ParticipantTable: React.FC<ParticipantTableProps> = ({
   candidateDetails,
 }) => {
-  // Transform the candidate details into the format expected by the table
   const [data, setData] = useState<Participant[]>([]);
 
   useEffect(() => {
-    const participants = candidateDetails.map((candidate) => ({
-      name: `${candidate.firstName} ${candidate.lastName}`,
-      degree: candidate.degree,
-      allocatedTime: "Not Specified", // Adjust this field if there's actual data for allocated time
-      attended: false, // Default value, adjust as needed
-    }));
+    async function loadData() {
+      try {
+        // Fetch allocation data
+        const allocations = await fetchParticipantAllocations(
+          candidateDetails.candidate_id
+        );
 
-    setData(participants);
+        // Combine candidate details with allocation data
+        const participants = allocations.map((allocation: any) => ({
+          name: `${candidateDetails.firstName} ${candidateDetails.lastName}`, // Combine first and last name
+          degree: candidateDetails.degree,
+          ...allocation,
+        }));
+
+        setData(participants);
+      } catch (error) {
+        console.error("Error fetching participant data:", error);
+      }
+    }
+    loadData();
   }, [candidateDetails]);
 
   const table = useReactTable({
