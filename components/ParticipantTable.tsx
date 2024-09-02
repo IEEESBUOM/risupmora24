@@ -19,6 +19,26 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 
+// Define the type for the candidate data
+type Candidate = {
+  candidate_id: string;
+  firstName: string;
+  lastName: string;
+  nameWithInitials: string;
+  universityID: string;
+  contactNo: string;
+  department: string;
+  degree: string;
+  cvUrl: string;
+  imgUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  prefCompany1?: string | null;
+  prefCompany2?: string | null;
+  prefCompany3?: string | null;
+  prefCompany4?: string | null;
+};
+
 type Participant = {
   name: string;
   degree: string;
@@ -26,6 +46,7 @@ type Participant = {
   attended: boolean;
 };
 
+// Table columns definition
 const columns: ColumnDef<Participant, any>[] = [
   {
     header: "Name",
@@ -59,7 +80,7 @@ const columns: ColumnDef<Participant, any>[] = [
             data: newParticipants,
           }));
 
-          // Update the database with the new attendance status
+          
           try {
             await updateParticipantInDatabase(newParticipants[row.index]);
           } catch (error) {
@@ -86,23 +107,26 @@ async function updateParticipantInDatabase(participant: Participant) {
   }
 }
 
-const ParticipantTable = () => {
+type ParticipantTableProps = {
+  candidateDetails: Candidate[];
+};
+
+const ParticipantTable: React.FC<ParticipantTableProps> = ({
+  candidateDetails,
+}) => {
+  // Transform the candidate details into the format expected by the table
   const [data, setData] = useState<Participant[]>([]);
 
-  // Fetch data when component mounts
   useEffect(() => {
-    const fetchParticipants = async () => {
-      try {
-        const response = await fetch("/api/getParticipants");
-        const participants = await response.json();
-        setData(participants);
-      } catch (error) {
-        console.error("Error fetching participants:", error);
-      }
-    };
+    const participants = candidateDetails.map((candidate) => ({
+      name: `${candidate.firstName} ${candidate.lastName}`,
+      degree: candidate.degree,
+      allocatedTime: "Not Specified", // Adjust this field if there's actual data for allocated time
+      attended: false, // Default value, adjust as needed
+    }));
 
-    fetchParticipants();
-  }, []);
+    setData(participants);
+  }, [candidateDetails]);
 
   const table = useReactTable({
     data,
