@@ -25,15 +25,9 @@ export default function Layout({children}: {children: React.ReactNode}) {
   const userData = useGetUserData({ userEmail: userEmail || "" });
   const role = userData.user?.role;
 
-  const path = window.location.pathname;
-  console.log(path);
 
-  const logoutHandler = async () => {
-    
-    await signOut();
-    window.location.href = "/";
-    
-  }
+
+
 
   if(status === "loading" || userData.isPending){
     return <PageLoader />
