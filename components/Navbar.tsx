@@ -266,6 +266,43 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
                       isInSheet={true}
                     />
                   }
+                  {status == "authenticated" && userData.user.role == "admin" && (
+              <div className=" grid mt-5   gap-5 justify-start ">
+                <div className="grid justify-start" onClick={()=>{signOut()}}>
+                <PrimaryButtonSmall text="< Logout" />
+              </div>
+                <Link href="/admin/add-company" passHref>
+                <PrimaryButtonSmall text="Admin >" />
+              </Link>
+
+              
+              </div>
+              
+              
+            )}
+            {status == "authenticated" && userData.user.role == "companyCoordinator" && (
+              <div className=" grid mt-5  gap-5 justify-start ">
+                <div className="grid justify-start" onClick={()=>{signOut()}}>
+              <PrimaryButtonSmall text="< Logout" />
+            </div>
+                <Link href={`/admin/company-coordinator/${userData.user.id}`} passHref>
+                <PrimaryButtonSmall text="Dashboard >" />
+              </Link>
+              
+              </div>
+            )}
+
+{status == "authenticated" && userData.user.role == "departmentCoordinator" && (
+              <div className=" grid mt-5   gap-5 justify-start   ">
+                <div className="grid justify-start" onClick={()=>{signOut()}}>
+              <PrimaryButtonSmall text="< Logout" />
+            </div>
+                <Link href={`/admin/department-coordinator/${userData.user.id}`} passHref>
+                <PrimaryButtonSmall text="Dashboard >" />
+              </Link>
+              
+              </div>
+            )}
 
                 {/* </SheetFooter> */}
               </SheetContent>
@@ -397,20 +434,41 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
             )}
 
             {status == "authenticated" && userData.user.role == "admin" && (
-              <Link href="/admin/add-company" passHref>
+              <div className="sm:flex hidden ">
+                <div className="" onClick={()=>{signOut()}}>
+                <PrimaryButtonSmall text="< Logout" />
+              </div>
+                <Link href="/admin/add-company" passHref>
                 <PrimaryButtonSmall text="Admin >" />
               </Link>
+
+              
+              </div>
+              
+              
             )}
             {status == "authenticated" && userData.user.role == "companyCoordinator" && (
-              <Link href={`/admin/company-coordinator/${userData.user.id}`} passHref>
-                <PrimaryButtonSmall text="Coordinator >" />
+              <div className="sm:flex hidden ">
+                <div className="" onClick={()=>{signOut()}}>
+              <PrimaryButtonSmall text="< Logout" />
+            </div>
+                <Link href={`/admin/company-coordinator/${userData.user.id}`} passHref>
+                <PrimaryButtonSmall text="Dashboard >" />
               </Link>
+              
+              </div>
             )}
 
 {status == "authenticated" && userData.user.role == "departmentCoordinator" && (
-              <Link href={`/admin/department-coordinator/${userData.user.id}`} passHref>
-                <PrimaryButtonSmall text="Coordinator >" />
+              <div className=" sm:flex hidden ">
+                <div className="" onClick={()=>{signOut()}}>
+              <PrimaryButtonSmall text="< Logout" />
+            </div>
+                <Link href={`/admin/department-coordinator/${userData.user.id}`} passHref>
+                <PrimaryButtonSmall text="Dashboard >" />
               </Link>
+              
+              </div>
             )}
 
             {status == "unauthenticated" && (

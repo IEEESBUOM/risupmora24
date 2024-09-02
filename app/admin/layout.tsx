@@ -51,11 +51,9 @@ export default function Layout({children}: {children: React.ReactNode}) {
             
 
           <Link href={`/`}>
-          <PrimaryButtonSmall text="Home"  />
+          Home
           </Link>
-          <div onClick={logoutHandler} >
-          <PrimaryButtonSmall text="Sign out"  />
-          </div>
+          
 
         </div>
 
@@ -79,12 +77,10 @@ export default function Layout({children}: {children: React.ReactNode}) {
             
 
           <Link href={`/`}>
-          <PrimaryButtonSmall text="Home"  />
+          Home
           </Link>
 
-          <div onClick={logoutHandler} >
-          <PrimaryButtonSmall text="Sign out"  />
-          </div>
+          
                 
               </SheetContent>
             </Sheet>
