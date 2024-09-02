@@ -49,77 +49,6 @@ type Participant = {
   allocationId: string;
 };
 
-
-
-// Table columns definition
-const columns: ColumnDef<Participant, any>[] = [
-  
-  {
-    header: "Name",
-    accessorKey: "name",
-  },
-  {
-    header: "Degree",
-    accessorKey: "degree",
-  },
-  {
-    header: "Allocated Time",
-    accessorKey: "allocatedTime",
-  },
-  {
-    header: "Attended",
-    cell: ({ row, table }) => {
-      const [checked, setChecked] = useState(row.original.attended);
-      const [updating, setUpdating] = useState(false); 
-
-      const handleCheckboxChange = async () => {
-        setUpdating(true); 
-        const updatedParticipant = {
-          ...row.original,
-          attended: !checked, 
-        };
-
-        try {
-          // Update attendance in the database
-          await updateParticipantAttendance(updatedParticipant);
-
-          // Update local state immediately
-          setChecked(updatedParticipant.attended);
-
-          table.setOptions((prevOptions) => ({
-            ...prevOptions,
-            data: prevOptions.data.map((participant) =>
-              participant.candidateId === updatedParticipant.candidateId
-                ? { ...participant, attended: updatedParticipant.attended }
-                : participant
-            ),
-          }));
-        } catch (error) {
-          console.error("Failed to update participant attendance:", error);
-        } finally {
-          setUpdating(false); 
-        }
-      };
-
-      return (
-        <div className="flex items-center">
-          <Checkbox
-            checked={checked} 
-            onCheckedChange={handleCheckboxChange}
-            disabled={updating} 
-          />
-          {updating && (
-            <span className="ml-2 text-sm text-gray-500">
-              Updating attendance...
-            </span>
-          )}
-        </div>
-      );
-    },
-  },
-];
-
-// Function to update participant attendance in the database
 async function updateParticipantAttendance(participant: Participant) {
   const response = await fetch("/api/v1/candidate/updateAttendance", {
     method: "POST",
@@ -137,7 +66,6 @@ async function updateParticipantAttendance(participant: Participant) {
   }
 }
 
-// Function to fetch participant allocations
 async function fetchAllocations(
   candidateDetails: Candidate[]
 ): Promise<Participant[]> {
@@ -186,7 +114,9 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
 }) => {
   const [data, setData] = useState<Participant[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  
+  const [attendanceState, setAttendanceState] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   useEffect(() => {
     async function initializeAllocations() {
@@ -194,6 +124,14 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
       try {
         const participants = await fetchAllocations(candidateDetails);
         setData(participants);
+
+        // Initialize attendanceState
+        const initialAttendanceState: { [key: string]: boolean } = {};
+        participants.forEach((participant) => {
+          initialAttendanceState[participant.candidateId] =
+            participant.attended;
+        });
+        setAttendanceState(initialAttendanceState);
       } finally {
         setLoading(false);
       }
@@ -201,6 +139,70 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
 
     initializeAllocations();
   }, [candidateDetails]);
+
+  const handleCheckboxChange = async (
+    candidateId: string,
+    attended: boolean
+  ) => {
+    const updatedParticipant = data.find(
+      (participant) => participant.candidateId === candidateId
+    );
+    if (!updatedParticipant) return;
+
+    try {
+      await updateParticipantAttendance({
+        ...updatedParticipant,
+        attended,
+      });
+
+      setAttendanceState((prev) => ({
+        ...prev,
+        [candidateId]: attended,
+      }));
+
+      setData((prevData) =>
+        prevData.map((participant) =>
+          participant.candidateId === candidateId
+            ? { ...participant, attended }
+            : participant
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update participant attendance:", error);
+    }
+  };
+
+  // Table columns definition
+  const columns: ColumnDef<Participant, any>[] = [
+    {
+      header: "Name",
+      accessorKey: "name",
+    },
+    {
+      header: "Degree",
+      accessorKey: "degree",
+    },
+    {
+      header: "Allocated Time",
+      accessorKey: "allocatedTime",
+    },
+    {
+      header: "Attended",
+      cell: ({ row }) => {
+        const isChecked = attendanceState[row.original.candidateId] || false;
+        return (
+          <div className="flex items-center">
+            <Checkbox
+              checked={isChecked}
+              onCheckedChange={() =>
+                handleCheckboxChange(row.original.candidateId, !isChecked)
+              }
+            />
+          </div>
+        );
+      },
+    },
+  ];
 
   const table = useReactTable({
     data,
