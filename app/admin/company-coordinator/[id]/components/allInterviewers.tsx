@@ -1,19 +1,23 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import CandidateData from "./candidateData";
-import { Allocation, Candidate, Company, Feedback } from "@/Type";
+import { Allocation, Candidate, Company, Feedback, Panelist } from "@/Type";
 
 interface Props {
   initialCandidates: Candidate[];
   feedbacks: Feedback[];
   company: Company[];
   allocation: Allocation[];
+  compnanyCoordinatorCompanyName: string;
+  allPanelists:Panelist[];
 }
 const AllIntervieweesData: React.FC<Props> = ({
+  compnanyCoordinatorCompanyName,
   initialCandidates,
   feedbacks,
   company,
   allocation,
+  allPanelists
 }) => {
   interface RowData {
     id: number;
@@ -122,7 +126,8 @@ const AllIntervieweesData: React.FC<Props> = ({
         </div>
 
         <div className="flex items-center justify-center md:justify-start w-full md:w-auto">
-          <select
+          Company : {compnanyCoordinatorCompanyName}
+          {/* <select
             onChange={handleSortBy}
             className="form-select p-2 border border-gray-300 rounded shadow-sm"
             aria-label="Default select example"
@@ -168,7 +173,7 @@ const AllIntervieweesData: React.FC<Props> = ({
             <option value="Computational Mathematics">
               Computational Mathematics
             </option>
-          </select>
+          </select> */}
         </div>
 
         <div className="w-full md:w-auto text-gray-700 font-semibold text-center md:text-right">
@@ -269,6 +274,7 @@ const AllIntervieweesData: React.FC<Props> = ({
                     preference3={candidate.prefCompany3}
                     preference4={candidate.prefCompany4}
                     allocations={allocation}
+                    allPanelists={allPanelists}
                   />
                 ))}
               {emptyRows > 0 && (

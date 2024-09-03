@@ -7,6 +7,7 @@ import { InterviewAllocation } from "@/service/InterviewAllocation";
 import { getAllocation } from "@/service/getInterviewAllocation";
 import { getUserById } from "@/service/getUserById";
 import { notFound } from "next/navigation";
+import { getDepartmentCordinatorByID } from "@/service/getDepartmentCordinatorById";
 
 type Paramms = {
   params: {
@@ -15,62 +16,49 @@ type Paramms = {
 };
 
 const DepartmentCordinatorPage = async ({ params }: Paramms) => {
-  // get department coordinator id from params
   const departmentCoordinatorId = params.id;
   console.log(departmentCoordinatorId);
 
-  // get company coordinator details
+  // Get department coordinator details
   const user = await getUserById({ userId: departmentCoordinatorId });
-
   console.log(user);
-  // if that user is not a company coordinator, return 404
+
   if (user == null || user.role !== "departmentCoordinator") {
     notFound();
   }
 
-  // get company name of the company coordinator
   const departmentCoordinatorDepartmentName =
     user.department_cordnator.department;
   console.log(departmentCoordinatorDepartmentName);
 
-  /////////////////////////// above code done by ruchith ///////////////////////////
-
+  // Fetch candidates and filter based on department
   const response = await getCandidates();
+  const filterResponse = response.data.filter(
+    (candidate: Candidate) =>
+      candidate.department === departmentCoordinatorDepartmentName
+  );
+
   const companyResponce = await getCompany();
   const feedbackResponse = await getFeedback();
   const allAllocation = await getAllocation();
   console.log(feedbackResponse);
-  console.log(response);
+  console.log(response.data);
+  console.log(filterResponse);
+  console.log(companyResponce.companies);
 
-  let initialCandidates: Candidate[] = [];
-  let feedback: Feedback[] = [];
-  let company: Company[] = [];
-  let allocation: Allocation[] = [];
-  if (response && response.data) {
-    initialCandidates = response.data;
-  } else {
-    new Error("Failed to fetch candidates");
-  }
+  // Initialize arrays to store the filtered data
+  let initialCandidates: Candidate[] = filterResponse || [];
+  let feedback: Feedback[] = feedbackResponse.data || [];
+  let company: Company[] = companyResponce.companies || [];
+  let allocation: Allocation[] = allAllocation.data || [];
 
-  if (feedbackResponse && feedbackResponse.data) {
-    feedback = feedbackResponse.data;
-  } else {
-    new Error("Failed to fetch feedback");
-  }
+  console.log(initialCandidates);
+  console.log(company);
 
-  if (companyResponce && companyResponce.data) {
-    company = companyResponce.data;
-  } else {
-    new Error("Failed to fetch company");
-  }
-  if (allAllocation && allAllocation.data) {
-    allocation = allAllocation.data;
-  } else {
-    new Error("Failed to fetch Allocations");
-  }
-  console.log(feedback);
   return (
     <AllInterviewers
+    department={departmentCoordinatorDepartmentName}
+      departmentCordinatorId={departmentCoordinatorId}
       initialCandidates={initialCandidates}
       feedbacks={feedback}
       company={company}

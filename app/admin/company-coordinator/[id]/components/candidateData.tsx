@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useAlocateInterviewees } from "@/hooks/user/useAlocateInterviweers";
 import { Company } from "@/Type";
 import toast from "react-hot-toast";
+import { useUpdateInterviewees } from "@/hooks/user/useUpdateInterviewees";
+import { getPanelistByCompanyIdAndPanelNumber } from "@/service/getPanelistByCompanyIdAndPanelNumber";
 
 // Define an interface for row data
 interface RowData {
@@ -20,10 +22,11 @@ interface RowData {
 }
 
 const CandidateData = (candidate: any) => {
+  console.log(candidate.allPanelists);
   console.log(candidate.department);
   console.log(candidate.allocations);
   console.log(candidate.feedbacks);
-  const { Allocation, isPending } = useAlocateInterviewees();
+  const { Allocation, isPending } = useUpdateInterviewees();
 
   // Initialize state with the RowData interface
   const [rowData, setRowData] = useState<RowData>({
@@ -40,7 +43,7 @@ const CandidateData = (candidate: any) => {
     company4: "",
     time4: "",
   });
-
+  const length = candidate.allPanelists.length;
   // Initialize edit state
   const [isEditing, setIsEditing] = useState(false);
 
@@ -92,7 +95,7 @@ const CandidateData = (candidate: any) => {
   };
 
   // Handle submit button click
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const panels = [
       { panel: "panel1", company: "company1", time: "time1" },
       { panel: "panel2", company: "company2", time: "time2" },
@@ -100,13 +103,26 @@ const CandidateData = (candidate: any) => {
       { panel: "panel4", company: "company4", time: "time4" },
     ];
 
-    panels.forEach((panelInfo) => {
+    for (const panelInfo of panels) {
       const panelValue = rowData[panelInfo.panel as keyof RowData];
       const companyValue = rowData[panelInfo.company as keyof RowData];
       const timeValue = rowData[panelInfo.time as keyof RowData];
 
       // Skip if the company is empty
-      if (!companyValue) return;
+      if (!companyValue) continue;
+
+      let panelistId: string | undefined;
+
+      try {
+        const panelistData = await getPanelistByCompanyIdAndPanelNumber(
+          companyValue,
+          parseInt(panelValue)
+        );
+        panelistId = panelistData?.data?.[0]?.panelist_id;
+        console.log(panelistId); // For debugging purposes
+      } catch (error) {
+        console.error("Error fetching panelist data:", error);
+      }
 
       const formData = {
         allocated_panel_number: parseInt(panelValue),
@@ -115,23 +131,29 @@ const CandidateData = (candidate: any) => {
         allocation_date: "2021-10-10",
         allocation_status: "pending",
         candidate_id: candidate.candidate_id,
-        panelist_id: "clyu9qgs80000vulxcwnnj1uq",
+        panelist_id: panelistId,
       };
 
       console.log(formData);
-      Allocation(
-        { Allocation: formData },
-        {
-          onSuccess: () => {
-            toast.success("Allocation Success 1");
-          },
-          onError: (error) => {
-            console.error("Allocation error:", error);
-            toast.error("Allocation failed 1");
-          },
-        }
-      );
-    });
+
+      try {
+        await Allocation(
+          { Allocation: formData },
+          {
+            onSuccess: () => {
+              toast.success("Allocation Success");
+            },
+            onError: (error) => {
+              console.error("Allocation error:", error);
+              toast.error("Allocation failed");
+            },
+          }
+        );
+      } catch (error) {
+        console.error("Error submitting allocation:", error);
+        toast.error("Allocation submission error");
+      }
+    }
   };
 
   // Toggle edit mode
@@ -163,29 +185,14 @@ const CandidateData = (candidate: any) => {
           disabled={!isEditing}
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
-          <option value="">Select Panel</option>
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-        </select>
-      </td>
-      {/* <td className="p-2 border-l border-gray-300">
-        <select
-          id="company1"
-          value={rowData.company1}
-          onChange={handleChange}
-          disabled={!isEditing}
-          className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
-        >
-          <option value="">None</option>
-          {candidate.company.map((company: Company) => (
-            <option key={company.company_id} value={company.company_id}>
-              {company.company_name}
+          {candidate.allPanelists.map((panelist: any) => (
+            <option key={panelist.panelist_id} value={panelist.panelist_id}>
+              {panelist.pannel_number}
             </option>
           ))}
         </select>
-      </td> */}
+      </td>
+
       <td className="p-2 border-l border-gray-300">
         <input
           id="time1"
@@ -196,135 +203,6 @@ const CandidateData = (candidate: any) => {
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </td>
-      {/* <td className="p-2 border-l border-gray-300"></td>
-      <td className="p-2 border-l border-gray-300">
-        <select
-          id="panel2"
-          value={rowData.panel2}
-          onChange={handleChange}
-          disabled={!isEditing}
-          className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
-        >
-          <option value="">Select Panel</option>
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-        </select>
-      </td>
-      <td className="p-2 border-l border-gray-300">
-        <select
-          id="company2"
-          value={rowData.company2}
-          onChange={handleChange}
-          disabled={!isEditing}
-          className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
-        >
-          <option value="">None</option>
-          {candidate.company.map((company: Company) => (
-            <option key={company.company_id} value={company.company_id}>
-              {company.company_name}
-            </option>
-          ))}
-        </select>
-      </td>
-      <td className="p-2 border-l border-gray-300">
-        <input
-          id="time2"
-          type="time"
-          value={rowData.time2}
-          onChange={handleChange}
-          disabled={!isEditing}
-          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </td>
-      <td className="p-2 border-l border-gray-300"></td>
-      <td className="p-2 border-l border-gray-300">
-        <select
-          id="panel3"
-          value={rowData.panel3}
-          onChange={handleChange}
-          disabled={!isEditing}
-          className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
-        >
-          <option value="">Select Panel</option>
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-        </select>
-      </td>
-      <td className="p-2 border-l border-gray-300">
-        <select
-          id="company3"
-          value={rowData.company3}
-          onChange={handleChange}
-          disabled={!isEditing}
-          className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
-        >
-          <option value="">None</option>
-          {candidate.company.map((company: Company) => (
-            <option key={company.company_id} value={company.company_id}>
-              {company.company_name}
-            </option>
-          ))}
-        </select>
-      </td>
-      <td className="p-2 border-l border-gray-300">
-        <input
-          id="time3"
-          type="time"
-          value={rowData.time3}
-          onChange={handleChange}
-          disabled={!isEditing}
-          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </td>
-      <td className="p-2 border-l border-gray-300"></td>
-      <td className="p-2 border-l border-gray-300">
-        <select
-          id="panel4"
-          value={rowData.panel4}
-          onChange={handleChange}
-          disabled={!isEditing}
-          className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
-        >
-          <option value="">Select Panel</option>
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-        </select>
-      </td>
-      <td className="p-2 border-l border-gray-300">
-        <select
-          id="company4"
-          value={rowData.company4}
-          onChange={handleChange}
-          disabled={!isEditing}
-          className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
-        >
-          <option value="">None</option>
-          {candidate.company.map((company: Company) => (
-            <option key={company.company_id} value={company.company_id}>
-              {company.company_name}
-            </option>
-          ))}
-        </select>
-      </td>
-      <td className="p-2 border-l border-gray-300">
-        <input
-          id="time4"
-          type="time"
-          value={rowData.time4}
-          onChange={handleChange}
-          disabled={!isEditing}
-          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </td>
-      <td className="p-2 border-l border-gray-300"></td>
-      <td className="p-2 border-l border-gray-300"></td>
-      <td className="p-2 border-l border-gray-300"></td> */}
 
       <td className="p-2 border-l border-gray-300">
         {isEditing ? (
@@ -333,7 +211,7 @@ const CandidateData = (candidate: any) => {
               onClick={handleSubmit}
               className="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600"
             >
-              Save
+              {isPending ? "Saving..." : "Save"}
             </button>
             <button
               onClick={toggleEdit}

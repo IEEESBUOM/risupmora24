@@ -2,18 +2,23 @@
 import React, { useState, useEffect } from "react";
 import CandidateData from "./candidateData";
 import { Allocation, Candidate, Company, Feedback } from "@/Type";
+import { getDepartmentCordinatorByID } from "@/service/getDepartmentCordinatorById";
 
 interface Props {
   initialCandidates: Candidate[];
   feedbacks: Feedback[];
   company: Company[];
   allocation: Allocation[];
+  departmentCordinatorId: string;
+  department: string;
 }
 const AllIntervieweesData: React.FC<Props> = ({
+  department,
   initialCandidates,
   feedbacks,
   company,
   allocation,
+  departmentCordinatorId,
 }) => {
   interface RowData {
     id: number;
@@ -21,6 +26,7 @@ const AllIntervieweesData: React.FC<Props> = ({
     pref_1: string;
     // Add other properties as needed
   }
+  console.log(departmentCordinatorId);
   console.log(company);
   console.log(allocation);
   console.log(feedbacks);
@@ -51,7 +57,13 @@ const AllIntervieweesData: React.FC<Props> = ({
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  const filterCandidates = getDepartmentCordinatorByID(departmentCordinatorId)
+    .then((departmentCordinatorData) => {
+      console.log(departmentCordinatorData.data.department);
+    })
+    .catch((error) => {
+      console.error("Error fetching department coordinator data:", error);
+    });
   useEffect(() => {
     // Filter and sort candidates based on search field and department
     let filtered = initialCandidates;
@@ -63,14 +75,21 @@ const AllIntervieweesData: React.FC<Props> = ({
       );
     }
 
-    if (selectedDepartment) {
-      filtered = filtered.filter(
-        (candidate) => candidate.department === selectedDepartment
-      );
-    }
+    // if (selectedDepartment) {
+    //   filtered = filtered.filter(
+    //     (candidate) => candidate.department === selectedDepartment
+    //   );
+    // }
 
     setFilteredCandidates(filtered);
-  }, [searchField, selectedDepartment, initialCandidates]);
+  }, [
+    searchField,
+    selectedDepartment,
+    initialCandidates,
+    departmentCordinatorId,
+  ]);
+
+  console.log(filteredCandidates);
 
   const [AllCandidateData, setAllCandidateData] =
     useState<Candidate[]>(initialCandidates);
@@ -122,7 +141,8 @@ const AllIntervieweesData: React.FC<Props> = ({
         </div>
 
         <div className="flex items-center justify-center md:justify-start w-full md:w-auto">
-          <select
+          Department: {department}
+          {/* <select
             onChange={handleSortBy}
             className="form-select p-2 border border-gray-300 rounded shadow-sm"
             aria-label="Default select example"
@@ -168,7 +188,7 @@ const AllIntervieweesData: React.FC<Props> = ({
             <option value="Computational Mathematics">
               Computational Mathematics
             </option>
-          </select>
+          </select> */}
         </div>
 
         <div className="w-full md:w-auto text-gray-700 font-semibold text-center md:text-right">
@@ -269,6 +289,7 @@ const AllIntervieweesData: React.FC<Props> = ({
                     preference3={candidate.prefCompany3}
                     preference4={candidate.prefCompany4}
                     allocations={allocation}
+                    departmentCordinatorId={departmentCordinatorId}
                   />
                 ))}
               {emptyRows > 0 && (

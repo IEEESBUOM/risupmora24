@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useAlocateInterviewees } from "@/hooks/user/useAlocateInterviweers";
 import { Company } from "@/Type";
 import toast from "react-hot-toast";
+import { getDepartmentCordinatorByID } from "@/service/getDepartmentCordinatorById";
+import { getPanelistByCompanyIdAndPanelNumber } from "@/service/getPanelistByCompanyIdAndPanelNumber";
 
 // Define an interface for row data
 interface RowData {
@@ -20,10 +22,11 @@ interface RowData {
 }
 
 const CandidateData = (candidate: any) => {
-  console.log(candidate.department);
+  console.log(candidate.candidate.department);
   console.log(candidate.allocations);
   console.log(candidate.feedbacks);
   const { Allocation, isPending } = useAlocateInterviewees();
+  console.log(candidate.departmentCordinatorId);
 
   // Initialize state with the RowData interface
   const [rowData, setRowData] = useState<RowData>({
@@ -100,22 +103,35 @@ const CandidateData = (candidate: any) => {
       { panel: "panel4", company: "company4", time: "time4" },
     ];
 
-    panels.forEach((panelInfo) => {
+    panels.forEach(async (panelInfo) => {
       const panelValue = rowData[panelInfo.panel as keyof RowData];
       const companyValue = rowData[panelInfo.company as keyof RowData];
       const timeValue = rowData[panelInfo.time as keyof RowData];
 
       // Skip if the company is empty
       if (!companyValue) return;
+      let panelistId: string | undefined;
+
+      try {
+        const panelistData = await getPanelistByCompanyIdAndPanelNumber(
+          companyValue,
+          1
+        );
+        panelistId = panelistData?.data?.[0]?.panelist_id;
+        console.log(panelistId); // For debugging purposes
+      } catch (error) {
+        toast.error("Error fetching panelist data - panelist not assigned");
+        console.error("Error fetching panelist data:", error);
+      }
 
       const formData = {
-        allocated_panel_number: parseInt(panelValue),
+        allocated_panel_number: 1,
         company_id: companyValue,
-        allocation_timeSlot: timeValue,
+        allocation_timeSlot: "00:00",
         allocation_date: "2021-10-10",
         allocation_status: "pending",
         candidate_id: candidate.candidate_id,
-        panelist_id: "clyu9qgs80000vulxcwnnj1uq",
+        panelist_id: panelistId,
       };
 
       console.log(formData);
@@ -126,6 +142,7 @@ const CandidateData = (candidate: any) => {
             toast.success("Allocation Success 1");
           },
           onError: (error) => {
+            console.log(error);
             console.error("Allocation error:", error);
             toast.error("Allocation failed 1");
           },
@@ -139,6 +156,7 @@ const CandidateData = (candidate: any) => {
     setIsEditing(!isEditing);
   };
 
+  console.log(candidate);
   return (
     <tr className="border-b border-gray-300">
       <td className="p-2 border-l border-gray-300">{candidate.candidate_id}</td>
@@ -179,11 +197,16 @@ const CandidateData = (candidate: any) => {
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">None</option>
-          {candidate.company.map((company: Company) => (
-            <option key={company.company_id} value={company.company_id}>
-              {company.company_name}
-            </option>
-          ))}
+          {candidate.company
+            .slice()
+            .sort((a: Company, b: Company) =>
+              a.company_name.localeCompare(b.company_name)
+            )
+            .map((company: Company) => (
+              <option key={company.company_id} value={company.company_id}>
+                {company.company_name}
+              </option>
+            ))}
         </select>
       </td>
       {/* <td className="p-2 border-l border-gray-300">
@@ -221,11 +244,16 @@ const CandidateData = (candidate: any) => {
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">None</option>
-          {candidate.company.map((company: Company) => (
-            <option key={company.company_id} value={company.company_id}>
-              {company.company_name}
-            </option>
-          ))}
+          {candidate.company
+            .slice()
+            .sort((a: Company, b: Company) =>
+              a.company_name.localeCompare(b.company_name)
+            )
+            .map((company: Company) => (
+              <option key={company.company_id} value={company.company_id}>
+                {company.company_name}
+              </option>
+            ))}
         </select>
       </td>
       {/* <td className="p-2 border-l border-gray-300">
@@ -263,11 +291,16 @@ const CandidateData = (candidate: any) => {
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">None</option>
-          {candidate.company.map((company: Company) => (
-            <option key={company.company_id} value={company.company_id}>
-              {company.company_name}
-            </option>
-          ))}
+          {candidate.company
+            .slice()
+            .sort((a: Company, b: Company) =>
+              a.company_name.localeCompare(b.company_name)
+            )
+            .map((company: Company) => (
+              <option key={company.company_id} value={company.company_id}>
+                {company.company_name}
+              </option>
+            ))}
         </select>
       </td>
       {/* <td className="p-2 border-l border-gray-300">
@@ -305,11 +338,16 @@ const CandidateData = (candidate: any) => {
           className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
         >
           <option value="">None</option>
-          {candidate.company.map((company: Company) => (
-            <option key={company.company_id} value={company.company_id}>
-              {company.company_name}
-            </option>
-          ))}
+          {candidate.company
+            .slice()
+            .sort((a: Company, b: Company) =>
+              a.company_name.localeCompare(b.company_name)
+            )
+            .map((company: Company) => (
+              <option key={company.company_id} value={company.company_id}>
+                {company.company_name}
+              </option>
+            ))}
         </select>
       </td>
       {/* <td className="p-2 border-l border-gray-300">
@@ -333,7 +371,7 @@ const CandidateData = (candidate: any) => {
               onClick={handleSubmit}
               className="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600"
             >
-              Save
+              {isPending ? "Saving..." : "Save"}
             </button>
             <button
               onClick={toggleEdit}
