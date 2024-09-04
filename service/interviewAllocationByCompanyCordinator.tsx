@@ -8,7 +8,7 @@ export const InterviewAllocationByCompanyCordinator = async (data: {
 
   try {
     const putResponse = await axios.put(
-      `http://localhost:3000/api/v1/admin/UpdateInterviewByCompanyCordinator`,
+      `${process.env.APP_URL}/api/v1/admin/UpdateInterviewByCompanyCordinator`,
       {
         allocation_date: item.allocation_date,
         allocation_timeSlot: item.allocation_timeSlot,
