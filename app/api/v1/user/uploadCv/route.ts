@@ -6,12 +6,15 @@ export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
     const { cvUrl, userId } = data;
-    console.log("❤️❤️❤️❤️❤️❤️", cvUrl, userId);
+
+    console.log(cvUrl, userId);
 
     const updatedCandidate = await prisma.candidate.update({
       where: { candidate_id: userId },
       data: { cvUrl },
     });
+
+    console.log(updatedCandidate);
 
     if (!updatedCandidate) {
       return NextResponse.json(
@@ -19,8 +22,6 @@ export async function POST(req: NextRequest) {
         { status: 404 }
       );
     }
-
-    console.log(updatedCandidate);
 
     return NextResponse.json({ message: "success" }, { status: 200 });
   } catch (e) {

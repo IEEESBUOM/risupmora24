@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 // import { uploadCVService } from '@/service/uploadCVService';
 import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 
 type UploadCVHookType = {
   cvUrl: string;
@@ -15,7 +16,12 @@ type UploadCVHookType = {
 export const useUploadCV = () => {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
-  const userId = session?.user?.id as string;
+  // const userId = session?.user?.id as string;
+
+  const params = useParams();
+  const userId = params.id as string;
+
+  console.log("userId", userId);
 
   const { mutate: uploadCV, isPending: isUploading } = useMutation({
     mutationFn: ({ cvUrl }: UploadCVHookType) =>

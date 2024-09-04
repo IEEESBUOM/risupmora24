@@ -7,9 +7,9 @@ import { signOut } from "next-auth/react";
 
 const StudentNavbar = () => {
 
-  const logoutHandler = () => {
+  const logoutHandler = async () => {
     
-    signOut();
+    await signOut();
     window.location.href = "/";
     
   }

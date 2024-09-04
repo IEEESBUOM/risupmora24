@@ -10,13 +10,11 @@ export const uploadCandidateCv = async ({
   cvUrl: string;
   userId: string;
 }) => {
-  console.log("getCandidate");
   // export const getCandidate = async (data: string) => {
   // const data = "clyld3pa40000wb6y5trem706";
-  console.log("🤷‍♀️🤷‍♂️👌😊", cvUrl);
-  console.log("🤷‍♀️🤷‍♂️👌😊", userId);
-  // if (!userId) return;
 
+  // if (!userId) return;
+  // console.log(cvUrl, userId);
   try {
     const response = await axios.post(
       `${process.env.APP_URL}/api/v1/user/uploadCv`,
@@ -25,6 +23,7 @@ export const uploadCandidateCv = async ({
         userId,
       }
     );
+    // console.log(response.data);
     if (response.data) {
       // console.log(response.data);
       return response.data;

@@ -63,7 +63,6 @@ export const authOptions: NextAuthOptions = {
     // },
 
     async session({ session, token }: { session: Session; token: JWT }) {
-      console.log("😂👍🖤", token.image);
       session.user.email = token.email;
       session.user.name = token.name;
       session.user.id = token.id;
@@ -81,7 +80,6 @@ export const authOptions: NextAuthOptions = {
       // isNewUser?: boolean | undefined;
     }) {
       if (params.user) {
-        console.log("😂", params.user.image);
         params.token.id = params.user._id;
         params.token.name = params.user.name;
         params.token.image = params.user.image;

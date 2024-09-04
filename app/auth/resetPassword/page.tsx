@@ -1,5 +1,5 @@
 "use client";
-import react, { useState,useEffect } from "react";
+import react, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -9,22 +9,22 @@ import toast from "react-hot-toast";
 export default function Page() {
   const [errorMessage, setErrorMessage] = useState("");
   const [passwordResetToken, setPasswordResetToken] = useState("");
-  useEffect(()=>{
-    const getToken = async () =>{
+  useEffect(() => {
+    const getToken = async () => {
       const searchParams = new URLSearchParams(window.location.search);
-      const token = searchParams.get('token');
-      console.log(token);
-      if(token){setPasswordResetToken(token);}
-      
-    }
+      const token = searchParams.get("token");
+
+      if (token) {
+        setPasswordResetToken(token);
+      }
+    };
     getToken();
-  })
+  });
   type Inputs = {
     newPassword: string;
     newPasswordConfirm: string;
   };
 
-  
   const {
     register,
     handleSubmit,
@@ -48,7 +48,7 @@ export default function Page() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({data,passwordResetToken}),
+          body: JSON.stringify({ data, passwordResetToken }),
         })
           .then((res) => {
             if (res.ok) {
@@ -150,7 +150,6 @@ export default function Page() {
       <div className="mt-4  grid justify-center">
         <Button variant={"auth"}>Reset Password</Button>
       </div>
-      
     </form>
   );
 }

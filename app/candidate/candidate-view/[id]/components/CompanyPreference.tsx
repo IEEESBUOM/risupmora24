@@ -69,11 +69,8 @@ export default function CompanyPreference({
   const [prefCompany3, setPrefCompany3] = useState(pref3 || "");
   const [prefCompany4, setPrefCompany4] = useState(pref4 || "");
   const [companyData,setCompanyData] = useState([])
-  const [updatedCompanyList,setUpdatedCompanyList] = useState([
-    { com_name: "Company A", com_id: 1 },
-    { com_name: "Company B", com_id: 2 },
-    { com_name: "Company C", com_id: 3 },
-  ]);
+  const [updatedCompanyList,setUpdatedCompanyList] = useState<{ company_id: number; company_name: string; }[]>([]);
+
   return (updatedCompanyList.length === 0) ? <div className=" ">
 </div> : (
     <div className="my-5">
@@ -95,8 +92,8 @@ export default function CompanyPreference({
               <SelectGroup className="bg-white">
                 <SelectLabel>Company</SelectLabel>
                 {updatedCompanyList.map((company) => (
-                  <SelectItem key={company.com_id} value={company.com_name}>
-                    {company.com_name}
+                  <SelectItem key={company.company_id} value={company.company_name}>
+                    {company.company_name}
                   </SelectItem>
                 ))}
               </SelectGroup>
@@ -117,9 +114,9 @@ export default function CompanyPreference({
               <SelectGroup className="bg-white">
                 <SelectLabel>Company</SelectLabel>
                 {updatedCompanyList.map((company) => (
-                  <SelectItem key={company.com_id} value={company.com_name}>
-                    {company.com_name}
-                  </SelectItem>
+                  <SelectItem key={company.company_id} value={company.company_name}>
+                  {company.company_name}
+                </SelectItem>
                 ))}
               </SelectGroup>
             </SelectContent>
@@ -139,9 +136,9 @@ export default function CompanyPreference({
               <SelectGroup className="bg-white">
                 <SelectLabel>Company</SelectLabel>
                 {updatedCompanyList.map((company) => (
-                  <SelectItem key={company.com_id} value={company.com_name}>
-                    {company.com_name}
-                  </SelectItem>
+                  <SelectItem key={company.company_id} value={company.company_name}>
+                  {company.company_name}
+                </SelectItem>
                 ))}
               </SelectGroup>
             </SelectContent>
@@ -161,9 +158,9 @@ export default function CompanyPreference({
               <SelectGroup className="bg-white">
                 <SelectLabel>Company</SelectLabel>
                 {updatedCompanyList.map((company) => (
-                  <SelectItem key={company.com_id} value={company.com_name}>
-                    {company.com_name}
-                  </SelectItem>
+                  <SelectItem key={company.company_id} value={company.company_name}>
+                  {company.company_name}
+                </SelectItem>
                 ))}
               </SelectGroup>
             </SelectContent>

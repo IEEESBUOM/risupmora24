@@ -73,22 +73,33 @@ const SignIn = () => {
           .then(async (res) => {
             if (res.ok) {
               const signInData = await res.json();
-              console.log(signInData);
-              console.log(data.email, data.password);
+
               const result = await signIn("credentials", {
                 email: data.email,
                 password: data.password,
                 redirect: false,
               });
               if (result?.ok) {
-                console.log(signInData.isCandidate);
-                console.log(signInData);
-                if (signInData.isCandidate) {
-                  console.log("candidate");
-                  router.push("/");
-                } else {
+                if (
+                  !signInData.isCandidate &&
+                  signInData.role === "candidate"
+                ) {
                   router.push(`/candidate/registation/${signInData.id}`);
-                  console.log("not candidate");
+                } else if (
+                  signInData.isCandidate &&
+                  signInData.role === "candidate"
+                ) {
+                  router.push(`/`);
+                } else if (signInData.role === "admin") {
+                  router.push(`/admin/add-company/`);
+                } else if (signInData.role === "departmentCoordinator") {
+                  router.push(`/admin/department-coordinator/${signInData.id}`);
+                } else if (signInData.role === "companyCoordinator") {
+                  router.push(`/admin/company-coordinator/${signInData.id}`);
+                } else if (signInData.role === "panelist") {
+                  router.push(`/company/dashboard/${signInData.id}`);
+                } else {
+                  router.push(`/`);
                 }
               }
               resolve();

@@ -7,7 +7,6 @@ import crypto from "crypto";
 export async function POST(req: NextRequest) {
   try {
     const { username, password, email } = await req.json();
-    console.log(username, password, email);
 
     if (!username || !password || !email) {
       return NextResponse.json(
@@ -30,26 +29,21 @@ export async function POST(req: NextRequest) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
 
     const user = await prisma.user.create({
       data: {
         name: username,
         password: hashedPassword,
         email,
+        role: "candidate",
       },
     });
 
-    console.log(user);
-
     if (!user) {
-      return NextResponse.json(
-        { message: "server error" },
-        { status: 500 }
-      );
+      return NextResponse.json({ message: "server error" }, { status: 500 });
     }
 
-    const token = crypto.randomBytes(32).toString('hex');
+    const token = crypto.randomBytes(32).toString("hex");
     const hashedToken = await bcrypt.hash(token, 10);
     const expires = new Date();
     expires.setHours(expires.getHours() + 24); // Token valid for 24 hours
@@ -67,9 +61,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "success" }, { status: 200 });
   } catch (e) {
     console.log(e);
-    return NextResponse.json(
-      { message: "server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "server error" }, { status: 500 });
   }
 }

@@ -1,17 +1,18 @@
-import { PrismaClient } from '@prisma/client';
-import { NextRequest, NextResponse } from 'next/server';
-import bcrypt from 'bcrypt';
+import { PrismaClient } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest) {
   try {
     const { token } = await req.json();
-  
 
-    if (!token || typeof token !== 'string') {
-        console.log('verification failed');
-      return NextResponse.json({ message: 'verification failed' }, { status: 400 });
+    if (!token || typeof token !== "string") {
+      return NextResponse.json(
+        { message: "verification failed" },
+        { status: 400 }
+      );
     }
 
     const verificationToken = await prisma.verificationToken.findFirst({
@@ -19,20 +20,23 @@ export async function POST(req: NextRequest) {
     });
 
     if (!verificationToken) {
-        console.log('verification failed')
-      return NextResponse.json({ message: 'verification failed' }, { status: 400 });
+      return NextResponse.json(
+        { message: "verification failed" },
+        { status: 400 }
+      );
     }
-  
 
-    const isTokenValid = (token==verificationToken.token);
+    const isTokenValid = token == verificationToken.token;
 
     if (!isTokenValid) {
-        console.log('verification failed    ')
-      return NextResponse.json({ message: 'verification failed' }, { status: 400 });
+      return NextResponse.json(
+        { message: "verification failed" },
+        { status: 400 }
+      );
     }
 
     if (new Date() > verificationToken.expires) {
-      return NextResponse.json({ message: 'Token expired' }, { status: 400 });
+      return NextResponse.json({ message: "Token expired" }, { status: 400 });
     }
 
     await prisma.user.update({
@@ -49,9 +53,12 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json({ message: 'Email verified successfully' }, { status: 200 });
+    return NextResponse.json(
+      { message: "Email verified successfully" },
+      { status: 200 }
+    );
   } catch (e) {
     console.log(e);
-    return NextResponse.json({ message: 'Server error' }, { status: 500 });
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }

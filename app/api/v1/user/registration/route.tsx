@@ -39,13 +39,11 @@ export async function POST(req: NextRequest) {
       imgUrl,
     }: Request = await req.json();
 
-    console.log(userId);
     const userExists = await prisma.user.findUnique({
       where: {
         id: userId,
       },
     });
-    console.log(userExists);
 
     if (!userExists) {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
@@ -63,7 +61,6 @@ export async function POST(req: NextRequest) {
       cvUrl,
       imgUrl,
     };
-    console.log(data);
 
     // const data = await prisma.user.findMany();
 
@@ -79,8 +76,6 @@ export async function POST(req: NextRequest) {
         image: imgUrl,
       },
     });
-
-
 
     return NextResponse.json({ savedCandidate });
 

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
 import { AlignRight } from "lucide-react";
 import Image from "next/image";
@@ -33,6 +33,7 @@ import HamburgerButton from "./ui/HamburgerButton";
 import { signOut, useSession } from "next-auth/react";
 import NavBarProfile from "./NavBarProfile";
 import { useGetUserData } from "@/hooks/user/useGetUserData";
+import PageLoader from "./PageLoader";
 
 interface SectionRefs {
   heroSectionRef: MutableRefObject<HTMLDivElement | null>;
@@ -47,13 +48,10 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   const [active, setActive] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session, status } = useSession();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   // const [userData, setUserData] = useState<any>(null);
- 
 
-
-
-  console.log(session);
-
+  const router = useRouter();
 
   const [showProfile, setShowProfile] = useState<boolean>(false);
 
@@ -64,7 +62,6 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
     _id: session?.user.id as string,
   };
   const userData = useGetUserData({ userEmail: user.email });
-  console.log(userData)
 
   function clickLogoutBtn() {
     signOut();
@@ -78,6 +75,20 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
 
   // }, [user.email]);
 
+  useEffect(() => {
+    setIsLoading(true);
+    if (userData.user) {
+      if (
+        !userData.user.candidate == null &&
+        userData.user.role === "candidate"
+      ) {
+        router.push(`/candidate/registation/${userData.user.id}`);
+      } else {
+        setIsLoading(false);
+      }
+    }
+    setIsLoading(false);
+  }, [userData]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -143,6 +154,10 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   const handleUserProfile = () => {
     setShowProfile(true);
   };
+  if (status == "loading" || isLoading || userData.isPending) {
+    return <PageLoader />;
+  }
+
   return (
     <>
       <div className=" fixed  grid w-full bg-white   sm:overflow-hidden  sm:h-24    max-md:max-w-full z-20   ">
@@ -219,7 +234,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
                   <div
                     onClick={() => handleScroll("contact")}
                     className={clsx(navigationMenuTriggerStyle(), {
-                      "after:w-full after:scale-x-100 font-semibold":
+                      "after:w-full after:scale-x-100 font-semibold ":
                         pathname === "/",
                     })}
                   >
@@ -234,7 +249,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
 
                 {/* <SheetFooter> */}
                 <div className="h-[2px]  w-full bg-white"></div>
-                {userData && (
+                {userData?.user?.role == "candidate" && (
                   <NavBarProfile
                     id={userData.user?.id}
                     name={userData.user?.name}
@@ -246,6 +261,60 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
                     isInSheet={true}
                   />
                 )}
+                {status == "authenticated" && userData.user.role == "admin" && (
+                  <div className=" grid mt-5   gap-5 justify-start ">
+                    <div
+                      className="grid justify-start"
+                      onClick={() => {
+                        signOut();
+                      }}
+                    >
+                      <PrimaryButtonSmall text="< Logout" />
+                    </div>
+                    <Link href="/admin/add-company" passHref>
+                      <PrimaryButtonSmall text="Admin >" />
+                    </Link>
+                  </div>
+                )}
+                {status == "authenticated" &&
+                  userData.user.role == "companyCoordinator" && (
+                    <div className=" grid mt-5  gap-5 justify-start ">
+                      <div
+                        className="grid justify-start"
+                        onClick={() => {
+                          signOut();
+                        }}
+                      >
+                        <PrimaryButtonSmall text="< Logout" />
+                      </div>
+                      <Link
+                        href={`/admin/company-coordinator/${userData.user.id}`}
+                        passHref
+                      >
+                        <PrimaryButtonSmall text="Dashboard >" />
+                      </Link>
+                    </div>
+                  )}
+
+                {status == "authenticated" &&
+                  userData.user.role == "departmentCoordinator" && (
+                    <div className=" grid mt-5   gap-5 justify-start   ">
+                      <div
+                        className="grid justify-start"
+                        onClick={() => {
+                          signOut();
+                        }}
+                      >
+                        <PrimaryButtonSmall text="< Logout" />
+                      </div>
+                      <Link
+                        href={`/admin/department-coordinator/${userData.user.id}`}
+                        passHref
+                      >
+                        <PrimaryButtonSmall text="Dashboard >" />
+                      </Link>
+                    </div>
+                  )}
 
                 {/* </SheetFooter> */}
               </SheetContent>
@@ -317,7 +386,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
-         {/* {if (status == "authenticated" && userData.user) {
+          {/* {if (status == "authenticated" && userData.user) {
           <div
           onClick={handleUserProfile}
           className=" flex gap-2 cursor-pointer"
@@ -351,56 +420,106 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
 
          } */}
 
-
-
-
-
-
           <div className="  grid content-center min-w-36 justify-center">
-          {status == "authenticated" && userData.user && (
-            <div
-              onClick={handleUserProfile}
-              className=" flex gap-2 cursor-pointer"
-            >
-              <div className="grid content-center font-quicksand font-semibold text-lg">
-                {user.firstName}
+            {status == "authenticated" && userData.user.role == "candidate" && (
+              <div
+                onClick={handleUserProfile}
+                className=" flex gap-2 cursor-pointer"
+              >
+                <div className="grid content-center font-quicksand font-semibold text-lg">
+                  {user.firstName}
+                </div>
+                <div className=" py-4 sm:py-2 grid content-center">
+                  {userData.user?.image && (
+                    <Image
+                      src={userData.user?.image}
+                      alt="profile picture"
+                      width={40}
+                      height={40}
+                      className="rounded-full w-auto h-auto"
+                    />
+                  )}
+                </div>
               </div>
-              <div className=" py-4 sm:py-2 grid content-center">
-                {userData.user && (
-                <Image
-                  src={userData.user?.image}
-                  alt="profile picture"
-                  width={50}
-                  height={50}
-                  className="rounded-full w-auto h-auto"
-                />)}
+            )}
+
+            {status == "authenticated" && userData.user.role == "admin" && (
+              <div className="sm:flex hidden ">
+                <div
+                  className=""
+                  onClick={() => {
+                    signOut();
+                  }}
+                >
+                  <PrimaryButtonSmall text="< Logout" />
+                </div>
+                <Link href="/admin/add-company" passHref>
+                  <PrimaryButtonSmall text="Admin >" />
+                </Link>
               </div>
-            </div>
-          ) }
+            )}
+            {status == "authenticated" &&
+              userData.user.role == "companyCoordinator" && (
+                <div className="sm:flex hidden ">
+                  <div
+                    className=""
+                    onClick={() => {
+                      signOut();
+                    }}
+                  >
+                    <PrimaryButtonSmall text="< Logout" />
+                  </div>
+                  <Link
+                    href={`/admin/company-coordinator/${userData.user.id}`}
+                    passHref
+                  >
+                    <PrimaryButtonSmall text="Dashboard >" />
+                  </Link>
+                </div>
+              )}
 
+            {status == "authenticated" &&
+              userData.user.role == "departmentCoordinator" && (
+                <div className=" sm:flex hidden ">
+                  <div
+                    className=""
+                    onClick={() => {
+                      signOut();
+                    }}
+                  >
+                    <PrimaryButtonSmall text="< Logout" />
+                  </div>
+                  <Link
+                    href={`/admin/department-coordinator/${userData.user.id}`}
+                    passHref
+                  >
+                    <PrimaryButtonSmall text="Dashboard >" />
+                  </Link>
+                </div>
+              )}
 
-          {status == "unauthenticated" && (
+            {status == "unauthenticated" && (
               <Link href="/auth/signin" passHref className=" grid ">
                 <PrimaryButtonSmall text="Sign In" />
               </Link>
             )}
 
-          {status != "authenticated" && status !="unauthenticated" && (
-            <Image
-            src="/spinner/loading-black.svg"
-            width={28}
-            height={28}
-            alt="spinner"
-          />
-          )}
-          {status == "authenticated" && !userData.user && (
-            <Image
-            src="/spinner/loading-black.svg"
-            width={28}
-            height={28}
-            alt="spinner"
-          />)
-            }
+            {status != "authenticated" && status != "unauthenticated" && (
+              <Image
+                src="/spinner/loading-black.svg"
+                width={28}
+                height={28}
+                alt="spinner"
+              />
+            )}
+            {status == "authenticated" && !userData.user && (
+              <Image
+                src="/spinner/loading-black.svg"
+                width={28}
+                height={28}
+                alt="spinner"
+              />
+            )}
           </div>
         </div>
 
@@ -420,16 +539,18 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
               : "xl:w-3/12 lg:w-3/12 md:w-1/3 2xl:w-1/5 sm:block hidden"
           } rounded-b-2xl  right-0 z-50   bg-custom-black  `}
         >
-          <NavBarProfile
-                    id={userData.user?.id}
-                    name={userData.user?.name}
-                    email={userData.user?.email}
-                    image={userData.user?.image || ""}
-                    clickLogoutBtn={clickLogoutBtn}
-                    setShowProfile={setShowProfile}
-                    showProfile={showProfile}
-                    isInSheet={false}
-                  />
+          {userData?.user?.role == "candidate" && (
+            <NavBarProfile
+              id={userData.user?.id}
+              name={userData.user?.name}
+              email={userData.user?.email}
+              image={userData.user?.image || ""}
+              clickLogoutBtn={clickLogoutBtn}
+              setShowProfile={setShowProfile}
+              showProfile={showProfile}
+              isInSheet={false}
+            />
+          )}
         </div>
       </div>
     </>
