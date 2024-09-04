@@ -4,10 +4,6 @@ import { Allocation } from "@/Type";
 export const InterviewAllocationByCompanyCordinator = async (data: {
   Allocation: Allocation;
 }) => {
-  console.log("here...................");
-  console.log("InterviewAllocation");
-  console.log(data);
-
   const item = data.Allocation; // Access the Allocation object
 
   try {
@@ -23,10 +19,6 @@ export const InterviewAllocationByCompanyCordinator = async (data: {
         company_id: item.company_id,
         panelist_id: item.panelist_id,
       }
-    );
-    console.log(
-      `Updated allocation for candidate_id: ${item.candidate_id}`,
-      putResponse
     );
 
     if (!putResponse.data) {

@@ -1,11 +1,8 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export const getCompanyAllocationData = async (id:string) => {
+export const getCompanyAllocationData = async (id: string) => {
   try {
-    
-    console.log(id);
-      
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_APP_URL}/api/v1/companyAllocation/getCompanyAllocation/${id}`
     );

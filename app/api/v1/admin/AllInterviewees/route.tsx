@@ -73,7 +73,6 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  console.log("DELETE request received");
   try {
     const { candidate_id } = await req.json();
 

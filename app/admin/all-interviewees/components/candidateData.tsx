@@ -20,9 +20,6 @@ interface RowData {
 }
 
 const CandidateData = (candidate: any) => {
-  console.log(candidate.department);
-  console.log(candidate.allocations);
-  console.log(candidate.feedbacks);
   const { Allocation, isPending } = useAlocateInterviewees();
 
   // Initialize state with the RowData interface
@@ -118,7 +115,6 @@ const CandidateData = (candidate: any) => {
         panelist_id: "clyu9qgs80000vulxcwnnj1uq",
       };
 
-      console.log(formData);
       Allocation(
         { Allocation: formData },
         {

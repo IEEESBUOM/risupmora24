@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
-  console.log("GET");
   try {
     // Extract the company_id from the query parameters
     const { searchParams } = new URL(req.url);

@@ -17,11 +17,9 @@ type Paramms = {
 
 const DepartmentCordinatorPage = async ({ params }: Paramms) => {
   const departmentCoordinatorId = params.id;
-  console.log(departmentCoordinatorId);
 
   // Get department coordinator details
   const user = await getUserById({ userId: departmentCoordinatorId });
-  console.log(user);
 
   if (user == null || user.role !== "departmentCoordinator") {
     return notFound();
@@ -29,7 +27,6 @@ const DepartmentCordinatorPage = async ({ params }: Paramms) => {
 
   const departmentCoordinatorDepartmentName =
     user.department_cordnator?.department;
-  console.log(departmentCoordinatorDepartmentName);
 
   // Fetch candidates and filter based on department
   const response = await getCandidates();
@@ -41,10 +38,6 @@ const DepartmentCordinatorPage = async ({ params }: Paramms) => {
   const companyResponce = await getCompany();
   const feedbackResponse = await getFeedback();
   const allAllocation = await getAllocation();
-  console.log(feedbackResponse);
-  console.log(response.data);
-  console.log(filterResponse);
-  console.log(companyResponce.companies);
 
   // Initialize arrays to store the filtered data
   let initialCandidates: Candidate[] = filterResponse || [];
@@ -52,12 +45,9 @@ const DepartmentCordinatorPage = async ({ params }: Paramms) => {
   let company: Company[] = companyResponce.companies || [];
   let allocation: Allocation[] = allAllocation.data || [];
 
-  console.log(initialCandidates);
-  console.log(company);
-
   return (
     <AllInterviewers
-    department={departmentCoordinatorDepartmentName}
+      department={departmentCoordinatorDepartmentName}
       departmentCordinatorId={departmentCoordinatorId}
       initialCandidates={initialCandidates}
       feedbacks={feedback}

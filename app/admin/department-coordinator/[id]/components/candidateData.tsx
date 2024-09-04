@@ -22,11 +22,7 @@ interface RowData {
 }
 
 const CandidateData = (candidate: any) => {
-  console.log(candidate.candidate.department);
-  console.log(candidate.allocations);
-  console.log(candidate.feedbacks);
   const { Allocation, isPending } = useAlocateInterviewees();
-  console.log(candidate.departmentCordinatorId);
 
   // Initialize state with the RowData interface
   const [rowData, setRowData] = useState<RowData>({
@@ -118,7 +114,6 @@ const CandidateData = (candidate: any) => {
           1
         );
         panelistId = panelistData?.data?.[0]?.panelist_id;
-        console.log(panelistId); // For debugging purposes
       } catch (error) {
         toast.error("Error fetching panelist data - panelist not assigned");
         console.error("Error fetching panelist data:", error);
@@ -134,7 +129,6 @@ const CandidateData = (candidate: any) => {
         panelist_id: panelistId,
       };
 
-      console.log(formData);
       Allocation(
         { Allocation: formData },
         {
@@ -156,7 +150,6 @@ const CandidateData = (candidate: any) => {
     setIsEditing(!isEditing);
   };
 
-  console.log(candidate);
   return (
     <tr className="border-b border-gray-300">
       <td className="p-2 border-l border-gray-300">{candidate.candidate_id}</td>

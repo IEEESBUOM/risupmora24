@@ -9,7 +9,6 @@ type RegistrationProps = {
 };
 
 const Registration = ({ candidate }: RegistrationProps) => {
-  console.log(candidate);
   return (
     <div className="flex justify-center">
       <div className="flex flex-col lg:w-3/4 xl:w-2/3 justify-center items-center">

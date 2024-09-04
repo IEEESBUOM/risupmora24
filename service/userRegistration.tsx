@@ -4,9 +4,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 export const userRegistration = async (data: RegistrationFormDataSendType) => {
-  console.log(data);
-  console.log(process.env.APP_URL);
-
   try {
     const response = await axios.post(
       `${process.env.APP_URL}/api/v1/user/registration`,

@@ -22,10 +22,6 @@ interface RowData {
 }
 
 const CandidateData = (candidate: any) => {
-  console.log(candidate.allPanelists);
-  console.log(candidate.department);
-  console.log(candidate.allocations);
-  console.log(candidate.feedbacks);
   const { Allocation, isPending } = useUpdateInterviewees();
 
   // Initialize state with the RowData interface
@@ -119,7 +115,6 @@ const CandidateData = (candidate: any) => {
           parseInt(panelValue)
         );
         panelistId = panelistData?.data?.[0]?.panelist_id;
-        console.log(panelistId); // For debugging purposes
       } catch (error) {
         console.error("Error fetching panelist data:", error);
       }
@@ -133,8 +128,6 @@ const CandidateData = (candidate: any) => {
         candidate_id: candidate.candidate_id,
         panelist_id: panelistId,
       };
-
-      console.log(formData);
 
       try {
         await Allocation(

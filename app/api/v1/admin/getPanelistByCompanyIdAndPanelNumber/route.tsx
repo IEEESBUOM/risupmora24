@@ -2,13 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
-  console.log("GET");
   try {
     const { searchParams } = new URL(req.url);
     const company_id = searchParams.get("company_id");
     const panel_number = searchParams.get("pannel_number");
-
-    console.log(company_id, panel_number);
 
     if (!company_id) {
       return NextResponse.json(
@@ -27,7 +24,7 @@ export async function GET(req: NextRequest) {
         pannel_number: panelNumberParsed,
       },
     });
-    console.log(data);
+
     return NextResponse.json({ data });
   } catch (e) {
     console.log(e);

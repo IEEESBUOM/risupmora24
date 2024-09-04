@@ -10,7 +10,6 @@ const Page = async ({ params }: any) => {
   const userId = params.id;
   const userIdIsCorrect = await checkUserId({ userId });
   const candidate = await getCandidate({ userId });
-  console.log("candidate", candidate);
 
   if (userIdIsCorrect)
     return (

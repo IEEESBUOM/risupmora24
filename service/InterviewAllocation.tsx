@@ -2,10 +2,6 @@ import axios from "axios";
 import { Allocation } from "@/Type";
 
 export const InterviewAllocation = async (data: { Allocation: Allocation }) => {
-  console.log("here...................");
-  console.log("InterviewAllocation");
-  console.log(data);
-
   const item = data.Allocation; // Access the Allocation object
 
   try {
@@ -17,10 +13,6 @@ export const InterviewAllocation = async (data: { Allocation: Allocation }) => {
           candidate_id: item.candidate_id,
         },
       }
-    );
-    console.log(
-      `Deleted allocations for candidate_id: ${item.candidate_id}`,
-      deleteResponse
     );
 
     // Step 2: Post the new allocation data
@@ -39,10 +31,6 @@ export const InterviewAllocation = async (data: { Allocation: Allocation }) => {
         company: {},
         panelist: {},
       }
-    );
-    console.log(
-      `Posted new allocation for candidate_id: ${item.candidate_id}`,
-      postResponse
     );
 
     if (!postResponse.data) {

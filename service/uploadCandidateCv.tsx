@@ -3,18 +3,16 @@ import { RegistrationFormDataSendType, RegistrationFormDataType } from "@/Type";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export const  uploadCandidateCv = async ({
+export const uploadCandidateCv = async ({
   cvUrl,
   userId,
 }: {
   cvUrl: string;
   userId: string;
 }) => {
-  console.log("getCandidate");
   // export const getCandidate = async (data: string) => {
   // const data = "clyld3pa40000wb6y5trem706";
-  console.log("🤷‍♀️🤷‍♂️👌😊", cvUrl);
-  console.log("🤷‍♀️🤷‍♂️👌😊", userId);
+
   // if (!userId) return;
 
   try {

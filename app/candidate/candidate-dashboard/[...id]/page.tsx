@@ -10,18 +10,15 @@ type Paramms = {
 };
 
 const StudentDashboard = async ({ params }: Paramms) => {
-  console.log(params.id[0].split("-"));
-
   const userId = params.id[0].split("-")[0];
   const panelId = params.id[0].split("-")[1];
-  console.log("userId", panelId);
 
   const candidate = await getCandidate({ userId });
 
   if (candidate == null) {
     notFound();
   }
-  console.log("candidate", candidate);
+
   if (candidate) {
     return (
       <div>

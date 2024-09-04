@@ -33,8 +33,11 @@ const StudentView = () => {
   const { data: session } = useSession();
   const { uploadCV, isUploading } = useUploadCV();
   const { candidate: data, isPending } = useCandidate({ userId });
-  const { CompanyAllocation:allocationDAta, isPending: isPendingCompanyAllocation} = useCompanyAllocation({ userId });
-  console.log(data);
+  const {
+    CompanyAllocation: allocationDAta,
+    isPending: isPendingCompanyAllocation,
+  } = useCompanyAllocation({ userId });
+
   const [cvUrl, setCvUrl] = useState<string>("");
 
   const formatTime = (dateTimeString: string) => {
@@ -52,10 +55,8 @@ const StudentView = () => {
   };
 
   const handleUploadCV = handleSubmit(async (data: CV) => {
-    console.log(data);
     // const formData = new FormData();
     // formData.append("cv", data.cv[0]);
-    console.log(cvUrl);
 
     try {
       await uploadCV({ cvUrl });
@@ -118,6 +119,7 @@ const StudentView = () => {
                   </div>
 
                   <Link
+                    target="_blank"
                     className=" border-2 grid w-36 justify-center  border-custom-black bg-white rounded-2xl font-semibold p-2 "
                     href={`${data?.cvUrl}`}
                   >
@@ -136,8 +138,7 @@ const StudentView = () => {
                   Company Allocation
                 </div>
                 <div className="overflow-x-auto border-2 border-stv-blue rounded-lg mt-2.5">
-                  {allocationDAta &&
-                  allocationDAta.length > 0 ? (
+                  {allocationDAta && allocationDAta.length > 0 ? (
                     <table className="border-collapse w-full">
                       <thead>
                         <tr>
@@ -227,7 +228,6 @@ const StudentView = () => {
                   </form>
                 </div>
 
-                
                 {/* <CompanyPreference
                   userEmail={data?.user.email}
                   pref1={data.prefCompany1}
@@ -238,7 +238,7 @@ const StudentView = () => {
 
                 <div className="border-t-2 border-custom-black  h-0.5 w-full my-6"></div>
 
-                <Feedback candidateId={userId}/>
+                <Feedback candidateId={userId} />
               </div>
             </>
           ) : (
