@@ -7,7 +7,6 @@ import { signOut } from "next-auth/react";
 
 const StudentNavbarForStuDashboard = ({ panelId }: { panelId: string }) => {
   // const navigate= us()
-  console.log("panelId", panelId);
   const logoutHandler = () => {
     // signOut();
     window.location.href = `/company/dashboard/${panelId}`;

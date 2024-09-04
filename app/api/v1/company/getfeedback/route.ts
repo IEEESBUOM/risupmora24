@@ -4,8 +4,8 @@ import prisma from "@/lib/prisma";
 export async function GET() {
   try {
     const data = await prisma.feedback.findMany();
-    
-    return NextResponse.json({data});
+
+    return NextResponse.json({ data });
   } catch (e) {
     console.log(e);
     return NextResponse.json(

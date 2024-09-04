@@ -19,7 +19,6 @@ type Paramms = {
 const CompanyCoordinator = async ({ params }: Paramms) => {
   // get company coordinator id from params
   const companyCoordinatorId = params.id;
-  console.log(companyCoordinatorId);
 
   // get company coordinator details
   const user = await getUserById({ userId: companyCoordinatorId });
@@ -35,21 +34,15 @@ const CompanyCoordinator = async ({ params }: Paramms) => {
 
   const compnanyCoordinatorCompanyId = user.company_cordnator.company_id;
 
-
-  console.log(user);
-  console.log(compnanyCoordinatorCompanyName);
-  console.log(compnanyCoordinatorCompanyId);
-
   /////////////////////////// above code done by ruchith ///////////////////////////
 
   const response = await getCandidates();
   const companyResponce = await getCompany();
   const feedbackResponse = await getFeedback();
   const allAllocation = await getAllocation();
-  const allPanelist = await getAllPanelistForOneCompany(compnanyCoordinatorCompanyId);
-  console.log(allAllocation.data[0].company_id);
-  console.log(feedbackResponse);
-  console.log(response);
+  const allPanelist = await getAllPanelistForOneCompany(
+    compnanyCoordinatorCompanyId
+  );
 
   const filterAllocation = allAllocation.data.filter(
     (allocation: Allocation) =>
@@ -66,13 +59,7 @@ const CompanyCoordinator = async ({ params }: Paramms) => {
   let company: Company[] = [];
   let allocation: Allocation[] = filterAllocation.data || [];
   let allPanelists: Panelist[] = [];
-  console.log(allocation);
-  console.log(filterAllocation);
-  console.log(
-    filterAllocation.forEach(
-      (allocation: Allocation) => allocation.candidate_id
-    )
-  );
+
   if (response && response.data) {
     initialCandidates = response.data.filter((candidate: Candidate) =>
       filterAllocation.some(
@@ -105,11 +92,10 @@ const CompanyCoordinator = async ({ params }: Paramms) => {
   } else {
     new Error("Failed to fetch Panelist");
   }
-  console.log(feedback);
-  console.log(filterAllocation);
+
   return (
     <AllInterviewers
-    compnanyCoordinatorCompanyName={compnanyCoordinatorCompanyName}
+      compnanyCoordinatorCompanyName={compnanyCoordinatorCompanyName}
       initialCandidates={initialCandidates}
       feedbacks={feedback}
       company={company}

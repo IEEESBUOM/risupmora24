@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function DELETE(req: NextRequest) {
-  console.log("DELETE request received");
   try {
     // Delete all records from each table
     // await prisma.feedback.deleteMany({});

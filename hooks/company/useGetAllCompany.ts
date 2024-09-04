@@ -15,7 +15,6 @@ export const useGetAllCompany = () => {
     queryFn: () => getAllCompany(),
     // queryFn: () => getCandidate(userId),
   });
-  console.log(company);
 
   // const { data: candidate, isPending } = useQuery({
   //   queryKey: ["candidate", userId],

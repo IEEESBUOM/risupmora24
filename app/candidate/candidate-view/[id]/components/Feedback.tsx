@@ -18,7 +18,7 @@ export default function Feedback({ candidateId }: { candidateId: string }) {
         `/api/v1/candidate/getFeedback/${candidateId}`
       );
       const data = await response.json();
-      console.log(data);
+
       setFeedbackData(data);
     };
     feedbackdata();

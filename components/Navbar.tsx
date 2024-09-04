@@ -51,7 +51,6 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   // const [userData, setUserData] = useState<any>(null);
 
-  console.log(session);
   const router = useRouter();
 
   const [showProfile, setShowProfile] = useState<boolean>(false);
@@ -63,7 +62,6 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
     _id: session?.user.id as string,
   };
   const userData = useGetUserData({ userEmail: user.email });
-  console.log(userData);
 
   function clickLogoutBtn() {
     signOut();
@@ -80,8 +78,6 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
   useEffect(() => {
     setIsLoading(true);
     if (userData.user) {
-      console.log(userData);
-
       if (
         !userData.user.candidate == null &&
         userData.user.role === "candidate"
@@ -253,56 +249,72 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
 
                 {/* <SheetFooter> */}
                 <div className="h-[2px]  w-full bg-white"></div>
-                {userData?.user?.role == "candidate" &&
-                  
-                    <NavBarProfile
-                      id={userData.user?.id}
-                      name={userData.user?.name}
-                      email={userData.user?.email}
-                      image={userData.user?.image || ""}
-                      clickLogoutBtn={clickLogoutBtn}
-                      setShowProfile={setShowProfile}
-                      showProfile={showProfile}
-                      isInSheet={true}
-                    />
-                  }
-                  {status == "authenticated" && userData.user.role == "admin" && (
-              <div className=" grid mt-5   gap-5 justify-start ">
-                <div className="grid justify-start" onClick={()=>{signOut()}}>
-                <PrimaryButtonSmall text="< Logout" />
-              </div>
-                <Link href="/admin/add-company" passHref>
-                <PrimaryButtonSmall text="Admin >" />
-              </Link>
+                {userData?.user?.role == "candidate" && (
+                  <NavBarProfile
+                    id={userData.user?.id}
+                    name={userData.user?.name}
+                    email={userData.user?.email}
+                    image={userData.user?.image || ""}
+                    clickLogoutBtn={clickLogoutBtn}
+                    setShowProfile={setShowProfile}
+                    showProfile={showProfile}
+                    isInSheet={true}
+                  />
+                )}
+                {status == "authenticated" && userData.user.role == "admin" && (
+                  <div className=" grid mt-5   gap-5 justify-start ">
+                    <div
+                      className="grid justify-start"
+                      onClick={() => {
+                        signOut();
+                      }}
+                    >
+                      <PrimaryButtonSmall text="< Logout" />
+                    </div>
+                    <Link href="/admin/add-company" passHref>
+                      <PrimaryButtonSmall text="Admin >" />
+                    </Link>
+                  </div>
+                )}
+                {status == "authenticated" &&
+                  userData.user.role == "companyCoordinator" && (
+                    <div className=" grid mt-5  gap-5 justify-start ">
+                      <div
+                        className="grid justify-start"
+                        onClick={() => {
+                          signOut();
+                        }}
+                      >
+                        <PrimaryButtonSmall text="< Logout" />
+                      </div>
+                      <Link
+                        href={`/admin/company-coordinator/${userData.user.id}`}
+                        passHref
+                      >
+                        <PrimaryButtonSmall text="Dashboard >" />
+                      </Link>
+                    </div>
+                  )}
 
-              
-              </div>
-              
-              
-            )}
-            {status == "authenticated" && userData.user.role == "companyCoordinator" && (
-              <div className=" grid mt-5  gap-5 justify-start ">
-                <div className="grid justify-start" onClick={()=>{signOut()}}>
-              <PrimaryButtonSmall text="< Logout" />
-            </div>
-                <Link href={`/admin/company-coordinator/${userData.user.id}`} passHref>
-                <PrimaryButtonSmall text="Dashboard >" />
-              </Link>
-              
-              </div>
-            )}
-
-{status == "authenticated" && userData.user.role == "departmentCoordinator" && (
-              <div className=" grid mt-5   gap-5 justify-start   ">
-                <div className="grid justify-start" onClick={()=>{signOut()}}>
-              <PrimaryButtonSmall text="< Logout" />
-            </div>
-                <Link href={`/admin/department-coordinator/${userData.user.id}`} passHref>
-                <PrimaryButtonSmall text="Dashboard >" />
-              </Link>
-              
-              </div>
-            )}
+                {status == "authenticated" &&
+                  userData.user.role == "departmentCoordinator" && (
+                    <div className=" grid mt-5   gap-5 justify-start   ">
+                      <div
+                        className="grid justify-start"
+                        onClick={() => {
+                          signOut();
+                        }}
+                      >
+                        <PrimaryButtonSmall text="< Logout" />
+                      </div>
+                      <Link
+                        href={`/admin/department-coordinator/${userData.user.id}`}
+                        passHref
+                      >
+                        <PrimaryButtonSmall text="Dashboard >" />
+                      </Link>
+                    </div>
+                  )}
 
                 {/* </SheetFooter> */}
               </SheetContent>
@@ -408,8 +420,6 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
 
          } */}
 
-         
-
           <div className="  grid content-center min-w-36 justify-center">
             {status == "authenticated" && userData.user.role == "candidate" && (
               <div
@@ -424,8 +434,8 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
                     <Image
                       src={userData.user?.image}
                       alt="profile picture"
-                      width={50}
-                      height={50}
+                      width={40}
+                      height={40}
                       className="rounded-full w-auto h-auto"
                     />
                   )}
@@ -435,41 +445,58 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
 
             {status == "authenticated" && userData.user.role == "admin" && (
               <div className="sm:flex hidden ">
-                <div className="" onClick={()=>{signOut()}}>
-                <PrimaryButtonSmall text="< Logout" />
-              </div>
+                <div
+                  className=""
+                  onClick={() => {
+                    signOut();
+                  }}
+                >
+                  <PrimaryButtonSmall text="< Logout" />
+                </div>
                 <Link href="/admin/add-company" passHref>
-                <PrimaryButtonSmall text="Admin >" />
-              </Link>
+                  <PrimaryButtonSmall text="Admin >" />
+                </Link>
+              </div>
+            )}
+            {status == "authenticated" &&
+              userData.user.role == "companyCoordinator" && (
+                <div className="sm:flex hidden ">
+                  <div
+                    className=""
+                    onClick={() => {
+                      signOut();
+                    }}
+                  >
+                    <PrimaryButtonSmall text="< Logout" />
+                  </div>
+                  <Link
+                    href={`/admin/company-coordinator/${userData.user.id}`}
+                    passHref
+                  >
+                    <PrimaryButtonSmall text="Dashboard >" />
+                  </Link>
+                </div>
+              )}
 
-              
-              </div>
-              
-              
-            )}
-            {status == "authenticated" && userData.user.role == "companyCoordinator" && (
-              <div className="sm:flex hidden ">
-                <div className="" onClick={()=>{signOut()}}>
-              <PrimaryButtonSmall text="< Logout" />
-            </div>
-                <Link href={`/admin/company-coordinator/${userData.user.id}`} passHref>
-                <PrimaryButtonSmall text="Dashboard >" />
-              </Link>
-              
-              </div>
-            )}
-
-{status == "authenticated" && userData.user.role == "departmentCoordinator" && (
-              <div className=" sm:flex hidden ">
-                <div className="" onClick={()=>{signOut()}}>
-              <PrimaryButtonSmall text="< Logout" />
-            </div>
-                <Link href={`/admin/department-coordinator/${userData.user.id}`} passHref>
-                <PrimaryButtonSmall text="Dashboard >" />
-              </Link>
-              
-              </div>
-            )}
+            {status == "authenticated" &&
+              userData.user.role == "departmentCoordinator" && (
+                <div className=" sm:flex hidden ">
+                  <div
+                    className=""
+                    onClick={() => {
+                      signOut();
+                    }}
+                  >
+                    <PrimaryButtonSmall text="< Logout" />
+                  </div>
+                  <Link
+                    href={`/admin/department-coordinator/${userData.user.id}`}
+                    passHref
+                  >
+                    <PrimaryButtonSmall text="Dashboard >" />
+                  </Link>
+                </div>
+              )}
 
             {status == "unauthenticated" && (
               <Link href="/auth/signin" passHref className=" grid ">
@@ -512,21 +539,18 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
               : "xl:w-3/12 lg:w-3/12 md:w-1/3 2xl:w-1/5 sm:block hidden"
           } rounded-b-2xl  right-0 z-50   bg-custom-black  `}
         >
-         
-
-          {userData?.user?.role == "candidate" &&
-            
-              <NavBarProfile
-                id={userData.user?.id}
-                name={userData.user?.name}
-                email={userData.user?.email}
-                image={userData.user?.image || ""}
-                clickLogoutBtn={clickLogoutBtn}
-                setShowProfile={setShowProfile}
-                showProfile={showProfile}
-                isInSheet={false}
-              />
-            }
+          {userData?.user?.role == "candidate" && (
+            <NavBarProfile
+              id={userData.user?.id}
+              name={userData.user?.name}
+              email={userData.user?.email}
+              image={userData.user?.image || ""}
+              clickLogoutBtn={clickLogoutBtn}
+              setShowProfile={setShowProfile}
+              showProfile={showProfile}
+              isInSheet={false}
+            />
+          )}
         </div>
       </div>
     </>

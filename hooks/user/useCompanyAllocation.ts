@@ -8,14 +8,12 @@ export const useCompanyAllocation = ({ userId }: { userId: string }) => {
   // const session = useSession();
 
   // const userId = session.data?.user?.token?.sub as string;
-  console.log(userId);
 
   const { data: CompanyAllocation, isPending } = useQuery({
     queryKey: ["CompanyAllocation", userId],
-    queryFn: () => getCompanyAllocationData(userId ),
+    queryFn: () => getCompanyAllocationData(userId),
     // queryFn: () => getCandidate(userId),
   });
-  console.log(CompanyAllocation);
 
   // const { data: candidate, isPending } = useQuery({
   //   queryKey: ["candidate", userId],

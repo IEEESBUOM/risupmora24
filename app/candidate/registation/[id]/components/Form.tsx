@@ -17,7 +17,6 @@ type FormProps = {
 };
 
 export default function Form({ candidate }: FormProps) {
-  console.log(candidate);
   const {
     register,
     setValue,
@@ -49,15 +48,9 @@ export default function Form({ candidate }: FormProps) {
     }
   }, [candidate, setValue]);
 
-  console.log(cvUrl, imgUrl);
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
-    console.log(imgUrl);
-    console.log(cvUrl);
-
     setUploading(true);
 
-    console.log(userId);
     if (!imgUrl) {
       alert("Image is required. Please upload a photo.");
       setUploading(false);
@@ -77,7 +70,7 @@ export default function Form({ candidate }: FormProps) {
     };
 
     const uniIdExist = await checkUniId({ universityID: data.universityID });
-    console.log(uniIdExist);
+
     if (uniIdExist) {
       toast.error(
         "This universityId has been used before. Please enter new ID."
@@ -418,10 +411,6 @@ export default function Form({ candidate }: FormProps) {
         <div className="flex flex-wrap  mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
             <div className="">Upload a Formal Photo of Yourself</div>
-            <div className=" text-xs font-light">
-              *Uploaded images will be visible to companies conducting
-              interviews.
-            </div>
           </label>
           <div className="lg:w-1/3 w-4/5 md:w-3/5 lg:ml-10 md:ml-0">
             <CloudinaryUpload
@@ -429,6 +418,10 @@ export default function Form({ candidate }: FormProps) {
               setImgUrl={setImgUrl}
               type={"image"}
             />
+            <div className=" text-xs mt-2 font-light">
+              *Uploaded images will be visible to companies conducting
+              interviews.
+            </div>
             {errors.photo && (
               <div className="text-xs text-red-600">
                 *{errors.photo.message}

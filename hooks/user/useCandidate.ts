@@ -8,14 +8,12 @@ export const useCandidate = ({ userId }: { userId: string }) => {
   // const session = useSession();
 
   // const userId = session.data?.user?.token?.sub as string;
-  console.log(userId);
 
   const { data: candidate, isPending } = useQuery({
     queryKey: ["candidate", userId],
     queryFn: () => getCandidate({ userId }),
     // queryFn: () => getCandidate(userId),
   });
-  console.log(candidate);
 
   // const { data: candidate, isPending } = useQuery({
   //   queryKey: ["candidate", userId],

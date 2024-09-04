@@ -4,6 +4,10 @@ import prisma from "@/lib/prisma";
 export async function GET() {
   try {
     const data = await prisma.allocation.findMany();
+
+    if (!data) {
+      return NextResponse.json({ message: "No data found" }, { status: 404 });
+    }
     // console.log(data);
     return NextResponse.json({ data });
   } catch (e) {

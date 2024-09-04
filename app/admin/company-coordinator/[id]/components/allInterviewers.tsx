@@ -9,7 +9,7 @@ interface Props {
   company: Company[];
   allocation: Allocation[];
   compnanyCoordinatorCompanyName: string;
-  allPanelists:Panelist[];
+  allPanelists: Panelist[];
 }
 const AllIntervieweesData: React.FC<Props> = ({
   compnanyCoordinatorCompanyName,
@@ -17,7 +17,7 @@ const AllIntervieweesData: React.FC<Props> = ({
   feedbacks,
   company,
   allocation,
-  allPanelists
+  allPanelists,
 }) => {
   interface RowData {
     id: number;
@@ -25,9 +25,7 @@ const AllIntervieweesData: React.FC<Props> = ({
     pref_1: string;
     // Add other properties as needed
   }
-  console.log(company);
-  console.log(allocation);
-  console.log(feedbacks);
+
   const [rowData, setRowData] = useState<RowData[]>([]);
   const [editBtnId, setEditBtnId] = useState<string | undefined>();
   const [searchField, setSearchField] = useState<string | undefined>("");

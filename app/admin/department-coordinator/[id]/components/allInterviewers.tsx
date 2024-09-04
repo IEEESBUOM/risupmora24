@@ -26,10 +26,7 @@ const AllIntervieweesData: React.FC<Props> = ({
     pref_1: string;
     // Add other properties as needed
   }
-  console.log(departmentCordinatorId);
-  console.log(company);
-  console.log(allocation);
-  console.log(feedbacks);
+
   const [rowData, setRowData] = useState<RowData[]>([]);
   const [editBtnId, setEditBtnId] = useState<string | undefined>();
   const [searchField, setSearchField] = useState<string | undefined>("");
@@ -88,8 +85,6 @@ const AllIntervieweesData: React.FC<Props> = ({
     initialCandidates,
     departmentCordinatorId,
   ]);
-
-  console.log(filteredCandidates);
 
   const [AllCandidateData, setAllCandidateData] =
     useState<Candidate[]>(initialCandidates);

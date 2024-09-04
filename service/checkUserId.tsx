@@ -5,10 +5,9 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 export const checkUserId = async ({ userId }: { userId: string }) => {
-  console.log("checkUserId");
   // export const getCandidate = async (data: string) => {
   // const data = "clyld3pa40000wb6y5trem706";
-  console.log(userId);
+
   // if (!userId) return;
 
   try {
@@ -33,10 +32,9 @@ export const checkUniId = async ({
 }: {
   universityID: string;
 }) => {
-  console.log("checkUserId");
   // export const getCandidate = async (data: string) => {
   // const data = "clyld3pa40000wb6y5trem706";
-  console.log(universityID);
+
   // if (!userId) return;
 
   try {

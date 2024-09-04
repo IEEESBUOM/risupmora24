@@ -22,6 +22,11 @@ export async function GET(req: NextRequest) {
         user: true,
       },
     });
+
+    if (!data) {
+      return NextResponse.json({ message: "No data found" }, { status: 404 });
+    }
+
     return NextResponse.json({ data });
   } catch (e) {
     return NextResponse.json(

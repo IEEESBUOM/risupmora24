@@ -11,13 +11,13 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       );
     }
-    console.log(email, password);
+
     const data = await prisma.user.findUnique({
       where: {
         email,
       },
     });
-    console.log("data");
+
     if (!data || !data.password) {
       return NextResponse.json(
         { message: "Invalid user name or password" },

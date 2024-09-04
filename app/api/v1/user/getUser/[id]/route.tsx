@@ -5,7 +5,7 @@ import { comparePassword } from "@/lib/auth";
 export async function GET(req: NextRequest, { params }: any) {
   try {
     const userId = params.id;
-    console.log(userId);
+
     const candidate = await prisma.user.findFirst({
       where: {
         // user: {
@@ -21,7 +21,6 @@ export async function GET(req: NextRequest, { params }: any) {
         department_cordnator: true,
       },
     });
-    console.log(candidate);
 
     if (!candidate) {
       return NextResponse.json(

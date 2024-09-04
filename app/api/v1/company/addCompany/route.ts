@@ -20,10 +20,8 @@ export async function POST(req: NextRequest) {
         company_id: companyId,
       },
     });
-    console.log(userExists);
 
     if (userExists != null) {
-      console.log("This Id has been used before.");
       return NextResponse.json(
         { message: "This Id has been used before." },
         { status: 400 }

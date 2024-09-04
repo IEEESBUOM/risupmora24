@@ -3,13 +3,12 @@ import PageLoader from "@/components/PageLoader";
 import { useGetUserData } from "@/hooks/user/useGetUserData";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler, set } from "react-hook-form";
 import toast from "react-hot-toast";
 
 export default function Page() {
   const [errorMessage, setErrorMessage] = useState("");
- 
 
   const departmentList = [
     { dept_name: "Civil_Engineering", dept_id: 1 }, // B.Sc. Eng(Hons) in Civil Engineering
@@ -47,8 +46,8 @@ export default function Page() {
     { dept_name: "Obterics_and_Gynaecology", dept_id: 33 },
     { dept_name: "Pediatrics_and_Neonatology", dept_id: 34 },
     { dept_name: "Medicine_Education", dept_id: 35 },
-    { dept_name: "Medical_Techonology", dept_id: 36 }
-];
+    { dept_name: "Medical_Techonology", dept_id: 36 },
+  ];
   type Inputs = {
     coordinatorName: string;
     departmentName: string;
@@ -62,20 +61,15 @@ export default function Page() {
     formState: { errors },
   } = useForm<Inputs>();
 
-
   const { data: session, status } = useSession();
-  console.log(session);
+
   const userEmail = session?.user?.email;
   const userData = useGetUserData({ userEmail: userEmail || "" });
   const role = userData.user?.role;
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log("data");
-    console.log(data);
-
     toast.promise(
       new Promise<void>((resolve, reject) => {
-
         fetch("/api/v1/admin/addDepCoordinator", {
           method: "POST",
           headers: {
@@ -87,46 +81,41 @@ export default function Page() {
             if (res.ok) {
               resolve();
               setErrorMessage("");
-              
             } else {
               res.json().then((data) => {
                 setErrorMessage(data.message);
                 reject();
               });
-
             }
           })
           .catch((error) => {
             reject(error);
           });
-
       }),
       {
         loading: "Pending request...",
         success: "Coordinator added successfully",
-      error: "Failed to add coordinator",
+        error: "Failed to add coordinator",
       }
-    )
+    );
   };
 
-  if(userData.user?.role !== "admin"){
+  if (userData.user?.role !== "admin") {
     return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-200">
-      <div className="max-w-md w-full text-center bg-white p-6 rounded-lg shadow-md">
-        <h1 className="text-3xl font-bold text-red-600">Access Denied</h1>
-        <p className="mt-4 text-gray-700">
-          You do not have permission to view this page.
-        </p>
-        
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-200">
+        <div className="max-w-md w-full text-center bg-white p-6 rounded-lg shadow-md">
+          <h1 className="text-3xl font-bold text-red-600">Access Denied</h1>
+          <p className="mt-4 text-gray-700">
+            You do not have permission to view this page.
+          </p>
+        </div>
       </div>
-    </div>
-  )
+    );
   }
 
-  if(status === "loading" || userData.isPending){
-    return <PageLoader />
+  if (status === "loading" || userData.isPending) {
+    return <PageLoader />;
   }
-
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative px-4 sm:px-0">
@@ -154,7 +143,10 @@ export default function Page() {
             </label>
             <input
               {...register("coordinatorName", {
-                required: {value: true, message: "Coordinator Name is required"},
+                required: {
+                  value: true,
+                  message: "Coordinator Name is required",
+                },
                 minLength: {
                   value: 3,
                   message: "coordinater name must be atleast 3 characters ",
@@ -240,7 +232,8 @@ export default function Page() {
               {errors.coordinatorName?.message ||
                 errors.departmentName?.message ||
                 errors.email?.message ||
-                errors.password?.message || errorMessage}
+                errors.password?.message ||
+                errorMessage}
             </p>
           </div>
 

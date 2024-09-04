@@ -14,8 +14,6 @@ const Page = () => {
   const { company, isPending } = useGetAllCompany();
   const { addNewCompany, isUpdating } = useAddCompany();
 
-  console.log(company, isPending);
-
   // if (isPending) {
   //   return;
   // }
@@ -42,9 +40,7 @@ const Page = () => {
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    // console.log("newCompany", newCompany);
-    console.log("companyIcone", companyIcone);
-    console.log("companyId", companyId);
+
     addNewCompany(
       { companyName, companyId, companyIcone },
       {
