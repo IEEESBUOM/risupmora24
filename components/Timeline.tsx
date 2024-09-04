@@ -39,7 +39,7 @@ const Timeline = () => {
   return (
     <div className="sm:m-8 partnersSection relative overflow-hidden">
       <div
-        className="absolute top-2 left-2 sm:top-4 sm:left-4 topicContainer opacity-0"
+        className="absolute top-10 left-2 sm:top-4  sm:left-4 topicContainer opacity-0"
         ref={topicRef}
       >
         <Topic text="Timeline" />
@@ -47,7 +47,7 @@ const Timeline = () => {
 
       <br />
 
-      <div className="flex flex-row justify-center items-center pt-[50px]">
+      <div className="flex flex-row sm:mt-0 mt-20 justify-center items-center pt-[50px]">
         <div className="flex flex-col">
           <TimelineCard
             topic="Session 01 BY MASS"
@@ -63,7 +63,6 @@ const Timeline = () => {
             topic="Session 03 BY IFS"
             subtopic="How to face in Interview."
             description="- 6.00 PM - September 10th, 2024 (Via Zoom)-"
-            
           />
         </div>
       </div>

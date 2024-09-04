@@ -234,7 +234,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
                   <div
                     onClick={() => handleScroll("contact")}
                     className={clsx(navigationMenuTriggerStyle(), {
-                      "after:w-full after:scale-x-100 font-semibold":
+                      "after:w-full after:scale-x-100 font-semibold ":
                         pathname === "/",
                     })}
                   >

@@ -61,21 +61,21 @@ function Partners() {
       </div>
       <div className="container-fluid p-0 mt-8 flex flex-col items-center justify-center">
         <div className="row flex flex-wrap justify-center items-center mt-5">
-          <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
+          {/* <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
             <div className="text-center text-lg w-64">Platinum Partner</div>
             <div className="flex justify-center items-center w-36 h-36">
-              {/* <Image
+              <Image
                 src={unilever}
                 alt="Unilever"
                 width={100}
                 height={100}
                 objectFit="contain"
-              /> */}
+              />
               <div className="text-center text-sm text-gray-300">
-          Coming Soon
-        </div>
+                Coming Soon
+              </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0 h-44">
             <div className="text-center text-lg w-64">Gold Partner</div>
@@ -91,23 +91,23 @@ function Partners() {
           </div>
 
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0 h-44">
-            <div className="text-center text-lg w-64">Innovation Partner</div>
+            <div className="text-center text-lg w-64">Silver Partner</div>
             <div className="flex justify-center items-center w-36 h-36">
-              {/* <Image
-                src={IFS}
-                alt="IFS"
+              <Image
+                src={gtn}
+                alt="GTN"
                 width={150}
                 height={150}
                 objectFit="contain"
-              /> */}
-              <div className="text-center text-sm text-gray-300">
-          Coming Soon
-        </div>
+              />
+              {/* <div className="text-center text-sm text-gray-300">
+                Coming Soon
+              </div> */}
             </div>
           </div>
         </div>
 
-        <div className="row flex flex-wrap justify-center items-center mt-5">
+        {/* <div className="row flex flex-wrap justify-center items-center mt-5">
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
             <div className="text-center text-lg w-64">Silver Partner</div>
             <div className="flex justify-center items-center h-24">
@@ -123,34 +123,34 @@ function Partners() {
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
             <div className="text-center text-lg w-64">Silver Partner</div>
             <div className="flex justify-center items-center h-24">
-              {/* <Image
+              <Image
                 src={pickMe}
                 alt="PickMe"
                 width={150}
                 height={150}
                 objectFit="contain"
-              /> */}
+              />
               <div className="text-center text-sm text-gray-300">
-          Coming Soon
-        </div>
+                Coming Soon
+              </div>
             </div>
           </div>
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
             <div className="text-center text-lg w-64">Bronze Partner</div>
             <div className="flex justify-center items-center h-24">
-              {/* <Image
+              <Image
                 src={zero_beta}
                 alt="Zero Beta"
                 width={150}
                 height={150}
                 objectFit="contain"
-              /> */}
+              />
               <div className="text-center text-sm text-gray-300">
-          Coming Soon
-        </div>
+                Coming Soon
+              </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

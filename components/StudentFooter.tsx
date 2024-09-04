@@ -1,5 +1,5 @@
 import Image from "next/image";
-
+import mas from "../assets/img/mas.png";
 const ResponsiveComponent = () => {
   return (
     <div className="container-fluid w-full mt-7 flex flex-col items-center justify-center">
@@ -36,28 +36,29 @@ const ResponsiveComponent = () => {
         {/* second row */}
         <div className="flex flex-col md:flex-row justify-center items-center mt-5 gap-8">
           <div className="flex flex-col items-center justify-center">
-            <div className="text-center text-lg w-64">Platinum Partner</div>
-            <div className="w-36 h-36 flex justify-center items-center">
-              <Image
-                src="/companyImg/Unilever1.png"
-                alt="logo"
-                width={120}
-                height={20}
-              />
-            </div>
-          </div>
-          <div className="flex flex-col items-center justify-center">
             <div className="text-center text-lg w-64">Gold Partner</div>
             <div className="w-36 h-36 flex justify-center items-center">
               <Image
-                src="/companyImg/wso2.png"
-                alt="logo"
-                width={150}
-                height={20}
+                src={mas}
+                alt="mas"
+                width={200}
+                height={200}
+                objectFit="contain"
               />
             </div>
           </div>
           <div className="flex flex-col items-center justify-center">
+            <div className="text-center text-lg w-64">Silver Partner</div>
+            <div className="w-36 h-36 flex justify-center items-center">
+              <Image
+                src="/companyImg/gtnlogo.png"
+                alt="logo"
+                width={130}
+                height={20}
+              />
+            </div>
+          </div>
+          {/* <div className="flex flex-col items-center justify-center">
             <div className="text-center text-lg w-64">Innovation Partner</div>
             <div className="w-36 h-36 flex justify-center items-center">
               <Image
@@ -67,11 +68,11 @@ const ResponsiveComponent = () => {
                 height={20}
               />
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* third row */}
-        <div className="flex flex-col md:flex-row justify-center items-center mt-5 gap-8">
+        {/* <div className="flex flex-col md:flex-row justify-center items-center mt-5 gap-8">
           <div className="flex flex-col items-center justify-center">
             <div className="text-center text-lg w-64">Silver Partner</div>
             <div className="h-24 flex justify-center items-center">
@@ -105,7 +106,7 @@ const ResponsiveComponent = () => {
               />
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
