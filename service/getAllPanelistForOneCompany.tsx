@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 export const getAllPanelistForOneCompany = async (company_id: string) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/v1/admin/getPanelistForOneCompany`,
+      `${process.env.APP_URL}/api/v1/admin/getPanelistForOneCompany`,
       {
         params: { company_id },
       }

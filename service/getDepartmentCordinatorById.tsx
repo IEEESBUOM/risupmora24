@@ -6,7 +6,7 @@ export const getDepartmentCordinatorByID = async (cordinator_id: any) => {
   console.log(cordinator_id);
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/v1/admin/getDepartmentCordinatorById`,
+      `${process.env.APP_URL}/api/v1/admin/getDepartmentCordinatorById`,
       {
         params: { cordinator_id },
       }
