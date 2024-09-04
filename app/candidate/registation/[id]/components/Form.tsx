@@ -332,44 +332,44 @@ export default function Form({ candidate }: FormProps) {
               })}
             >
               <option value="">None</option>
-              <option value="Bio Medical Engineering">
+              <option value="Electronic_and_Telecommunication_Engineering">
                 Bio Medical Engineering
               </option>
-              <option value="Electronic and Telecommunication Engineering">
+              <option value="Electronic_and_Telecommunication_Engineering">
                 Electronic and Telecommunication Engineering
               </option>
-              <option value="Electrical Engineering">
+              <option value="Electrical_Engineering">
                 Electrical Engineering
               </option>
-              <option value="Mechanical Engineering">
+              <option value="Mechanical_Engineering">
                 Mechanical Engineering
               </option>
-              <option value="Civil Engineering">Civil Engineering</option>
-              <option value="Material Science Engineering">
+              <option value="Civil_Engineering">Civil Engineering</option>
+              <option value="Material_Science_and_Engineering">
                 Material Science Engineering
               </option>
-              <option value="Chemical and Process Engineering">
+              <option value="Chemical_and_Process_Engineering">
                 Chemical and Process Engineering
               </option>
-              <option value="Transport Management and Logistics Engineering">
+              <option value="Trnsport_Management_and_Logistics_Engineering">
                 Transport Management and Logistics Engineering
               </option>
-              <option value="Textile and Apparel Engineering">
+              <option value="Textile_and_Apparel_Engineering">
                 Textile and Apparel Engineering
               </option>
-              <option value="Earth Resource Engineering">
+              <option value="Earth_Resources_Engineering">
                 Earth Resource Engineering
               </option>
-              <option value="Computer Science & Engineering">
+              <option value="Computer_Science_and_Engineering">
                 Computer Science & Engineering
               </option>
-              <option value="Information Technology">
+              <option value="Department_of_Information_Technology">
                 Information Technology
               </option>
-              <option value="Interdisciplinary Study">
+              <option value="Department_of_Interdisciplinary_Studies">
                 Interdisciplinary Study
               </option>
-              <option value="Computational Mathematics">
+              <option value="Department_of_Computational_Mathematics">
                 Computational Mathematics
               </option>
             </select>
