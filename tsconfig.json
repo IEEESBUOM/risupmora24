@@ -26,7 +26,8 @@
     "types/**/*.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "app/api/v1/admin/getDepartmentCordinatorById"
   ],
   "exclude": ["node_modules"]
 }

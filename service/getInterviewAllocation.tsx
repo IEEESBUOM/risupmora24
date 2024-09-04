@@ -9,7 +9,7 @@ export const getAllocation = async () => {
     if (response.data) {
       return response.data;
     }
-    toast.error("Failed to get Company");
+    toast.error("Failed to get Allocation");
     return null;
   } catch (error) {
     console.log(error);
