@@ -105,6 +105,21 @@ function Partners() {
               </div> */}
             </div>
           </div>
+
+          <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0 h-44">
+            <div className="text-center text-lg w-64">
+              Main Industrial Partner
+            </div>
+            <div className="flex justify-center items-center size-56">
+              <Image
+                src={IFS}
+                alt="mas"
+                width={200}
+                height={200}
+                objectFit="contain"
+              />
+            </div>
+          </div>
         </div>
 
         {/* <div className="row flex flex-wrap justify-center items-center mt-5">

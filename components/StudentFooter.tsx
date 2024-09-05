@@ -1,5 +1,6 @@
 import Image from "next/image";
 import mas from "../assets/img/mas.png";
+import ifs from "../assets/img/ifs.png";
 const ResponsiveComponent = () => {
   return (
     <div className="container-fluid w-full mt-7 flex flex-col items-center justify-center">
@@ -58,17 +59,14 @@ const ResponsiveComponent = () => {
               />
             </div>
           </div>
-          {/* <div className="flex flex-col items-center justify-center">
-            <div className="text-center text-lg w-64">Innovation Partner</div>
-            <div className="w-36 h-36 flex justify-center items-center">
-              <Image
-                src="/companyImg/ifslogo.png"
-                alt="logo"
-                width={150}
-                height={20}
-              />
+          <div className="flex flex-col items-center justify-center">
+            <div className="text-center text-lg w-64">
+              Main Industrial Partner
             </div>
-          </div> */}
+            <div className="w-36 h-36 flex justify-center items-center">
+              <Image src={ifs} alt="logo" width={150} height={20} />
+            </div>
+          </div>
         </div>
 
         {/* third row */}

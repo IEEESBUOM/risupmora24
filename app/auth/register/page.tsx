@@ -101,7 +101,7 @@ export default function Page() {
           })}
           type="email"
           name="email"
-          placeholder="Enter your email(ashan.21@uom.lk)"
+          placeholder="Enter your uom email"
           required
           id="email"
           className="w-full py-4 sm:py-3 pl-5 border-transparent rounded-full border-gray-300  border-2 placeholder:text-stone-500"
