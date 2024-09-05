@@ -7,14 +7,14 @@ export async function POST(req: NextRequest) {
     const data = await req.json();
     const { cvUrl, userId } = data;
 
-    console.log(cvUrl, userId);
+    // console.log(cvUrl, userId);
 
     const updatedCandidate = await prisma.candidate.update({
       where: { candidate_id: userId },
       data: { cvUrl },
     });
 
-    console.log(updatedCandidate);
+    // console.log(updatedCandidate);
 
     if (!updatedCandidate) {
       return NextResponse.json(

@@ -12,7 +12,7 @@ export async function GET() {
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === "P2021") {
-        console.error("Table not found:", e.meta?.modelName);
+        // console.error("Table not found:", e.meta?.modelName);
         return NextResponse.json(
           {
             message: `The table ${e.meta?.modelName} does not exist in the database.`,
@@ -22,7 +22,7 @@ export async function GET() {
       }
       // Add more specific error cases here if needed
     }
-    console.error("Unexpected error:", e);
+    // console.error("Unexpected error:", e);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

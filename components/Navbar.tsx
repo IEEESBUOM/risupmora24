@@ -158,7 +158,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
     return <PageLoader />;
   }
 
-  console.log("userData", userData.user);
+  // console.log("userData", userData.user);
 
   return (
     <>
