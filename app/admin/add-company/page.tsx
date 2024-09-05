@@ -2,17 +2,36 @@
 import CloudinaryUpload from "@/components/cloudinaryWidget";
 import { useAddCompany } from "@/hooks/company/useAddCompany";
 import { useGetAllCompany } from "@/hooks/company/useGetAllCompany";
+import { useGetUserData } from "@/hooks/user/useGetUserData";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 const Page = () => {
+  const { data: session, status } = useSession();
   const [companyIcone, setCompanyIcone] = useState<string>("");
   const [companyName, setCompanyName] = useState<string>("");
   const [companyId, setCompanyId] = useState<string>("");
 
   const { company, isPending } = useGetAllCompany();
   const { addNewCompany, isUpdating } = useAddCompany();
+
+  const userEmail = session?.user?.email;
+  const userData = useGetUserData({ userEmail: userEmail || "" });
+
+  if (userData.user?.role !== "admin") {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-200">
+        <div className="max-w-md w-full text-center bg-white p-6 rounded-lg shadow-md">
+          <h1 className="text-3xl font-bold text-red-600">Access Denied</h1>
+          <p className="mt-4 text-gray-700">
+            You do not have permission to view this page.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // if (isPending) {
   //   return;
