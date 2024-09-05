@@ -79,7 +79,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
     setIsLoading(true);
     if (userData.user) {
       if (
-        !userData.user.candidate == null &&
+        userData.user.candidate == null &&
         userData.user.role === "candidate"
       ) {
         router.push(`/candidate/registation/${userData.user.id}`);
