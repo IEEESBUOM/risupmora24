@@ -50,13 +50,13 @@ const Timeline = () => {
       <div className="flex flex-row sm:mt-0 mt-20 justify-center items-center pt-[50px]">
         <div className="flex flex-col">
           <TimelineCard
-            topic="Session 01 BY MASS"
-            subtopic="linked in profile creation and maintenance. "
+            topic="Session 01 BY MAS"
+            subtopic="LinkedIn profile creation and maintenance. "
             description="- 3.00 - PM August 27th, 2024 (Via Zoom) -"
           />
           <TimelineCard
             topic="Session 02 BY IFS"
-            subtopic="Excelling in Cv writing."
+            subtopic="Excelling in CV writing."
             description="- 6.00 PM - September 3rd, 2024 (Via Zoom) -"
           />
           <TimelineCard

@@ -38,12 +38,16 @@ const StudentView = () => {
     isPending: isPendingCompanyAllocation,
   } = useCompanyAllocation({ userId });
 
+  console.log(allocationDAta);
+
   const [cvUrl, setCvUrl] = useState<string>("");
 
   const formatTime = (dateTimeString: string) => {
+    console.log(dateTimeString);
     const parts = dateTimeString.split("T");
     const timePart = parts[1];
-    const [hour, minute] = timePart.split(":").map(Number);
+    console.log(timePart);
+    const [hour, minute] = timePart?.split(":").map(Number);
 
     const meridiem = hour >= 12 ? "PM" : "AM";
     const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
