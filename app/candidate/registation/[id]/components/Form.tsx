@@ -102,7 +102,7 @@ export default function Form({ candidate }: FormProps) {
         {/* Full Name */}
         <div className="flex  items-center flex-wrap mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
-            Full Name
+            Full Name <span className="text-red-600">*</span>
           </label>
 
           <div className="w-full md:w-8/12 flex flex-col lg:flex-row gap-2 lg:gap-6 lg:ml-10 md:ml-0  ">
@@ -141,7 +141,7 @@ export default function Form({ candidate }: FormProps) {
         {/* Name with initials */}
         <div className="flex  flex-wrap items-center mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
-            Name with initials
+            Name with initials <span className="text-red-600">*</span>
           </label>
           <div className="flex flex-col w-4/5 lg:w-1/3 md:w-3/5  lg:ml-10 md:ml-0">
             <input
@@ -167,7 +167,7 @@ export default function Form({ candidate }: FormProps) {
         {/* University ID */}
         <div className="flex  flex-wrap items-center mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
-            University ID
+            University ID <span className="text-red-600">*</span>
           </label>
           <div className="flex flex-col w-4/5 lg:w-1/3 md:w-3/5  lg:ml-10 md:ml-0">
             <input
@@ -201,7 +201,7 @@ export default function Form({ candidate }: FormProps) {
         {/* Contact No */}
         <div className="flex  flex-wrap items-center mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
-            Contact No (WhatsApp)
+            Contact No (WhatsApp) <span className="text-red-600">*</span>
           </label>
           <div className="flex w-4/5 flex-col md:w-3/5 lg:w-1/3  lg:ml-10 md:ml-0">
             <input
@@ -263,7 +263,7 @@ export default function Form({ candidate }: FormProps) {
         {/* Degree */}
         <div className="flex flex-wrap items-center mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
-            Degree
+            Degree <span className="text-red-600">*</span>
           </label>
 
           <div className="flex w-4/5 flex-col lg:w-1/3 md:w-3/5 lg:ml-10 md:ml-0">
@@ -322,7 +322,7 @@ export default function Form({ candidate }: FormProps) {
         {/* Department */}
         <div className="flex flex-wrap items-center mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
-            Department
+            Department <span className="text-red-600">*</span>
           </label>
           <div className="flex flex-col  w-4/5 lg:w-1/3 md:w-3/5 lg:ml-10 md:ml-0">
             <select
@@ -399,6 +399,7 @@ export default function Form({ candidate }: FormProps) {
               })}
             /> */}
             <CloudinaryUpload croping={true} setImgUrl={setCvUrl} type={"cv"} />
+            {/* <div className=" text-xs mt-2 font-light">*Optional</div> */}
             {errors.cv && (
               <div className="text-xs text-red-600">*{errors.cv.message}</div>
             )}
@@ -408,7 +409,10 @@ export default function Form({ candidate }: FormProps) {
         {/* Photo Upload */}
         <div className="flex flex-wrap  mb-6">
           <label className="block font-poppins text-black text-md font-bold mb-2 w-full lg:w-1/4">
-            <div className="">Upload a Formal Photo of Yourself</div>
+            <div className="">
+              Upload a Formal Photo of Yourself{" "}
+              <span className="text-red-600">*</span>
+            </div>
           </label>
           <div className="lg:w-1/3 w-4/5 md:w-3/5 lg:ml-10 md:ml-0">
             <CloudinaryUpload
