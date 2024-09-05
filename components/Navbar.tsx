@@ -158,6 +158,8 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
     return <PageLoader />;
   }
 
+  console.log("userData", userData.user);
+
   return (
     <>
       <div className=" fixed  grid w-full bg-white   sm:overflow-hidden  sm:h-24    max-md:max-w-full z-20   ">
@@ -261,23 +263,24 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
                     isInSheet={true}
                   />
                 )}
-                {status == "authenticated" && userData.user.role == "admin" && (
-                  <div className=" grid mt-5   gap-5 justify-start ">
-                    <div
-                      className="grid justify-start"
-                      onClick={() => {
-                        signOut();
-                      }}
-                    >
-                      <PrimaryButtonSmall text="< Logout" />
-                    </div>
-                    <Link href="/admin/add-company" passHref>
-                      <PrimaryButtonSmall text="Admin >" />
-                    </Link>
-                  </div>
-                )}
                 {status == "authenticated" &&
-                  userData.user.role == "companyCoordinator" && (
+                  userData?.user?.role == "admin" && (
+                    <div className=" grid mt-5   gap-5 justify-start ">
+                      <div
+                        className="grid justify-start"
+                        onClick={() => {
+                          signOut();
+                        }}
+                      >
+                        <PrimaryButtonSmall text="< Logout" />
+                      </div>
+                      <Link href="/admin/add-company" passHref>
+                        <PrimaryButtonSmall text="Admin >" />
+                      </Link>
+                    </div>
+                  )}
+                {status == "authenticated" &&
+                  userData?.user?.role == "companyCoordinator" && (
                     <div className=" grid mt-5  gap-5 justify-start ">
                       <div
                         className="grid justify-start"
@@ -297,7 +300,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
                   )}
 
                 {status == "authenticated" &&
-                  userData.user.role == "departmentCoordinator" && (
+                  userData?.user?.role == "departmentCoordinator" && (
                     <div className=" grid mt-5   gap-5 justify-start   ">
                       <div
                         className="grid justify-start"
@@ -421,29 +424,30 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
          } */}
 
           <div className="  grid content-center min-w-36 justify-center">
-            {status == "authenticated" && userData.user.role == "candidate" && (
-              <div
-                onClick={handleUserProfile}
-                className=" flex gap-2 cursor-pointer"
-              >
-                <div className="grid content-center font-quicksand font-semibold text-lg">
-                  {user.firstName}
+            {status == "authenticated" &&
+              userData?.user?.role == "candidate" && (
+                <div
+                  onClick={handleUserProfile}
+                  className=" flex gap-2 cursor-pointer"
+                >
+                  <div className="grid content-center font-quicksand font-semibold text-lg">
+                    {user.firstName}
+                  </div>
+                  <div className=" py-4 sm:py-2 grid content-center">
+                    {userData.user?.image && (
+                      <Image
+                        src={userData.user?.image}
+                        alt="profile picture"
+                        width={40}
+                        height={40}
+                        className="rounded-full w-auto h-auto"
+                      />
+                    )}
+                  </div>
                 </div>
-                <div className=" py-4 sm:py-2 grid content-center">
-                  {userData.user?.image && (
-                    <Image
-                      src={userData.user?.image}
-                      alt="profile picture"
-                      width={40}
-                      height={40}
-                      className="rounded-full w-auto h-auto"
-                    />
-                  )}
-                </div>
-              </div>
-            )}
+              )}
 
-            {status == "authenticated" && userData.user.role == "admin" && (
+            {status == "authenticated" && userData?.user?.role == "admin" && (
               <div className="sm:flex hidden ">
                 <div
                   className=""
@@ -459,7 +463,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
               </div>
             )}
             {status == "authenticated" &&
-              userData.user.role == "companyCoordinator" && (
+              userData?.user?.role == "companyCoordinator" && (
                 <div className="sm:flex hidden ">
                   <div
                     className=""
@@ -479,7 +483,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
               )}
 
             {status == "authenticated" &&
-              userData.user.role == "departmentCoordinator" && (
+              userData?.user?.role == "departmentCoordinator" && (
                 <div className=" sm:flex hidden ">
                   <div
                     className=""
