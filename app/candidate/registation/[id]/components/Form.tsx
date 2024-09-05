@@ -332,9 +332,7 @@ export default function Form({ candidate }: FormProps) {
               })}
             >
               <option value="">None</option>
-              <option value="Electronic_and_Telecommunication_Engineering">
-                Bio Medical Engineering
-              </option>
+
               <option value="Electronic_and_Telecommunication_Engineering">
                 Electronic and Telecommunication Engineering
               </option>
@@ -351,7 +349,7 @@ export default function Form({ candidate }: FormProps) {
               <option value="Chemical_and_Process_Engineering">
                 Chemical and Process Engineering
               </option>
-              <option value="Trnsport_Management_and_Logistics_Engineering">
+              <option value="Transport_Management_and_Logistics_Engineering">
                 Transport Management and Logistics Engineering
               </option>
               <option value="Textile_and_Apparel_Engineering">
@@ -363,13 +361,13 @@ export default function Form({ candidate }: FormProps) {
               <option value="Computer_Science_and_Engineering">
                 Computer Science & Engineering
               </option>
-              <option value="Department_of_Information_Technology">
+              <option value="Information_Technology">
                 Information Technology
               </option>
-              <option value="Department_of_Interdisciplinary_Studies">
+              <option value="Interdisciplinary_Studies">
                 Interdisciplinary Study
               </option>
-              <option value="Department_of_Computational_Mathematics">
+              <option value="Computational_Mathematics">
                 Computational Mathematics
               </option>
             </select>
