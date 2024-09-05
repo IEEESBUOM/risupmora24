@@ -3,12 +3,12 @@ import axios from "axios";
 
 export const getCandidateDetails = async (panelistId: string) => {
   try {
-    console.log("panelistId", panelistId);
+    // console.log("panelistId", panelistId);
     const response = await axios.post(
       `${process.env.APP_URL}/api/v1/candidate/getCandidateDetails?panelistId=${panelistId}`
     );
 
-    console.log("response", response.data);
+    // console.log("response", response.data);
 
     if (response.data) {
       return response.data;

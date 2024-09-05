@@ -127,7 +127,7 @@ const ProgressBarWrapper: React.FC = () => {
 
   const handleProgressChange = (newValue: number) => {
     setProgress(newValue);
-    console.log(`Progress changed to: ${newValue}%`);
+    // console.log(`Progress changed to: ${newValue}%`);
   };
 
   return (

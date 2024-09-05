@@ -21,7 +21,7 @@ export const useUploadCV = () => {
   const params = useParams();
   const userId = params.id as string;
 
-  console.log("userId", userId);
+  // console.log("userId", userId);
 
   const { mutate: uploadCV, isPending: isUploading } = useMutation({
     mutationFn: ({ cvUrl }: UploadCVHookType) =>
