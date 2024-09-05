@@ -11,42 +11,19 @@ export default function Page() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const departmentList = [
-    { dept_name: "Civil_Engineering", dept_id: 1 }, // B.Sc. Eng(Hons) in Civil Engineering
-    { dept_name: "Mechanical_Engineering", dept_id: 2 }, // B.Sc. Eng(Hons) in Mechanical Engineering
-    { dept_name: "Computer_Science_and_Engineering", dept_id: 3 }, // B.Sc. Eng(Hons) in Computer Science & Engineering
-    { dept_name: "Electrical_Engineering", dept_id: 4 }, // B.Sc. Eng(Hons) in Electrical Engineering
-    { dept_name: "Electronic_and_Telecommunication_Engineering", dept_id: 5 }, // B.Sc. Eng(Hons) in Electronic & Telecommunication Engineering
-    { dept_name: "Material_Science_and_Engineering", dept_id: 6 }, // B.Sc. Eng(Hons) in Material Science & Engineering
-    { dept_name: "Chemical_and_Process_Engineering", dept_id: 7 }, // B.Sc. Eng(Hons) in Chemical & Process Engineering
+    { dept_name: "Electronic_and_Telecommunication_Engineering", dept_id: 1 }, // B.Sc. Eng(Hons) in Civil Engineering
+    { dept_name: "Electrical_Engineering", dept_id: 2 }, // B.Sc. Eng(Hons) in Mechanical Engineering
+    { dept_name: "Mechanical_Engineering", dept_id: 3 }, // B.Sc. Eng(Hons) in Computer Science & Engineering
+    { dept_name: "Civil_Engineering", dept_id: 4 }, // B.Sc. Eng(Hons) in Electrical Engineering
+    { dept_name: "Material_Science_and_Engineering", dept_id: 5 }, // B.Sc. Eng(Hons) in Electronic & Telecommunication Engineering
+    { dept_name: "Chemical_and_Process_Engineering", dept_id: 6 }, // B.Sc. Eng(Hons) in Material Science & Engineering
+    { dept_name: "Transport_Management_and_Logistics_Engineering", dept_id: 7 }, // B.Sc. Eng(Hons) in Chemical & Process Engineering
     { dept_name: "Textile_and_Apparel_Engineering", dept_id: 8 }, // B.Sc. Eng(Hons) in Textile & Apparel Engineering
     { dept_name: "Earth_Resources_Engineering", dept_id: 9 }, // B.Sc. Eng(Hons) in Earth Resource Engineering
-    { dept_name: "Medicine_and_Mental_Health", dept_id: 10 }, // Assuming closest match for Bio Medical Engineering
-    { dept_name: "Trnsport_Management_and_Logistics_Engineering", dept_id: 11 }, // B.Sc. Eng(Hons) in Transport Management & Logistics Engineering
-    { dept_name: "Department_of_Information_Trchnology", dept_id: 12 }, // BSc (Hons) in IT
-    { dept_name: "Management_of_Technology", dept_id: 13 }, // BSc (Hons) in IT & Management
-    { dept_name: "Decision_Science", dept_id: 14 }, // BSc (Hons) in AI
-    { dept_name: "Department_of_Architecture", dept_id: 15 },
-    { dept_name: "Department_of_Building_Economics", dept_id: 16 },
-    { dept_name: "Department_of_Town_and_Country_Planning", dept_id: 17 },
-    { dept_name: "Department_of_Integrated_Design", dept_id: 18 },
-    { dept_name: "Department_of_Facilities_Management", dept_id: 19 },
-    { dept_name: "Department_of_Languages", dept_id: 20 },
-    { dept_name: "Mathematics", dept_id: 21 },
-    { dept_name: "Industrial_Management", dept_id: 22 },
-    { dept_name: "Department_of_Interdisciplinary_Studies", dept_id: 23 },
-    { dept_name: "Department_of_Computational_Mathematics", dept_id: 24 },
-    { dept_name: "Anotomy", dept_id: 25 },
-    { dept_name: "Biochemistry_and_Clinical_Chemistry", dept_id: 26 },
-    { dept_name: "Physiology", dept_id: 27 },
-    { dept_name: "Pharmacology", dept_id: 28 },
-    { dept_name: "Microbiology_and_Parasitology", dept_id: 29 },
-    { dept_name: "Community_Medicine_and_Family_Medicine", dept_id: 30 },
-    { dept_name: "Pathology_and_Foransic_Medicine", dept_id: 31 },
-    { dept_name: "Surgery_and_Anaesthesia", dept_id: 32 },
-    { dept_name: "Obterics_and_Gynaecology", dept_id: 33 },
-    { dept_name: "Pediatrics_and_Neonatology", dept_id: 34 },
-    { dept_name: "Medicine_Education", dept_id: 35 },
-    { dept_name: "Medical_Techonology", dept_id: 36 },
+    { dept_name: "Computer_Science_and_Engineering", dept_id: 10 }, // Assuming closest match for Bio Medical Engineering
+    { dept_name: "Information_Technology", dept_id: 11 }, // B.Sc. Eng(Hons) in Transport Management & Logistics Engineering
+    { dept_name: "Interdisciplinary_Studies", dept_id: 12 }, // BSc (Hons) in IT
+    { dept_name: "Computational_Mathematics", dept_id: 13 }, // BSc (Hons) in IT & Management
   ];
   type Inputs = {
     coordinatorName: string;
