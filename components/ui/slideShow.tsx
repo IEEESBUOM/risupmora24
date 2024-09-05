@@ -2,8 +2,9 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import unileverBanner from "../../assets/img/mas.png";
 import ifsBanner from "../../assets/img/gtn.png";
+import ifs from "../../assets/img/ifs.png";
 
-const slideimgs = [unileverBanner, ifsBanner];
+const slideimgs = [unileverBanner, ifsBanner, ifs];
 const delay = 2500;
 
 export default function Slideshow() {

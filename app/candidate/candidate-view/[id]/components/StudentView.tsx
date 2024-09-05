@@ -109,7 +109,7 @@ const StudentView = () => {
                     <b>WhatsApp Group: </b>
                     <span>
                       <a
-                        href="https://chat.whatsapp.com/LnlgYtDoGDE4huMAqXckRg"
+                        href="https://chat.whatsapp.com/KHbyBSMLvIEJEUpiKoclYv"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
