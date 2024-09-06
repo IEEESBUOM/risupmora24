@@ -42,21 +42,21 @@ const StudentView = () => {
 
   const [cvUrl, setCvUrl] = useState<string>("");
 
-  const formatTime = (dateTimeString: string) => {
-    console.log(dateTimeString);
-    const parts = dateTimeString.split("T");
-    const timePart = parts[1];
-    console.log(timePart);
-    const [hour, minute] = timePart?.split(":").map(Number);
+  // const formatTime = (dateTimeString: string) => {
+  //   console.log(dateTimeString);
+  //   const parts = dateTimeString.split("T");
+  //   const timePart = parts[1];
+  //   console.log(timePart);
+  //   const [hour, minute] = timePart?.split(":").map(Number);
 
-    const meridiem = hour >= 12 ? "PM" : "AM";
-    const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
-    const formattedTime = `${formattedHour}:${minute
-      .toString()
-      .padStart(2, "0")} ${meridiem}`;
+  //   const meridiem = hour >= 12 ? "PM" : "AM";
+  //   const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+  //   const formattedTime = `${formattedHour}:${minute
+  //     .toString()
+  //     .padStart(2, "0")} ${meridiem}`;
 
-    return `${formattedTime}`;
-  };
+  //   return `${formattedTime}`;
+  // };
 
   const handleUploadCV = handleSubmit(async (data: CV) => {
     // const formData = new FormData();
@@ -164,17 +164,18 @@ const StudentView = () => {
                       <tbody>
                         {allocationDAta.map((allocation: any) => (
                           <tr key={allocation.id}>
-                            <td className="py-2.5 px-3 text-left">
-                              {allocation.Company}
+                            <td className="py-2.5 text-gray-600 px-3 text-left">
+                              {allocation.company.company_name}
                             </td>
-                            <td className="py-2.5 px-3 text-left">
-                              {allocation.allocation_date}
+                            <td className="py-2.5 text-gray-600 px-3 text-left">
+                              2024-9-13
                             </td>
-                            <td className="py-2.5 px-3 text-left">
+                            <td className="py-2.5 text-gray-600 px-3 text-left">
                               {allocation.allocated_panel_number}
                             </td>
-                            <td className="py-2.5 px-3 text-left">
-                              {formatTime(allocation.allocation_timeSlot)}
+                            <td className="py-2.5 text-gray-600 px-3 text-left">
+                              {allocation.allocation_timeSlot}
+                              {/* {formatTime(allocation.allocation_timeSlot)} */}
                             </td>
                           </tr>
                         ))}

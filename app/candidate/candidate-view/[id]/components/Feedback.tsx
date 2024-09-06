@@ -24,6 +24,8 @@ export default function Feedback({ candidateId }: { candidateId: string }) {
     feedbackdata();
   }, [candidateId]);
 
+  console.log(feedbackdata);
+
   return (
     <div className="mt-8  md:text-xl">
       <b>Feedback:</b>
@@ -35,11 +37,11 @@ export default function Feedback({ candidateId }: { candidateId: string }) {
                 <CarouselItem key={feedback.id}>
                   <FeedBackComponent
                     key={feedback.id}
-                    company={feedback.company}
-                    communication={feedback.communication}
-                    experience={feedback.experience}
-                    problemSolving={feedback.problem_solving}
-                    technical={feedback.technical}
+                    company={feedback.company.company_name}
+                    communication={feedback.communicationSkill}
+                    experience={feedback.experienceAndProject}
+                    problemSolving={feedback.problemSolvingSkill}
+                    technical={feedback.technicalSkill}
                     feedback={feedback.feedback}
                   />
                 </CarouselItem>
