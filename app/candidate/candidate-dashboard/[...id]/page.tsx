@@ -12,10 +12,11 @@ type Paramms = {
 const StudentDashboard = async ({ params }: Paramms) => {
   const userId = params.id[0].split("-")[0];
   const panelId = params.id[0].split("-")[1];
+  console.log(userId, panelId);
 
   const candidate = await getCandidate({ userId });
 
-  if (candidate == null) {
+  if (candidate == null || panelId == null) {
     notFound();
   }
 

@@ -68,7 +68,7 @@ const Dashboard = ({ data, panelId }: { data: Candidate; panelId: string }) => {
                   </Link>
                 </div>
                 <div>
-                  <Feedback />
+                  <Feedback panalistId={panelId} userId={data.candidate_id} />
                 </div>
               </div>
             </div>
