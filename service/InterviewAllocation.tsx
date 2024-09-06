@@ -5,9 +5,10 @@ export const InterviewAllocation = async (data: { Allocation: Allocation }) => {
   const item = data.Allocation; // Access the Allocation object
 
   try {
+    console.log(item.candidate_id);
     // Step 1: Delete existing allocations for the candidate
     const deleteResponse = await axios.delete(
-      `${process.env.APP_URL}/api/v1/admin/deleteAllInterviewees`,
+      `http://localhost:3000/api/v1/admin/deleteAllInterviewees`,
       {
         data: {
           candidate_id: item.candidate_id,
@@ -17,7 +18,8 @@ export const InterviewAllocation = async (data: { Allocation: Allocation }) => {
 
     // Step 2: Post the new allocation data
     const postResponse = await axios.post(
-      `${process.env.APP_URL}/api/v1/admin/AllInterviewees`,
+      // `https://riseupmora.lk/api/v1/admin/AllInterviewees`
+      `http://localhost:3000/api/v1/admin/AllInterviewees`,
       {
         allocation_date: item.allocation_date,
         allocation_timeSlot: item.allocation_timeSlot,
