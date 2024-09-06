@@ -185,8 +185,9 @@ export default function Form({ candidate }: FormProps) {
                 },
                 validate: {
                   pattern: (value) =>
-                    /^[2][0-3][0-9]{4}[a-zA-Z]$/.test(value) ||
-                    "University ID is not valid",
+                    /^[1][9-9][0-9]{4}[a-zA-Z]$|^[2][0-2][0-9]{4}[a-zA-Z]$/.test(
+                      value
+                    ) || "University ID is not valid",
                 },
               })}
             />
