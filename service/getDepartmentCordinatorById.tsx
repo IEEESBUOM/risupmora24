@@ -3,7 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 export const getDepartmentCordinatorByID = async (cordinator_id: any) => {
-  console.log(cordinator_id);
+  // console.log(cordinator_id);
   try {
     const response = await axios.get(
       `${process.env.APP_URL}/api/v1/admin/getDepartmentCordinatorById`,

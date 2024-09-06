@@ -23,6 +23,9 @@ export async function GET(req: NextRequest) {
       where: {
         candidate_id: candidateId,
       },
+      include: {
+        company: true,
+      },
     });
 
     if (!data) {
