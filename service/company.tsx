@@ -1,7 +1,6 @@
 "use server";
 
 import axios from "axios";
-import toast from "react-hot-toast";
 
 type CompanyType = {
   companyName: string;
@@ -18,7 +17,7 @@ export const getAllCompany = async () => {
     if (response.data) {
       return response.data;
     }
-    toast.error("getting company failed");
+    // toast.error("getting company failed");
     return null;
   } catch (error) {
     console.log(error);
@@ -38,7 +37,26 @@ export const addCompany = async (data: CompanyType) => {
     if (response.data) {
       return response.data;
     }
-    toast.error("adding company failed");
+    // toast.error("adding company failed");
+    return null;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const addFeedback = async (data: any) => {
+  try {
+    const response = await axios.post(
+      `${process.env.APP_URL}/api/v1/feedback/addFeedback`,
+      data
+    );
+
+    if (response.data) {
+      console.log(response.data);
+      return response.data;
+    }
+    // toast.error("adding feedback failed");
     return null;
   } catch (error) {
     console.log(error);
