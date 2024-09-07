@@ -8,6 +8,7 @@ export async function GET(req: NextRequest) {
     // Extract the ID from the URL using the pathname
     const { pathname } = new URL(req.url);
     const candidateId = pathname.split("/").pop();
+    console.log("Candidate ID:", candidateId);
 
     if (!candidateId) {
       return NextResponse.json(

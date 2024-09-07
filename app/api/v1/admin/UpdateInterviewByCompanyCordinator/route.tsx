@@ -13,6 +13,15 @@ export async function PUT(req: NextRequest) {
       allocation_status,
     } = await req.json();
 
+    console.log(
+      allocation_date,
+      allocation_timeSlot,
+      allocated_panel_number,
+      candidate_id,
+      company_id,
+      panelist_id
+    );
+
     // Validate the required fields
     if (
       !allocation_timeSlot ||

@@ -4,6 +4,7 @@ import { Company } from "@/Type";
 import toast from "react-hot-toast";
 import { useUpdateInterviewees } from "@/hooks/user/useUpdateInterviewees";
 import { getPanelistByCompanyIdAndPanelNumber } from "@/service/getPanelistByCompanyIdAndPanelNumber";
+import { getCandidateAllocationDetails } from "@/service/getCandidateAllocationDetails";
 
 // Define an interface for row data
 interface RowData {
@@ -23,6 +24,15 @@ interface RowData {
 
 const CandidateData = (candidate: any) => {
   const { Allocation, isPending } = useUpdateInterviewees();
+  // console.log(candidate.allPanelists);
+  // console.log(candidate.allocations);
+  // console.log(candidate.allocation);
+  // console.log(candidate.candidate_id);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [conflictDetails, setConflictDetails] = useState<{
+    company: string;
+    time: string;
+  } | null>(null);
 
   // Initialize state with the RowData interface
   const [rowData, setRowData] = useState<RowData>({
@@ -40,6 +50,7 @@ const CandidateData = (candidate: any) => {
     time4: "",
   });
   const length = candidate.allPanelists.length;
+  // console.log("length", length);
   // Initialize edit state
   const [isEditing, setIsEditing] = useState(false);
 
@@ -76,6 +87,8 @@ const CandidateData = (candidate: any) => {
       }
     });
 
+    // console.log(newRowData);
+
     setRowData(newRowData);
   }, [candidate]);
 
@@ -84,11 +97,14 @@ const CandidateData = (candidate: any) => {
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => {
     const { id, value } = e.target;
+    // console.log("id", id, value);
     setRowData((prevState) => ({
       ...prevState,
       [id]: value,
     }));
   };
+
+  // console.log("rowData", rowData);
 
   // Handle submit button click
   const handleSubmit = async () => {
@@ -103,6 +119,36 @@ const CandidateData = (candidate: any) => {
       const panelValue = rowData[panelInfo.panel as keyof RowData];
       const companyValue = rowData[panelInfo.company as keyof RowData];
       const timeValue = rowData[panelInfo.time as keyof RowData];
+
+      const allocationDetails = await getCandidateAllocationDetails(
+        candidate.candidate_id
+      );
+
+      const conflictingAllocation = allocationDetails.find(
+        (allocation: any) => {
+          const existingTime = allocation.allocation_timeSlot;
+          const timeDifference = Math.abs(
+            new Date(`1970-01-01T${existingTime}`).getTime() -
+              new Date(`1970-01-01T${timeValue}`).getTime()
+          );
+          return timeDifference <= 14 * 60 * 1000; // 14 minutes in milliseconds
+        }
+      );
+      // console.log(conflictingAllocation);
+
+      if (conflictingAllocation) {
+        const userConfirmed = window.confirm(
+          `This user has already been allocated to ${conflictingAllocation.company.company_name} at ${conflictingAllocation.allocation_timeSlot}. Do you want to override this allocation?`
+        );
+
+        if (!userConfirmed) {
+          // console.log("usernr  sx Confirmed");
+          // If user cancels, stop the allocation process
+          return;
+        }
+      }
+
+      // console.log("userConfirmed");
 
       // Skip if the company is empty
       if (!companyValue) continue;
@@ -119,15 +165,34 @@ const CandidateData = (candidate: any) => {
         console.error("Error fetching panelist data:", error);
       }
 
+      const previousAllocation = candidate.allocations.find(
+        (allocation: any) => allocation.candidate_id === candidate.candidate_id
+      );
+      // console.log(previousAllocation);
+      // console.log(parseInt(panelValue));
+      // console.log(panelValue);
+
+      // if (conflictingAllocation) {
+      //   setConflictDetails({
+      //     company: conflictingAllocation.company_id,
+      //     time: conflictingAllocation.allocation_timeSlot,
+      //   });
+      //   setModalOpen(true);
+      //   return; // Exit loop until user makes a decision
+      // }
+
       const formData = {
         allocated_panel_number: parseInt(panelValue),
         company_id: companyValue,
         allocation_timeSlot: timeValue,
-        allocation_date: "2021-10-10",
-        allocation_status: "pending",
+        allocation_date: "2024-9-12",
+        allocation_status: previousAllocation.allocation_status,
         candidate_id: candidate.candidate_id,
         panelist_id: panelistId,
       };
+      // console.log("formData", formData);
+
+      // console.log(allocationDetails);
 
       try {
         await Allocation(
@@ -135,6 +200,7 @@ const CandidateData = (candidate: any) => {
           {
             onSuccess: () => {
               toast.success("Allocation Success");
+              toggleEdit();
             },
             onError: (error) => {
               console.error("Allocation error:", error);
@@ -155,74 +221,73 @@ const CandidateData = (candidate: any) => {
   };
 
   return (
-    <tr className="border-b border-gray-300">
-      <td className="p-2 border-l border-gray-300">{candidate.candidate_id}</td>
-      <td className="p-2 border-l border-gray-300">
-        {candidate.firstName} {candidate.lastName}
-      </td>
-      {/* <td className="p-2 border-l border-gray-300">
-        {candidate.preference1}
-        {" , "}
-        {candidate.preference2}
-        {" , "}
-        {candidate.preference3}
-        {" , "}
-        {candidate.preference4}
-        {" , "}
-      </td> */}
-      <td className="p-2 border-l border-gray-300">
-        <select
-          id="panel1"
-          value={rowData.panel1}
-          onChange={handleChange}
-          disabled={!isEditing}
-          className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
-        >
-          {candidate.allPanelists.map((panelist: any) => (
-            <option key={panelist.panelist_id} value={panelist.panelist_id}>
-              {panelist.pannel_number}
-            </option>
-          ))}
-        </select>
-      </td>
-
-      <td className="p-2 border-l border-gray-300">
-        <input
-          id="time1"
-          type="time"
-          value={rowData.time1}
-          onChange={handleChange}
-          disabled={!isEditing}
-          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </td>
-
-      <td className="p-2 border-l border-gray-300">
-        {isEditing ? (
-          <>
-            <button
-              onClick={handleSubmit}
-              className="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600"
-            >
-              {isPending ? "Saving..." : "Save"}
-            </button>
+    <>
+      {/* <Modal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onConfirm={handleModalConfirm}
+        conflictingCompany={""}
+        conflictingTime={""}
+      /> */}
+      <tr className="border-b border-gray-300">
+        <td className="p-2 border-l border-gray-300">
+          {candidate.candidate_id}
+        </td>
+        <td className="p-2 border-l border-gray-300">
+          {candidate.firstName} {candidate.lastName}
+        </td>
+        <td className="p-2 border-l border-gray-300">
+          <select
+            id="panel1"
+            value={rowData.panel1}
+            onChange={handleChange}
+            disabled={!isEditing}
+            className="p-2 border bg-blue-400 rounded shadow-sm hover:bg-blue-500 text-white"
+          >
+            {candidate.allPanelists.map((panelist: any) => (
+              <option key={panelist.panelist_id} value={panelist.pannel_number}>
+                {panelist.pannel_number}
+              </option>
+            ))}
+          </select>
+        </td>
+        <td className="p-2 border-l border-gray-300">
+          <input
+            id="time1"
+            type="time"
+            value={rowData.time1}
+            onChange={handleChange}
+            disabled={!isEditing}
+            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </td>
+        <td className="p-2 border-l border-gray-300">
+          {isEditing ? (
+            <>
+              <button
+                onClick={handleSubmit}
+                className="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600"
+              >
+                {isPending ? "Saving..." : "Save"}
+              </button>
+              <button
+                onClick={toggleEdit}
+                className="px-4 py-2 bg-red-500 text-white rounded shadow hover:bg-red-600"
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
             <button
               onClick={toggleEdit}
-              className="px-4 py-2 bg-red-500 text-white rounded shadow hover:bg-red-600"
+              className="px-4 py-2 text-blue-500 rounded shadow hover:bg-blue-500 border-2 border-blue-500 hover:text-white"
             >
-              Cancel
+              Edit
             </button>
-          </>
-        ) : (
-          <button
-            onClick={toggleEdit}
-            className="px-4 py-2  text-blue-500 rounded shadow hover:bg-blue-500 border-2 border-blue-500 hover:text-white"
-          >
-            Edit
-          </button>
-        )}
-      </td>
-    </tr>
+          )}
+        </td>
+      </tr>
+    </>
   );
 };
 

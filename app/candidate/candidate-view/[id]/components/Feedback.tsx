@@ -24,7 +24,7 @@ export default function Feedback({ candidateId }: { candidateId: string }) {
     feedbackdata();
   }, [candidateId]);
 
-  console.log(feedbackdata);
+  // console.log(feedbackdata);
 
   return (
     <div className="mt-8  md:text-xl">

@@ -10,17 +10,19 @@ export async function POST(req: NextRequest) {
       candidate_id,
       company_id,
       panelist_id,
+      allocation_status,
     } = await req.json();
 
     // Log the received data for debugging purposes
-    // console.log(
-    //   allocation_date,
-    //   allocation_timeSlot,
-    //   allocated_panel_number,
-    //   candidate_id,
-    //   company_id,
-    //   panelist_id
-    // );
+    console.log(
+      allocation_date,
+      allocation_timeSlot,
+      allocated_panel_number,
+      candidate_id,
+      company_id,
+      panelist_id,
+      allocation_status
+    );
 
     // Validate the required fields
     if (
@@ -54,7 +56,7 @@ export async function POST(req: NextRequest) {
         panelist: {
           connect: { panelist_id: panelist_id }, // Assuming 'id' is the primary key field for the Panelist model
         },
-        allocation_status: "gg", // Adjust this field as needed
+        allocation_status: allocation_status, // Adjust this field as needed
       },
     });
 

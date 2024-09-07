@@ -2,7 +2,17 @@
 import React, { useState, useEffect } from "react";
 import CandidateData from "./candidateData";
 import { Allocation, Candidate, Company, Feedback, Panelist } from "@/Type";
-
+// import {
+//   AlertDialog,
+//   AlertDialogAction,
+//   AlertDialogCancel,
+//   AlertDialogContent,
+//   AlertDialogDescription,
+//   AlertDialogFooter,
+//   AlertDialogHeader,
+//   AlertDialogTitle,
+//   AlertDialogTrigger,
+// } from "@/components/ui/alert-dialog";
 interface Props {
   initialCandidates: Candidate[];
   feedbacks: Feedback[];
@@ -25,6 +35,13 @@ const AllIntervieweesData: React.FC<Props> = ({
     pref_1: string;
     // Add other properties as needed
   }
+  // const [isOpen, setIsOpen] = useState(true);
+  // console.log(initialCandidates);
+
+  // const handleEvent = () => {
+  //   // Some condition that triggers the alert dialog
+  //   setIsOpen(true);
+  // };
 
   const [rowData, setRowData] = useState<RowData[]>([]);
   const [editBtnId, setEditBtnId] = useState<string | undefined>();
@@ -93,6 +110,8 @@ const AllIntervieweesData: React.FC<Props> = ({
   function handleSortBy(e: React.ChangeEvent<HTMLSelectElement>) {
     setSelectedDepartment(e.target.value);
   }
+
+  // console.log(filteredCandidates);
 
   return (
     <div className="px-5 py-4 bg-gray-100 min-h-screen">
@@ -252,13 +271,36 @@ const AllIntervieweesData: React.FC<Props> = ({
                 </th>
               </tr>
             </thead>
+            {/* <div>
+              <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-blue-400">
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="text-blue-400">
+                      This action cannot be undone. This will permanently delete
+                      your account and remove your data from our servers.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="text-blue-400">
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction className="text-blue-400">
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div> */}
             <tbody>
               {filteredCandidates
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((candidate) => (
                   <CandidateData
                     candidate={candidate}
-                    feedbacks={feedbacks}
+                    // feedbacks={feedbacks}
                     company={company}
                     allocation={allocation}
                     handleEditButton={handleEditButton}
@@ -267,10 +309,10 @@ const AllIntervieweesData: React.FC<Props> = ({
                     candidate_id={candidate.candidate_id}
                     firstName={candidate.firstName}
                     lastName={candidate.lastName}
-                    preference1={candidate.prefCompany1}
-                    preference2={candidate.prefCompany2}
-                    preference3={candidate.prefCompany3}
-                    preference4={candidate.prefCompany4}
+                    // preference1={candidate.prefCompany1}
+                    // preference2={candidate.prefCompany2}
+                    // preference3={candidate.prefCompany3}
+                    // preference4={candidate.prefCompany4}
                     allocations={allocation}
                     allPanelists={allPanelists}
                   />

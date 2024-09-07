@@ -15,17 +15,17 @@ type Request = {
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
-    console.log(data);
+    // console.log(data);
 
-    console.log(
-      data.communicationSkill,
-      data.experienceAndProject,
-      data.problemSolvingSkill,
-      data.technicalSkill,
-      data.feedback,
-      data.panalistId,
-      data.userId
-    );
+    // console.log(
+    //   data.communicationSkill,
+    //   data.experienceAndProject,
+    //   data.problemSolvingSkill,
+    //   data.technicalSkill,
+    //   data.feedback,
+    //   data.panalistId,
+    //   data.userId
+    // );
     // Validate all required fields
     if (!data.panalistId || !data.userId) {
       return NextResponse.json(
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    console.log(panalist);
+    // console.log(panalist);
 
     if (!panalist) {
       return NextResponse.json(
