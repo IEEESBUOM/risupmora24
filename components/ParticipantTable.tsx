@@ -82,7 +82,7 @@ async function fetchAllocations(
         if (res.ok) {
           const allocations = await res.json();
           if (allocations.length > 0) {
-            allocatedTime = `${allocations[0].allocation_date} ${allocations[0].allocation_timeSlot}`;
+            allocatedTime = `${allocations[0].allocation_timeSlot}`;
             attended = allocations[0].attendance;
             allocationId = allocations[0].allocation_id;
           }
@@ -101,6 +101,22 @@ async function fetchAllocations(
       };
     })
   );
+
+  // Sort participants by allocatedTime
+  participants.sort((a, b) => {
+    if (
+      a.allocatedTime !== "Not Specified" &&
+      b.allocatedTime !== "Not Specified"
+    ) {
+      return (
+        new Date(a.allocatedTime).getTime() -
+        new Date(b.allocatedTime).getTime()
+      );
+    }
+    if (a.allocatedTime === "Not Specified") return 1;
+    if (b.allocatedTime === "Not Specified") return -1;
+    return 0;
+  });
 
   return participants;
 }
@@ -216,7 +232,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
               onCheckedChange={() =>
                 handleCheckboxChange(row.original.candidateId, !isChecked)
               }
-              disabled={isUpdating} // Disable the checkbox while updating
+              disabled={isUpdating} 
             />
           </div>
         );
