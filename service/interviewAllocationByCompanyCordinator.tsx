@@ -5,10 +5,11 @@ export const InterviewAllocationByCompanyCordinator = async (data: {
   Allocation: Allocation;
 }) => {
   const item = data.Allocation; // Access the Allocation object
-
+  // console.log(process.env.NEXT_PUBLIC_APP_URL);
   try {
     const putResponse = await axios.put(
-      `https://riseupmora.lk/api/v1/admin/UpdateInterviewByCompanyCordinator`,
+      // `https://riseupmora.lk/api/v1/admin/UpdateInterviewByCompanyCordinator`
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/v1/admin/UpdateInterviewByCompanyCordinator`,
       {
         allocation_date: item.allocation_date,
         allocation_timeSlot: item.allocation_timeSlot,

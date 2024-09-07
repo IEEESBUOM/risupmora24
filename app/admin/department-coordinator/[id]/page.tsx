@@ -25,6 +25,7 @@ const DepartmentCordinatorPage = async ({ params }: Paramms) => {
     return notFound();
   }
 
+  // console.log("gggggggggggggggggggggggggggggggggg",departmentCoordinatorId);
   const departmentCoordinatorDepartmentName =
     user.department_cordnator?.department;
 

@@ -1,12 +1,14 @@
 import { Panelist } from "@/Type";
 import axios from "axios";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
 export const getDepartmentCordinatorByID = async (cordinator_id: any) => {
   // console.log(cordinator_id);
+  // console.log(process.env.NEXT_PUBLIC_APP_URL);
+
   try {
     const response = await axios.get(
-      `${process.env.APP_URL}/api/v1/admin/getDepartmentCordinatorById`,
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/v1/admin/getDepartmentCordinatorById`,
       {
         params: { cordinator_id },
       }
@@ -15,7 +17,7 @@ export const getDepartmentCordinatorByID = async (cordinator_id: any) => {
     if (response.data) {
       return response.data;
     }
-    toast.error("Failed to get Panels");
+    // toast.error("Failed to get Panels");
     return null;
   } catch (error) {
     console.log(error);

@@ -22,7 +22,7 @@ export const useUpdateInterviewees = () => {
     },
 
     onSuccess: () => {
-      toast.success("Allocation Success");
+      // toast.success("Allocation Success");
     },
     onError: (error) => {
       console.error("Allocation error:", error);

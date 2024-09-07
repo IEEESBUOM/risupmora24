@@ -53,7 +53,7 @@ export const addFeedback = async (data: any) => {
     );
 
     if (response.data) {
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
     }
     // toast.error("adding feedback failed");

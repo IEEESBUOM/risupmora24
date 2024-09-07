@@ -8,7 +8,8 @@ export const getPanelistByCompanyIdAndPanelNumber = async (
 ) => {
   try {
     const response = await axios.get(
-      `https://riseupmora.lk/api/v1/admin/getPanelistByCompanyIdAndPanelNumber`,
+      // `https://riseupmora.lk/api/v1/admin/getPanelistByCompanyIdAndPanelNumber`
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/v1/admin/getPanelistByCompanyIdAndPanelNumber`,
       {
         params: { company_id, pannel_number },
       }

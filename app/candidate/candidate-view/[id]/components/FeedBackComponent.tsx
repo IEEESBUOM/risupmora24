@@ -17,14 +17,14 @@ export default function FeedBackComponent({
   technical: number;
   feedback: string;
 }) {
-  console.log(
-    company,
-    communication,
-    experience,
-    problemSolving,
-    technical,
-    feedback
-  );
+  // console.log(
+  //   company,
+  //   communication,
+  //   experience,
+  //   problemSolving,
+  //   technical,
+  //   feedback
+  // );
   return (
     <div className="bg-white rounded-md px-6 py-4 m-3 text-custom-black font-poppins text-sm    ">
       <div className="flex gap-4  ">
