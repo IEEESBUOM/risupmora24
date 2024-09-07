@@ -27,6 +27,7 @@ const CandidateData = (candidate: any) => {
   // Initialize state with the RowData interface
   const [rowData, setRowData] = useState<RowData>({
     panel1: "",
+
     company1: "",
     time1: "",
     panel2: "",
@@ -84,6 +85,15 @@ const CandidateData = (candidate: any) => {
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => {
     const { id, value } = e.target;
+
+    const prefernce = id[7];
+    // console.log(prefernce);
+
+    // Get the selected option element
+
+    // Read the additional data attributes
+
+    // console.log(id, value);
     setRowData((prevState) => ({
       ...prevState,
       [id]: value,
@@ -104,6 +114,10 @@ const CandidateData = (candidate: any) => {
       const companyValue = rowData[panelInfo.company as keyof RowData];
       const timeValue = rowData[panelInfo.time as keyof RowData];
 
+      // console.log(panelInfo.company[7]);
+
+      // console.log(companyValue);
+
       // Skip if the company is empty
       if (!companyValue) return;
       let panelistId: string | undefined;
@@ -123,8 +137,8 @@ const CandidateData = (candidate: any) => {
         allocated_panel_number: 1,
         company_id: companyValue,
         allocation_timeSlot: "00:00",
-        allocation_date: "2021-10-10",
-        allocation_status: "pending",
+        allocation_date: "2024-9-12",
+        allocation_status: panelInfo.company[7],
         candidate_id: candidate.candidate_id,
         panelist_id: panelistId,
       };
@@ -133,7 +147,8 @@ const CandidateData = (candidate: any) => {
         { Allocation: formData },
         {
           onSuccess: () => {
-            toast.success("Allocation Success 1");
+            toggleEdit();
+            // toast.success("Allocation Success 1");
           },
           onError: (error) => {
             console.log(error);

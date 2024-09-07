@@ -9,12 +9,57 @@ import { getUserById } from "@/service/getUserById";
 import { notFound } from "next/navigation";
 import { all } from "axios";
 import { getAllPanelistForOneCompany } from "@/service/getAllPanelistForOneCompany";
+import { getCompanyAllocatin } from "@/service/getCompanyAllocatin";
 
 type Paramms = {
   params: {
     id: string;
   };
 };
+
+interface AllocationType {
+  allocation_id: string;
+  allocation_date: string;
+  allocation_timeSlot: string;
+  allocated_panel_number: number;
+  attendance: boolean;
+  allocation_status: string;
+  candidate_id: string;
+  company_id: string;
+  panelist_id: string;
+  candidate: {
+    candidate_id: string;
+    firstName: string;
+    lastName: string;
+    nameWithInitials: string;
+    universityID: string;
+    contactNo: string;
+    department: string;
+    degree: string;
+    cvUrl: string;
+    imgUrl: string;
+    createdAt: string;
+    updatedAt: string;
+    prefCompany1: string | null;
+    prefCompany2: string | null;
+    prefCompany3: string | null;
+    prefCompany4: string | null;
+    user: {
+      email: string;
+      createdAt: string;
+      updatedAt: string;
+      emailVerified: string | null;
+      id: string;
+      image: string;
+      name: string;
+      emailVerifyStatus: boolean;
+      password: string;
+      passwordResetToken: string;
+      passwordResetTokenExpire: string;
+      role: string;
+    };
+  };
+}
 
 const CompanyCoordinator = async ({ params }: Paramms) => {
   // get company coordinator id from params
@@ -36,7 +81,7 @@ const CompanyCoordinator = async ({ params }: Paramms) => {
 
   /////////////////////////// above code done by ruchith ///////////////////////////
 
-  const response = await getCandidates();
+  // const response = await getCandidates();
   const companyResponce = await getCompany();
   const feedbackResponse = await getFeedback();
   const allAllocation = await getAllocation();
@@ -44,10 +89,21 @@ const CompanyCoordinator = async ({ params }: Paramms) => {
     compnanyCoordinatorCompanyId
   );
 
+  const allocationCandidate: AllocationType[] = await getCompanyAllocatin(
+    compnanyCoordinatorCompanyId
+  );
+
+  const allCandidatesDetails: Candidate[] = allocationCandidate.map(
+    (allocation: AllocationType) => allocation.candidate
+  );
+
+  // console.log(allCandidatesDetails);
+
   const filterAllocation = allAllocation.data.filter(
     (allocation: Allocation) =>
       allocation.company_id === compnanyCoordinatorCompanyId
   );
+  // console.log(filterAllocation);
 
   // const filterResponse = response.data.filter(
   //   (allocation: Allocation) =>
@@ -57,19 +113,21 @@ const CompanyCoordinator = async ({ params }: Paramms) => {
   let initialCandidates: Candidate[] = [];
   let feedback: Feedback[] = [];
   let company: Company[] = [];
-  let allocation: Allocation[] = filterAllocation.data || [];
+  let allocation: Allocation[] = filterAllocation?.data || [];
   let allPanelists: Panelist[] = [];
 
-  if (response && response.data) {
-    initialCandidates = response.data.filter((candidate: Candidate) =>
-      filterAllocation.some(
-        (allocation: Allocation) =>
-          allocation.candidate_id === candidate.candidate_id
-      )
-    );
-  } else {
-    throw new Error("Failed to fetch candidates");
-  }
+  // if (response && response.data) {
+  //   initialCandidates = response.data.filter((candidate: Candidate) =>
+  //     filterAllocation.some(
+  //       (allocation: Allocation) =>
+  //         allocation.candidate_id === candidate.candidate_id
+  //     )
+  //   );
+  // } else {
+  //   throw new Error("Failed to fetch candidates");
+  // }
+
+  // console.log("initialCandidates", initialCandidates);
 
   if (feedbackResponse && feedbackResponse.data) {
     feedback = feedbackResponse.data;
@@ -93,10 +151,13 @@ const CompanyCoordinator = async ({ params }: Paramms) => {
     new Error("Failed to fetch Panelist");
   }
 
+  // console.log("allocation", allocation);
+  // console.log("initialCandidates", initialCandidates);
+
   return (
     <AllInterviewers
       compnanyCoordinatorCompanyName={compnanyCoordinatorCompanyName}
-      initialCandidates={initialCandidates}
+      initialCandidates={allCandidatesDetails}
       feedbacks={feedback}
       company={company}
       allocation={filterAllocation}
