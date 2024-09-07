@@ -20,11 +20,16 @@ export async function GET(
       where: {
         company_id: id,
       },
-      orderBy: {
-        allocation_status: {
-          sort: "asc",
+      orderBy: [
+        {
+          allocation_status: "asc", // Sort by allocation_status first
         },
-      },
+        {
+          candidate: {
+            createdAt: "asc", // Then sort by candidate's createdAt date
+          },
+        },
+      ],
       include: {
         candidate: {
           include: {
