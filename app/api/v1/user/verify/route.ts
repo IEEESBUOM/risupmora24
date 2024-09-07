@@ -7,10 +7,10 @@ const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   try {
     const { token } = await req.json();
-    console.log(token);
-    console.log("ashan here");
+
+    
     if (!token || typeof token !== "string") {
-      console.log("Invalid token");
+      
       return NextResponse.json(
         { message: "verification failed" },
         { status: 400 }
@@ -20,10 +20,10 @@ export async function POST(req: NextRequest) {
     const verificationToken = await prisma.verificationToken.findFirst({
       where: { token },
     });
-    console.log(verificationToken);
+    
 
     if (!verificationToken) {
-      console.log("Invalid token");
+      
       return NextResponse.json(
         { message: "verification failed" },
         { status: 400 }
@@ -33,7 +33,6 @@ export async function POST(req: NextRequest) {
     const isTokenValid = token == verificationToken.token;
 
     if (!isTokenValid) {
-      console.log("Invalid token");
       return NextResponse.json(
         { message: "verification failed" },
         { status: 400 }
@@ -42,7 +41,6 @@ export async function POST(req: NextRequest) {
     const newDate = new Date();
     newDate.setHours(newDate.getHours() - 144);
     if (newDate  > verificationToken.expires) {
-      console.log("Token expired");
       return NextResponse.json({ message: "Token expired" }, { status: 400 });
     }
 
