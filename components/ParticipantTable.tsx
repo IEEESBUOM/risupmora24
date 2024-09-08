@@ -122,8 +122,32 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
     }));
 
     try {
-      // Placeholder for the new updateParticipantAttendance function or logic.
-      // Implement your new update logic here.
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/v1/candidate/updateAttendance`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            allocationId: updatedParticipant.allocationId,
+            attended,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        let errorMessage = "Failed to update participant attendance";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch (parseError) {
+          errorMessage = `Server returned status code ${response.status}`;
+        }
+        throw new Error(errorMessage);
+      }
+
+      
 
       setAttendanceState((prev) => ({
         ...prev,
