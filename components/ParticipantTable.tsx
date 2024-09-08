@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link"; // Import Next.js Link
 import {
   ColumnDef,
   useReactTable,
@@ -18,6 +19,7 @@ import {
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import PageLoader from "./PageLoader";
 
 // Define the type for the candidate data
 type Candidate = {
@@ -82,7 +84,7 @@ async function fetchAllocations(
         if (res.ok) {
           const allocations = await res.json();
           if (allocations.length > 0) {
-            allocatedTime = `${allocations[0].allocation_date} ${allocations[0].allocation_timeSlot}`;
+            allocatedTime = `${allocations[0].allocation_timeSlot}`;
             attended = allocations[0].attendance;
             allocationId = allocations[0].allocation_id;
           }
@@ -102,15 +104,33 @@ async function fetchAllocations(
     })
   );
 
+  // Sort participants by allocatedTime
+  participants.sort((a, b) => {
+    if (
+      a.allocatedTime !== "Not Specified" &&
+      b.allocatedTime !== "Not Specified"
+    ) {
+      return (
+        new Date(a.allocatedTime).getTime() -
+        new Date(b.allocatedTime).getTime()
+      );
+    }
+    if (a.allocatedTime === "Not Specified") return 1;
+    if (b.allocatedTime === "Not Specified") return -1;
+    return 0;
+  });
+
   return participants;
 }
 
 type ParticipantTableProps = {
   candidateDetails: Candidate[];
+  panelistId: string; // Add panelistId as a prop
 };
 
 const ParticipantTable: React.FC<ParticipantTableProps> = ({
   candidateDetails,
+  panelistId, // Use panelistId from props
 }) => {
   const [data, setData] = useState<Participant[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -194,7 +214,17 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
   const columns: ColumnDef<Participant, any>[] = [
     {
       header: "Name",
-      accessorKey: "name",
+      cell: ({ row }) => {
+        const candidateId = row.original.candidateId;
+        return (
+          <Link
+            href={`/candidate/candidate-dashboard/${row.original.candidateId}-${panelistId}`}
+            className="text-blue-500 hover:underline"
+          >
+            {row.original.name}
+          </Link>
+        );
+      },
     },
     {
       header: "Degree",
@@ -216,7 +246,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
               onCheckedChange={() =>
                 handleCheckboxChange(row.original.candidateId, !isChecked)
               }
-              disabled={isUpdating} // Disable the checkbox while updating
+              disabled={isUpdating}
             />
           </div>
         );
@@ -235,7 +265,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
   return (
     <div>
       {loading ? (
-        <p>Loading...</p>
+        <PageLoader />
       ) : (
         <Table className="w-full">
           <TableHeader className="bg-stv-dark-blue text-stv-yellow">

@@ -27,7 +27,7 @@ const Page = async ({ params }: Paramms) => {
       </div>
 
       <div className="container mx-auto p-4">
-        <ParticipantTable candidateDetails={candidateDetails} />
+        <ParticipantTable candidateDetails={candidateDetails} panelistId={panalistId} />
       </div>
     </div>
   );
