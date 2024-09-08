@@ -40,10 +40,12 @@ export async function GET(req: NextRequest) {
           select: {
             firstName: true, 
             lastName: true,
+            degree: true,
           },
         },
       },
     });
+
 
     if (allocations.length === 0) {
       return NextResponse.json(
@@ -51,8 +53,8 @@ export async function GET(req: NextRequest) {
         { status: 404 }
       );
     }
-
     return NextResponse.json(allocations, { status: 200 });
+  
   } catch (error) {
     console.error("Error fetching allocations:", error);
     return NextResponse.json(

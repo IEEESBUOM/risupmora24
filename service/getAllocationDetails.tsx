@@ -7,12 +7,14 @@ export const getAllocationDetails = async (panelistId: string) => {
     );
 
     const data = await response.json();
+    
 
    
     if (!response.ok) {
       throw new Error(data.message || "Error fetching allocation details");
     }
 
+    
     return data;
   } catch (error) {
     

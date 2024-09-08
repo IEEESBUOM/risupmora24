@@ -8,6 +8,8 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getSortedRowModel, // Import sorting model
+  SortingState, // Import sorting state
 } from "@tanstack/react-table";
 import {
   Table,
@@ -48,7 +50,7 @@ async function updateParticipantAttendance(participant: Participant) {
 }
 
 type ParticipantTableProps = {
-  participants: Participant[];
+  participants: any[];
   panelistId: string;
 };
 
@@ -56,7 +58,21 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
   participants,
   panelistId,
 }) => {
-  const [data, setData] = useState<Participant[]>(participants);
+  const mapRawDataToParticipant = (rawData: any): Participant[] => {
+    return rawData.map((item: any) => ({
+      name: `${item.candidate.firstName} ${item.candidate.lastName}`,
+      degree: item.candidate.degree,
+      allocatedTime: item.allocation_timeSlot,
+      attended: item.attendance,
+      candidateId: item.allocation_id,
+      allocationId: item.allocation_id,
+    }));
+  };
+
+  // Apply data transformation
+  const [data, setData] = useState<Participant[]>(
+    mapRawDataToParticipant(participants)
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const [attendanceState, setAttendanceState] = useState<{
     [key: string]: boolean;
@@ -64,11 +80,15 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
   const [updatingState, setUpdatingState] = useState<{
     [key: string]: boolean;
   }>({});
+  const [sorting, setSorting] = useState<SortingState>([]); // Sorting state
 
   useEffect(() => {
+    const transformedParticipants = mapRawDataToParticipant(participants);
+    setData(transformedParticipants);
+
     const initialAttendanceState: { [key: string]: boolean } = {};
     const initialUpdatingState: { [key: string]: boolean } = {};
-    participants.forEach((participant) => {
+    transformedParticipants.forEach((participant) => {
       initialAttendanceState[participant.candidateId] = participant.attended;
       initialUpdatingState[participant.candidateId] = false;
     });
@@ -140,6 +160,8 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
     {
       header: "Allocated Time",
       accessorKey: "allocatedTime",
+      cell: ({ getValue }) => getValue<string>(),
+      enableSorting: true, // Enable sorting for this column
     },
     {
       header: "Attended",
@@ -166,6 +188,11 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(), 
+    onSortingChange: setSorting, 
+    state: {
+      sorting, 
+    },
     initialState: { pagination: { pageSize: 10 } },
   });
 
@@ -179,13 +206,28 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    onClick={header.column.getToggleSortingHandler()}
+                    className={
+                      header.column.getCanSort() ? "cursor-pointer" : ""
+                    }
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
+                    {header.column.getCanSort() && (
+                      <span>
+                        {header.column.getIsSorted() === "asc"
+                          ? " 🔼"
+                          : header.column.getIsSorted() === "desc"
+                          ? " 🔽"
+                          : null}
+                      </span>
+                    )}
                   </TableHead>
                 ))}
               </TableRow>

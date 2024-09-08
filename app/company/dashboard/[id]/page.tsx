@@ -11,12 +11,10 @@ type Paramms = {
 
 const Page = async ({ params }: Paramms) => {
   const panelistId = params.id; 
-  console.log(panelistId);
 
   const participants = await getAllocationDetails(panelistId);
 
-  console.log(participants);
-  
+  console.log(participants)
   
   
 
