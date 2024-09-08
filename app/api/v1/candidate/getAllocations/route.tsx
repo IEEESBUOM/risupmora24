@@ -6,8 +6,11 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
+  
   const url = new URL(req.url);
   const panelistId = url.searchParams.get("panelistId");
+
+  
 
   if (!panelistId) {
     return NextResponse.json({ error: "Invalid panelist ID" }, { status: 400 });

@@ -1,8 +1,7 @@
 import React from "react";
 import StudentNavbar from "@/components/StudentNavbar";
 import ParticipantTable from "@/components/ParticipantTable";
-import { fetchAllocations } from "@/service/getAllocations";
-import { Console } from "console";
+import {getAllocationDetails} from "@/service/getAllocationDetails"; 
 
 type Paramms = {
   params: {
@@ -11,13 +10,14 @@ type Paramms = {
 };
 
 const Page = async ({ params }: Paramms) => {
-  
-  const panalistId = params.id;
+  const panelistId = params.id; 
+  console.log(panelistId);
 
-  const participants = await fetchAllocations(panalistId);
+  const participants = await getAllocationDetails(panelistId);
 
-  
   console.log(participants);
+  
+  
   
 
   return (
@@ -28,7 +28,8 @@ const Page = async ({ params }: Paramms) => {
 
       <div className="container mx-auto p-4">
         <ParticipantTable
-          participantDetails={participants}
+          participants={participants}
+          panelistId={panelistId}
         />
       </div>
     </div>

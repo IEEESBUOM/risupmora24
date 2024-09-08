@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Link from "next/link"; // Import Next.js Link
+import Link from "next/link";
 import {
   ColumnDef,
   useReactTable,
@@ -21,27 +21,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import PageLoader from "./PageLoader";
 
-// Define the type for the candidate data
-type Candidate = {
-  candidate_id: string;
-  firstName: string;
-  lastName: string;
-  nameWithInitials: string;
-  universityID: string;
-  contactNo: string;
-  department: string;
-  degree: string;
-  cvUrl: string;
-  imgUrl: string;
-  createdAt: string;
-  updatedAt: string;
-  prefCompany1?: string | null;
-  prefCompany2?: string | null;
-  prefCompany3?: string | null;
-  prefCompany4?: string | null;
-};
-
-// Define the type for the participant data
 type Participant = {
   name: string;
   degree: string;
@@ -68,72 +47,16 @@ async function updateParticipantAttendance(participant: Participant) {
   }
 }
 
-async function fetchAllocations(
-  candidateDetails: Candidate[]
-): Promise<Participant[]> {
-  const participants = await Promise.all(
-    candidateDetails.map(async (candidate) => {
-      let allocatedTime = "Not Specified";
-      let attended = false;
-      let allocationId = "";
-
-      try {
-        const res = await fetch(
-          `/api/v1/candidate/getAllocations?candidateId=${candidate.candidate_id}`
-        );
-        if (res.ok) {
-          const allocations = await res.json();
-          console.log(allocations);
-          if (allocations.length > 0) {
-            allocatedTime = `${allocations[0].allocation_timeSlot}`;
-            attended = allocations[0].attendance;
-            allocationId = allocations[0].allocation_id;
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching allocation data:", error);
-      }
-
-      return {
-        name: `${candidate.firstName} ${candidate.lastName}`,
-        degree: candidate.degree,
-        allocatedTime,
-        attended,
-        candidateId: candidate.candidate_id,
-        allocationId,
-      };
-    })
-  );
-  console.log(participants);
-  // Sort participants by allocatedTime
-  participants.sort((a, b) => {
-    if (
-      a.allocatedTime !== "Not Specified" &&
-      b.allocatedTime !== "Not Specified"
-    ) {
-      return (
-        new Date(a.allocatedTime).getTime() -
-        new Date(b.allocatedTime).getTime()
-      );
-    }
-    if (a.allocatedTime === "Not Specified") return 1;
-    if (b.allocatedTime === "Not Specified") return -1;
-    return 0;
-  });
-
-  return participants;
-}
-
 type ParticipantTableProps = {
-  candidateDetails: Candidate[];
-  panelistId: string; // Add panelistId as a prop
+  participants: Participant[];
+  panelistId: string;
 };
 
 const ParticipantTable: React.FC<ParticipantTableProps> = ({
-  candidateDetails,
-  panelistId, // Use panelistId from props
+  participants,
+  panelistId,
 }) => {
-  const [data, setData] = useState<Participant[]>([]);
+  const [data, setData] = useState<Participant[]>(participants);
   const [loading, setLoading] = useState<boolean>(false);
   const [attendanceState, setAttendanceState] = useState<{
     [key: string]: boolean;
@@ -143,29 +66,15 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
   }>({});
 
   useEffect(() => {
-    async function initializeAllocations() {
-      setLoading(true);
-      try {
-        const participants = await fetchAllocations(candidateDetails);
-        setData(participants);
-
-        // Initialize attendanceState and updatingState
-        const initialAttendanceState: { [key: string]: boolean } = {};
-        const initialUpdatingState: { [key: string]: boolean } = {};
-        participants.forEach((participant) => {
-          initialAttendanceState[participant.candidateId] =
-            participant.attended;
-          initialUpdatingState[participant.candidateId] = false;
-        });
-        setAttendanceState(initialAttendanceState);
-        setUpdatingState(initialUpdatingState);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    initializeAllocations();
-  }, [candidateDetails]);
+    const initialAttendanceState: { [key: string]: boolean } = {};
+    const initialUpdatingState: { [key: string]: boolean } = {};
+    participants.forEach((participant) => {
+      initialAttendanceState[participant.candidateId] = participant.attended;
+      initialUpdatingState[participant.candidateId] = false;
+    });
+    setAttendanceState(initialAttendanceState);
+    setUpdatingState(initialUpdatingState);
+  }, [participants]);
 
   const handleCheckboxChange = async (
     candidateId: string,
@@ -176,7 +85,6 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
     );
     if (!updatedParticipant) return;
 
-    // Set updating state to true for the current row
     setUpdatingState((prev) => ({
       ...prev,
       [candidateId]: true,
@@ -203,7 +111,6 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
     } catch (error) {
       console.error("Failed to update participant attendance:", error);
     } finally {
-      // Set updating state back to false after the update is complete
       setUpdatingState((prev) => ({
         ...prev,
         [candidateId]: false,
@@ -211,7 +118,6 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
     }
   };
 
-  // Table columns definition
   const columns: ColumnDef<Participant, any>[] = [
     {
       header: "Name",
