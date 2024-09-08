@@ -120,9 +120,18 @@ const CandidateData = (candidate: any) => {
       const companyValue = rowData[panelInfo.company as keyof RowData];
       const timeValue = rowData[panelInfo.time as keyof RowData];
 
-      const allocationDetails = await getCandidateAllocationDetails(
+      const allocation = await getCandidateAllocationDetails(
         candidate.candidate_id
       );
+
+      // console.log(companyValue);
+      // console.log(allocation);
+
+      const allocationDetails = allocation.filter(
+        (allocation: any) => allocation.company_id != companyValue
+      );
+
+      // console.log(all);
 
       const conflictingAllocation = allocationDetails.find(
         (allocation: any) => {
