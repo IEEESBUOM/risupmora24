@@ -18,7 +18,7 @@ const Dashboard = ({ data, panelId }: { data: Candidate; panelId: string }) => {
 
           <div className="w-full mt-10 gap-5 flex-col justify-center flex items-center">
             <div className="pb-5">
-              <PrimaryButtonSmall text={" user.comName"} />
+              <PrimaryButtonSmall text={"User Profile"} />
             </div>
             <Image
               src={data.imgUrl}

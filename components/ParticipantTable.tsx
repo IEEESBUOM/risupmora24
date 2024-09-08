@@ -83,6 +83,7 @@ async function fetchAllocations(
         );
         if (res.ok) {
           const allocations = await res.json();
+          console.log(allocations);
           if (allocations.length > 0) {
             allocatedTime = `${allocations[0].allocation_timeSlot}`;
             attended = allocations[0].attendance;
@@ -103,7 +104,7 @@ async function fetchAllocations(
       };
     })
   );
-
+  console.log(participants);
   // Sort participants by allocatedTime
   participants.sort((a, b) => {
     if (

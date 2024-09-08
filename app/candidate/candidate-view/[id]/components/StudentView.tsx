@@ -71,6 +71,21 @@ const StudentView = () => {
     }
   });
 
+  function formatTime(timeSlot: string): string {
+    if (timeSlot === "00:00") {
+      return "Not Allocated";
+    }
+
+    // Split the time string into hours and minutes
+    const [hours, minutes] = timeSlot.split(":").map(Number);
+
+    // Determine AM or PM and convert to 12-hour format
+    const period = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12; // Convert 0 to 12 for 12 AM
+
+    return `${formattedHours}:${minutes.toString().padStart(2, "0")} ${period}`;
+  }
+
   return (
     <div className="w-full block 2xl:flex 2xl:justify-center 2xl:items-center  px-5 md:px-12 lg:px-28 h-100 mb-10">
       <div className="w-full ">
@@ -174,7 +189,7 @@ const StudentView = () => {
                               {allocation.allocated_panel_number}
                             </td>
                             <td className="py-2.5 text-gray-600 px-3 text-left">
-                              {allocation.allocation_timeSlot}
+                              {formatTime(allocation.allocation_timeSlot)}
                               {/* {formatTime(allocation.allocation_timeSlot)} */}
                             </td>
                           </tr>
