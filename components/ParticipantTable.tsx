@@ -27,7 +27,7 @@ type Participant = {
   name: string;
   degree: string;
   allocatedTime: string;
-  allocatedTime24: string; // 24-hour time for sorting
+  allocatedTime24: string; 
   attended: boolean;
   candidateId: string;
   allocationId: string;
@@ -88,8 +88,8 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
               return {
                 name: `${item.candidate.firstName} ${item.candidate.lastName}`,
                 degree: item.candidate.degree,
-                allocatedTime: formattedTime, // Display in 12-hour format
-                allocatedTime24, // Use 24-hour format for sorting
+                allocatedTime: formattedTime, 
+                allocatedTime24, 
                 attended: item.attendance,
                 candidateId: item.candidate.candidate_id,
                 allocationId: item.allocation_id,
