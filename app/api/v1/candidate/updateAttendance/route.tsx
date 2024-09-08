@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   try {
     const { allocationId, attended } = await req.json();
-
+    
     if (!allocationId || typeof attended !== "boolean") {
       return NextResponse.json(
         { error: "Invalid data provided" },
