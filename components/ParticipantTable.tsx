@@ -27,6 +27,7 @@ type Participant = {
   name: string;
   degree: string;
   allocatedTime: string;
+  allocatedTime24: string; // 24-hour time for sorting
   attended: boolean;
   candidateId: string;
   allocationId: string;
@@ -58,9 +59,6 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
   const [updatingState, setUpdatingState] = useState<{
     [key: string]: boolean;
   }>({});
-  const [sorting, setSorting] = useState<SortingState>([
-    { id: "allocatedTime", desc: true },
-  ]);
 
   useEffect(() => {
     const fetchParticipants = async () => {
@@ -72,8 +70,12 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
 
         if (participants) {
           const transformedParticipants = participants
-            .filter((item) => item.allocation_timeSlot !== "00:00") 
+            .filter((item) => item.allocation_timeSlot !== "00:00")
             .map((item: any) => {
+              // Convert to 24-hour format (HH:mm) for sorting
+              const allocatedTime24 = item.allocation_timeSlot;
+
+              // Convert to 12-hour AM/PM format for display
               const timeSlot = new Date(
                 `1970-01-01T${item.allocation_timeSlot}:00`
               );
@@ -86,12 +88,18 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
               return {
                 name: `${item.candidate.firstName} ${item.candidate.lastName}`,
                 degree: item.candidate.degree,
-                allocatedTime: formattedTime, 
+                allocatedTime: formattedTime, // Display in 12-hour format
+                allocatedTime24, // Use 24-hour format for sorting
                 attended: item.attendance,
                 candidateId: item.candidate.candidate_id,
                 allocationId: item.allocation_id,
               };
             });
+
+          // Sort the data by 24-hour time (HH:mm)
+          transformedParticipants.sort((a, b) =>
+            a.allocatedTime24.localeCompare(b.allocatedTime24)
+          );
 
           setData(transformedParticipants);
 
@@ -199,9 +207,8 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
     },
     {
       header: "Allocated Time",
-      accessorKey: "allocatedTime",
+      accessorKey: "allocatedTime", // Display time in 12-hour format
       cell: ({ getValue }) => getValue<string>(),
-      enableSorting: true,
     },
     {
       header: "Attended",
@@ -231,14 +238,6 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    onSortingChange: setSorting,
-    state: {
-      sorting,
-    },
-    initialState: {
-      pagination: { pageSize: 10 },
-      sorting: [{ id: "allocatedTime", desc: false }],
-    },
   });
 
   return (
@@ -253,7 +252,6 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    onClick={header.column.getToggleSortingHandler()}
                     className={
                       header.column.getCanSort() ? "cursor-pointer" : ""
                     }
@@ -264,15 +262,6 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                    {header.column.getCanSort() && (
-                      <span>
-                        {header.column.getIsSorted() === "asc"
-                          ? " 🔼"
-                          : header.column.getIsSorted() === "desc"
-                          ? " 🔽"
-                          : null}
-                      </span>
-                    )}
                   </TableHead>
                 ))}
               </TableRow>
