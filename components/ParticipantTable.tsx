@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
@@ -60,7 +59,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
     [key: string]: boolean;
   }>({});
   const [sorting, setSorting] = useState<SortingState>([
-    { id: "allocatedTime", desc: false }, 
+    { id: "allocatedTime", desc: true },
   ]);
 
   useEffect(() => {
@@ -71,16 +70,28 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
           panelistId
         );
 
-        
         if (participants) {
-          const transformedParticipants = participants.map((item: any) => ({
-            name: `${item.candidate.firstName} ${item.candidate.lastName}`,
-            degree: item.candidate.degree,
-            allocatedTime: item.allocation_timeSlot,
-            attended: item.attendance,
-            candidateId: item.candidate.candidate_id,
-            allocationId: item.allocation_id,
-          }));
+          const transformedParticipants = participants
+            .filter((item) => item.allocation_timeSlot !== "00:00") 
+            .map((item: any) => {
+              const timeSlot = new Date(
+                `1970-01-01T${item.allocation_timeSlot}:00`
+              );
+              const formattedTime = timeSlot.toLocaleString("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              });
+
+              return {
+                name: `${item.candidate.firstName} ${item.candidate.lastName}`,
+                degree: item.candidate.degree,
+                allocatedTime: formattedTime, 
+                attended: item.attendance,
+                candidateId: item.candidate.candidate_id,
+                allocationId: item.allocation_id,
+              };
+            });
 
           setData(transformedParticipants);
 
@@ -105,7 +116,6 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
 
     fetchParticipants();
   }, [panelistId]);
-
 
   const handleCheckboxChange = async (
     candidateId: string,
@@ -146,8 +156,6 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
         }
         throw new Error(errorMessage);
       }
-
-      
 
       setAttendanceState((prev) => ({
         ...prev,
@@ -193,16 +201,13 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
       header: "Allocated Time",
       accessorKey: "allocatedTime",
       cell: ({ getValue }) => getValue<string>(),
-      enableSorting: true, 
+      enableSorting: true,
     },
     {
       header: "Attended",
       cell: ({ row }) => {
         const isChecked = attendanceState[row.original.candidateId] || false;
         const isUpdating = updatingState[row.original.candidateId] || false;
-        const originalAttended = data.find(
-          (p) => p.candidateId === row.original.candidateId
-        )?.attended;
 
         return (
           <div className="flex items-center">
@@ -213,9 +218,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
               }
               disabled={isUpdating}
             />
-            <span className="ml-2 text-gray-500">
-            
-            </span>
+            <span className="ml-2 text-gray-500"></span>
           </div>
         );
       },
@@ -234,7 +237,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
     },
     initialState: {
       pagination: { pageSize: 10 },
-      sorting: [{ id: "allocatedTime", desc: false }], 
+      sorting: [{ id: "allocatedTime", desc: false }],
     },
   });
 
