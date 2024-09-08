@@ -50,7 +50,6 @@ export const getAllocationDetails = async (
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
       const data = await response.json();
-      console.log("data", data);
       return data as Allocation[]; 
 
     } else {
