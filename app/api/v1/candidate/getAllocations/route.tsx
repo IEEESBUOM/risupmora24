@@ -41,6 +41,7 @@ export async function GET(req: NextRequest) {
             firstName: true, 
             lastName: true,
             degree: true,
+            candidate_id: true,
           },
         },
       },

@@ -8,8 +8,8 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
-  getSortedRowModel, // Import sorting model
-  SortingState, // Import sorting state
+  getSortedRowModel, 
+  SortingState, 
 } from "@tanstack/react-table";
 import {
   Table,
@@ -59,17 +59,17 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
   panelistId,
 }) => {
   const mapRawDataToParticipant = (rawData: any): Participant[] => {
+    console.log(rawData);
     return rawData.map((item: any) => ({
       name: `${item.candidate.firstName} ${item.candidate.lastName}`,
       degree: item.candidate.degree,
       allocatedTime: item.allocation_timeSlot,
       attended: item.attendance,
-      candidateId: item.allocation_id,
+      candidateId: item.candidate.candidate_id,
       allocationId: item.allocation_id,
     }));
   };
 
-  // Apply data transformation
   const [data, setData] = useState<Participant[]>(
     mapRawDataToParticipant(participants)
   );
@@ -80,7 +80,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
   const [updatingState, setUpdatingState] = useState<{
     [key: string]: boolean;
   }>({});
-  const [sorting, setSorting] = useState<SortingState>([]); // Sorting state
+  const [sorting, setSorting] = useState<SortingState>([]); 
 
   useEffect(() => {
     const transformedParticipants = mapRawDataToParticipant(participants);
@@ -142,7 +142,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
     {
       header: "Name",
       cell: ({ row }) => {
-        const candidateId = row.original.candidateId;
+        
         return (
           <Link
             href={`/candidate/candidate-dashboard/${row.original.candidateId}-${panelistId}`}
@@ -161,7 +161,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
       header: "Allocated Time",
       accessorKey: "allocatedTime",
       cell: ({ getValue }) => getValue<string>(),
-      enableSorting: true, // Enable sorting for this column
+      enableSorting: true, 
     },
     {
       header: "Attended",
