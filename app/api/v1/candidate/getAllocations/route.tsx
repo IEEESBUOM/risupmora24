@@ -7,19 +7,16 @@ const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
-  const candidateId = url.searchParams.get("candidateId");
+  const panelistId = url.searchParams.get("panelistId");
 
-  if (!candidateId) {
-    return NextResponse.json(
-      { error: "Invalid candidate ID" },
-      { status: 400 }
-    );
+  if (!panelistId) {
+    return NextResponse.json({ error: "Invalid panelist ID" }, { status: 400 });
   }
 
   try {
     const allocations = await prisma.allocation.findMany({
       where: {
-        candidate_id: candidateId,
+        panelist_id: panelistId, 
       },
       select: {
         allocation_id: true,
@@ -34,6 +31,12 @@ export async function GET(req: NextRequest) {
         panelist: {
           select: {
             pannel_number: true,
+          },
+        },
+        candidate: {
+          select: {
+            firstName: true, 
+            lastName: true,
           },
         },
       },
