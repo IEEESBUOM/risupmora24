@@ -8,8 +8,8 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
-  getSortedRowModel, 
-  SortingState, 
+  getSortedRowModel,
+  SortingState,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -22,6 +22,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import PageLoader from "./PageLoader";
+import { getAllocationDetails } from "@/service/getAllocationDetails";
 
 type Participant = {
   name: string;
@@ -31,70 +32,80 @@ type Participant = {
   candidateId: string;
   allocationId: string;
 };
+type Candidate = {
+  firstName: string;
+  lastName: string;
+  degree: string;
+  candidate_id: string;
+};
 
-async function updateParticipantAttendance(participant: Participant) {
-  const response = await fetch("/api/v1/candidate/updateAttendance", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      allocationId: participant.allocationId,
-      attended: participant.attended,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to update participant attendance");
-  }
-}
+type Allocation = {
+  allocation_id: string;
+  allocation_timeSlot: string;
+  attendance: boolean;
+  candidate: Candidate;
+};
 
 type ParticipantTableProps = {
-  participants: any[];
   panelistId: string;
 };
 
-const ParticipantTable: React.FC<ParticipantTableProps> = ({
-  participants,
-  panelistId,
-}) => {
-  const mapRawDataToParticipant = (rawData: any): Participant[] => {
-    console.log(rawData);
-    return rawData.map((item: any) => ({
-      name: `${item.candidate.firstName} ${item.candidate.lastName}`,
-      degree: item.candidate.degree,
-      allocatedTime: item.allocation_timeSlot,
-      attended: item.attendance,
-      candidateId: item.candidate.candidate_id,
-      allocationId: item.allocation_id,
-    }));
-  };
-
-  const [data, setData] = useState<Participant[]>(
-    mapRawDataToParticipant(participants)
-  );
-  const [loading, setLoading] = useState<boolean>(false);
+const ParticipantTable: React.FC<ParticipantTableProps> = ({ panelistId }) => {
+  const [data, setData] = useState<Participant[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [attendanceState, setAttendanceState] = useState<{
     [key: string]: boolean;
   }>({});
   const [updatingState, setUpdatingState] = useState<{
     [key: string]: boolean;
   }>({});
-  const [sorting, setSorting] = useState<SortingState>([]); 
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "allocatedTime", desc: false }, 
+  ]);
 
   useEffect(() => {
-    const transformedParticipants = mapRawDataToParticipant(participants);
-    setData(transformedParticipants);
+    const fetchParticipants = async () => {
+      setLoading(true);
+      try {
+        const participants: Allocation[] | null = await getAllocationDetails(
+          panelistId
+        );
 
-    const initialAttendanceState: { [key: string]: boolean } = {};
-    const initialUpdatingState: { [key: string]: boolean } = {};
-    transformedParticipants.forEach((participant) => {
-      initialAttendanceState[participant.candidateId] = participant.attended;
-      initialUpdatingState[participant.candidateId] = false;
-    });
-    setAttendanceState(initialAttendanceState);
-    setUpdatingState(initialUpdatingState);
-  }, [participants]);
+        
+        if (participants) {
+          const transformedParticipants = participants.map((item: any) => ({
+            name: `${item.candidate.firstName} ${item.candidate.lastName}`,
+            degree: item.candidate.degree,
+            allocatedTime: item.allocation_timeSlot,
+            attended: item.attendance,
+            candidateId: item.candidate.candidate_id,
+            allocationId: item.allocation_id,
+          }));
+
+          setData(transformedParticipants);
+
+          const initialAttendanceState: { [key: string]: boolean } = {};
+          const initialUpdatingState: { [key: string]: boolean } = {};
+          transformedParticipants.forEach((participant) => {
+            initialAttendanceState[participant.candidateId] =
+              participant.attended;
+            initialUpdatingState[participant.candidateId] = false;
+          });
+          setAttendanceState(initialAttendanceState);
+          setUpdatingState(initialUpdatingState);
+        } else {
+          console.error("Participants data is null.");
+        }
+      } catch (error) {
+        console.error("Failed to fetch participants:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchParticipants();
+  }, [panelistId]);
+
 
   const handleCheckboxChange = async (
     candidateId: string,
@@ -111,10 +122,8 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
     }));
 
     try {
-      await updateParticipantAttendance({
-        ...updatedParticipant,
-        attended,
-      });
+      // Placeholder for the new updateParticipantAttendance function or logic.
+      // Implement your new update logic here.
 
       setAttendanceState((prev) => ({
         ...prev,
@@ -142,7 +151,6 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
     {
       header: "Name",
       cell: ({ row }) => {
-        
         return (
           <Link
             href={`/candidate/candidate-dashboard/${row.original.candidateId}-${panelistId}`}
@@ -168,6 +176,10 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
       cell: ({ row }) => {
         const isChecked = attendanceState[row.original.candidateId] || false;
         const isUpdating = updatingState[row.original.candidateId] || false;
+        const originalAttended = data.find(
+          (p) => p.candidateId === row.original.candidateId
+        )?.attended;
+
         return (
           <div className="flex items-center">
             <Checkbox
@@ -177,6 +189,9 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
               }
               disabled={isUpdating}
             />
+            <span className="ml-2 text-gray-500">
+            
+            </span>
           </div>
         );
       },
@@ -188,12 +203,15 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(), 
-    onSortingChange: setSorting, 
+    getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
     state: {
-      sorting, 
+      sorting,
     },
-    initialState: { pagination: { pageSize: 10 } },
+    initialState: {
+      pagination: { pageSize: 10 },
+      sorting: [{ id: "allocatedTime", desc: false }], 
+    },
   });
 
   return (

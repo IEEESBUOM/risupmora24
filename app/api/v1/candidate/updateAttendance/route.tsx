@@ -6,6 +6,8 @@ const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   try {
     const { allocationId, attended } = await req.json();
+    console.log("allocationId", allocationId);
+    console.log("attended", attended);
 
     if (!allocationId || typeof attended !== "boolean") {
       return NextResponse.json(
