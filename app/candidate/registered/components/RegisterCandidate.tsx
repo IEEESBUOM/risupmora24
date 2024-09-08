@@ -16,6 +16,7 @@ const RegisterCandidate: React.FC<Props> = ({ initialCandidates }) => {
 
   useEffect(() => {
     let filtered = candidates;
+    console.log("candidates", candidates);
 
     if (selectedDepartment === "sort-by" || selectedDepartment === "") {
       filtered = candidates;
@@ -85,46 +86,34 @@ const RegisterCandidate: React.FC<Props> = ({ initialCandidates }) => {
             onChange={handleDepartmentChange}
           >
             <option value="sort-by">Sort By Department</option>
-            <option value="Bio Medical Engineering">
-              Bio Medical Engineering
-            </option>
-            <option value="Electronic and Telecommunication Engineering">
-              Electronic and Telecommunication Engineering
-            </option>
-            <option value="Electrical Engineering">
-              Electrical Engineering
-            </option>
-            <option value="Mechanical Engineering">
-              Mechanical Engineering
-            </option>
-            <option value="Civil Engineering">Civil Engineering</option>
-            <option value="Material Science Engineering">
-              Material Science Engineering
-            </option>
-            <option value="Chemical and Process Engineering">
-              Chemical and Process Engineering
-            </option>
-            <option value="Transport Management and Logistics Engineering">
-              Transport Management and Logistics Engineering
-            </option>
-            <option value="Textile and Apparel Engineering">
-              Textile and Apparel Engineering
-            </option>
-            <option value="Earth Resource Engineering">
-              Earth Resource Engineering
-            </option>
-            <option value="Computer Science & Engineering">
-              Computer Science & Engineering
-            </option>
-            <option value="Information Technology">
-              Information Technology
-            </option>
-            <option value="Interdisciplinary Study">
-              Interdisciplinary Study
-            </option>
-            <option value="Computational Mathematics">
-              Computational Mathematics
-            </option>
+<option value="Electronic_and_Telecommunication_Engineering">
+  Electronic and Telecommunication Engineering
+</option>
+<option value="Electrical_Engineering">Electrical Engineering</option>
+<option value="Mechanical_Engineering">Mechanical Engineering</option>
+<option value="Civil_Engineering">Civil Engineering</option>
+<option value="Material_Science_and_Engineering">
+  Material Science and Engineering
+</option>
+<option value="Chemical_and_Process_Engineering">
+  Chemical and Process Engineering
+</option>
+<option value="Transport_Management_and_Logistics_Engineering">
+  Transport Management and Logistics Engineering
+</option>
+<option value="Textile_and_Apparel_Engineering">
+  Textile and Apparel Engineering
+</option>
+<option value="Earth_Resources_Engineering">
+  Earth Resources Engineering
+</option>
+<option value="Computer_Science_and_Engineering">
+  Computer Science and Engineering
+</option>
+<option value="Information_Technology">Information Technology</option>
+<option value="Interdisciplinary_Studies">Interdisciplinary Studies</option>
+<option value="Computational_Mathematics">Computational Mathematics</option>
+
           </select>
         </div>
 
