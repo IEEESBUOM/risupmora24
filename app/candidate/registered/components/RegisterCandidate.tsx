@@ -16,7 +16,6 @@ const RegisterCandidate: React.FC<Props> = ({ initialCandidates }) => {
 
   useEffect(() => {
     let filtered = candidates;
-    console.log("candidates", candidates);
 
     if (selectedDepartment === "sort-by" || selectedDepartment === "") {
       filtered = candidates;
