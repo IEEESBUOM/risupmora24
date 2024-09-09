@@ -36,6 +36,7 @@ export default function Page() {
     handleSubmit,
     watch,
     formState: { errors },
+    reset
   } = useForm<Inputs>();
 
   const { data: session, status } = useSession();
@@ -58,6 +59,7 @@ export default function Page() {
             if (res.ok) {
               resolve();
               setErrorMessage("");
+              reset();
             } else {
               res.json().then((data) => {
                 setErrorMessage(data.message);
