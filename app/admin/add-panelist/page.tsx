@@ -27,6 +27,7 @@ const Page = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    reset
   } = useForm<Inputs>();
 
   const { data: session, status } = useSession();
@@ -59,6 +60,7 @@ const Page = () => {
             if (res.ok) {
               resolve();
               setErrorMessage("");
+              reset();
             } else {
               res.json().then((data) => {
                 setErrorMessage(data.message);

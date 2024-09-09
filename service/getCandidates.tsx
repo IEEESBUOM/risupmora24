@@ -7,7 +7,10 @@ export const getCandidates = async () => {
     //   `${process.env.APP_URL}/api/v1/candidate/getCandidates`
     // );
     const response = await fetch(
-      `${process.env.APP_URL}/api/v1/candidate/getCandidates`
+      `${process.env.APP_URL}/api/v1/candidate/getCandidates`,
+      {
+        next: { revalidate: 1800 },
+      }
     );
     const data = await response.json();
     if (response.ok) {
