@@ -6,20 +6,20 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
+  
   const url = new URL(req.url);
-  const candidateId = url.searchParams.get("candidateId");
+  const panelistId = url.searchParams.get("panelistId");
 
-  if (!candidateId) {
-    return NextResponse.json(
-      { error: "Invalid candidate ID" },
-      { status: 400 }
-    );
+  
+
+  if (!panelistId) {
+    return NextResponse.json({ error: "Invalid panelist ID" }, { status: 400 });
   }
 
   try {
     const allocations = await prisma.allocation.findMany({
       where: {
-        candidate_id: candidateId,
+        panelist_id: panelistId, 
       },
       select: {
         allocation_id: true,
@@ -36,8 +36,17 @@ export async function GET(req: NextRequest) {
             pannel_number: true,
           },
         },
+        candidate: {
+          select: {
+            firstName: true, 
+            lastName: true,
+            degree: true,
+            candidate_id: true,
+          },
+        },
       },
     });
+
 
     if (allocations.length === 0) {
       return NextResponse.json(
@@ -45,8 +54,8 @@ export async function GET(req: NextRequest) {
         { status: 404 }
       );
     }
-
     return NextResponse.json(allocations, { status: 200 });
+  
   } catch (error) {
     console.error("Error fetching allocations:", error);
     return NextResponse.json(
