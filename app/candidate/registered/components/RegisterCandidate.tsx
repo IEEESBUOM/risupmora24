@@ -76,7 +76,7 @@ const RegisterCandidate: React.FC<Props> = ({ initialCandidates }) => {
         <div className="text-blue-500 mb-4 border-b pb-2 flex flex-col md:flex-row justify-between items-start md:items-center">
           <div className="text-blue-500 mb-4  pb-2 flex flex-col md:flex-row justify-between items-start md:items-center">
             <span className="text-lg mb-2 md:mb-0">
-              Number of candidates - {candidates.length}
+              Number of candidates - {filteredCandidates.length}
             </span>
           </div>
           <select
