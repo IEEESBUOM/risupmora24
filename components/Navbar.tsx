@@ -62,6 +62,7 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
     _id: session?.user.id as string,
   };
   const userData = useGetUserData({ userEmail: user.email });
+   console.log(userData)
 
   function clickLogoutBtn() {
     signOut();
@@ -495,6 +496,26 @@ const Navbar: React.FC<{ sectionRefs: SectionRefs }> = ({ sectionRefs }) => {
                   </div>
                   <Link
                     href={`/admin/department-coordinator/${userData.user.id}`}
+                    passHref
+                  >
+                    <PrimaryButtonSmall text="Dashboard >" />
+                  </Link>
+                </div>
+              )}
+
+{status == "authenticated" &&
+              userData?.user?.role == "panelist" && (
+                <div className=" sm:flex hidden ">
+                  <div
+                    className=""
+                    onClick={() => {
+                      signOut();
+                    }}
+                  >
+                    <PrimaryButtonSmall text="< Logout" />
+                  </div>
+                  <Link
+                    href={`/company/dashboard/${userData.user.id}`}
                     passHref
                   >
                     <PrimaryButtonSmall text="Dashboard >" />

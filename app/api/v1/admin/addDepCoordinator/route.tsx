@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   try {
     const { coordinatorName, departmentName, email, password }: Request =
       await req.json();
-
+    console.log(coordinatorName, departmentName, email, password);
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const excistUser = await prisma.user.findUnique({
@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
       },
     });
     if (excistUser) {
+      console.log("user already exists ");
       return NextResponse.json(
         { message: "A user already exists with this email" },
         { status: 400 }
@@ -39,13 +40,18 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    console.log(user);
+
     if (!user) {
+      console.log("error adding user");
       return NextResponse.json(
         { message: "Error adding department coordinator" },
         { status: 500 }
       );
     }
     const depEnum = departmentName as Department;
+    console.log(Department);
+    console.log(depEnum);
     const departmentCoordinator = await prisma.departmentCordinator.create({
       data: {
         department: depEnum,
@@ -54,6 +60,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!departmentCoordinator) {
+      console.log("error adding department coordinator");
       return NextResponse.json(
         { message: "Error adding department coordinator" },
         { status: 500 }
