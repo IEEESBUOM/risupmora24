@@ -73,7 +73,7 @@ export default function ContactUs() {
           shortName="Assistant Secretary"
           details="IEEE Student Branch of University Of Moratuwa"
           email="malithirumalka@gmail.com"
-          telephone="0701555080"
+          telephone="0776536321"
         />
       </div>
 
