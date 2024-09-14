@@ -3,8 +3,9 @@ import Image from "next/image";
 import unileverBanner from "../../assets/img/mas.png";
 import ifsBanner from "../../assets/img/gtn.png";
 import ifs from "../../assets/img/ifs.png";
+import sensusHub from "../../assets/img/sensusHub-cropped.png";
 
-const slideimgs = [unileverBanner, ifsBanner, ifs];
+const slideimgs = [unileverBanner, ifsBanner, ifs,sensusHub];
 const delay = 2500;
 
 export default function Slideshow() {
