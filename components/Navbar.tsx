@@ -1,7 +1,8 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { useRouter } from 'next/router';
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, } from "next/navigation";
 import clsx from "clsx";
 import { AlignRight } from "lucide-react";
 import Image from "next/image";
