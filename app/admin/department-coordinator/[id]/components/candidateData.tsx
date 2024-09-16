@@ -80,28 +80,20 @@ const CandidateData = (candidate: any) => {
     setRowData(newRowData);
   }, [candidate]);
 
-  // Handle input changes and update state
   const handleChange = (
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => {
     const { id, value } = e.target;
 
     const prefernce = id[7];
-    // console.log(prefernce);
 
-    // Get the selected option element
-
-    // Read the additional data attributes
-
-    // console.log(id, value);
     setRowData((prevState) => ({
       ...prevState,
       [id]: value,
     }));
   };
 
-  // Handle submit button click
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const panels = [
       { panel: "panel1", company: "company1", time: "time1" },
       { panel: "panel2", company: "company2", time: "time2" },
@@ -109,17 +101,15 @@ const CandidateData = (candidate: any) => {
       { panel: "panel4", company: "company4", time: "time4" },
     ];
 
-    panels.forEach(async (panelInfo) => {
+    const allocationDataArray = [];
+
+    for (const panelInfo of panels) {
       const panelValue = rowData[panelInfo.panel as keyof RowData];
       const companyValue = rowData[panelInfo.company as keyof RowData];
       const timeValue = rowData[panelInfo.time as keyof RowData];
 
-      // console.log(panelInfo.company[7]);
+      if (!companyValue) continue;
 
-      // console.log(companyValue);
-
-      // Skip if the company is empty
-      if (!companyValue) return;
       let panelistId: string | undefined;
 
       try {
@@ -143,24 +133,24 @@ const CandidateData = (candidate: any) => {
         panelist_id: panelistId,
       };
 
-      Allocation(
-        { Allocation: formData },
-        {
-          onSuccess: () => {
-            toggleEdit();
-            // toast.success("Allocation Success 1");
-          },
-          onError: (error) => {
-            console.log(error);
-            console.error("Allocation error:", error);
-            toast.error("Allocation failed 1");
-          },
-        }
-      );
-    });
+      allocationDataArray.push(formData);
+    }
+
+    Allocation(
+      { Allocation: allocationDataArray },
+      {
+        onSuccess: () => {
+          toggleEdit();
+          toast.success("Allocation Success");
+        },
+        onError: (error) => {
+          console.error("Allocation error:", error);
+          toast.error("Allocation failed");
+        },
+      }
+    );
   };
 
-  // Toggle edit mode
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };
