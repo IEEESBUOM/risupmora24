@@ -21,6 +21,7 @@ import CvUpload from "@/components/CvUpload";
 import { useCompanyAllocation } from "@/hooks/user/useCompanyAllocation";
 import FeedBackComponent from "./FeedBackComponent";
 import Feedback from "./Feedback";
+import DepartmentCompanies from "./departmentwiseCompanies";
 
 const StudentView = () => {
   const {
@@ -37,6 +38,7 @@ const StudentView = () => {
     CompanyAllocation: allocationDAta,
     isPending: isPendingCompanyAllocation,
   } = useCompanyAllocation({ userId });
+  console.log(data);
 
   console.log(allocationDAta);
 
@@ -259,6 +261,8 @@ const StudentView = () => {
                 <div className="border-t-2 border-custom-black  h-0.5 w-full my-6"></div>
 
                 <Feedback candidateId={userId} />
+                <div className="border-t-2 border-custom-black  h-0.5 w-full my-6"></div>
+                <DepartmentCompanies department={data.department} />
               </div>
             </>
           ) : (
