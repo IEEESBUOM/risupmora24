@@ -198,13 +198,13 @@ const SignIn = () => {
         <div className="mb-4  grid justify-center">
           <Button variant={"auth"}>Sign In</Button>
         </div>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <Link href="/auth/register">
             <div className="text-center text-xs font-semibold hover:underline">
               If you dont have an account? register!
             </div>
           </Link>
-        </div>
+        </div> */}
       </form>
     </>
   );
