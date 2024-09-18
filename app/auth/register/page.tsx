@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import NotFound from "@/app/not-found";
 
 export default function Page() {
   const router = useRouter();
@@ -55,6 +56,9 @@ export default function Page() {
     );
   };
   const [passwordVisible, setPasswordVisible] = useState(false);
+  return (
+    <NotFound/>
+  )
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
