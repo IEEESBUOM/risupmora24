@@ -56,9 +56,9 @@ export default function Page() {
     );
   };
   const [passwordVisible, setPasswordVisible] = useState(false);
-  return (
-    <NotFound/>
-  )
+  // return (
+  //   <NotFound/>
+  // )
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
