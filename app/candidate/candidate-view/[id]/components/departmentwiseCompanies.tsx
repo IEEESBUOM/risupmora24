@@ -46,6 +46,7 @@ const DepartmentCompanies = ({ department }: DepartmentCompaniesProps) => {
       { name: "Sensus Hub", logo: "/companyImg/senseusHub.png" },
       { name: "Nimbus Venture", logo: "/companyImg/Nimbus-Logo-320x132.png" },
       { name: "CodeGen", logo: "/companyImg/codegen.jpeg" },
+      { name: "Creative Software", logo: "/companyImg/creativeSoftware.jpeg" },
     ],
     Information_Technology: [
       { name: "GTN", logo: "/companyImg/gtnlogo.png" },
@@ -53,6 +54,7 @@ const DepartmentCompanies = ({ department }: DepartmentCompaniesProps) => {
       { name: "Sensus Hub", logo: "/companyImg/senseusHub.png" },
       { name: "Nimbus Venture", logo: "/companyImg/Nimbus-Logo-320x132.png" },
       { name: "CodeGen", logo: "/companyImg/codegen.jpeg" },
+      { name: "Creative Software", logo: "/companyImg/creativeSoftware.jpeg" },
     ],
     Interdisciplinary_Studies: [
       { name: "GTN", logo: "/companyImg/gtnlogo.png" },
@@ -60,6 +62,7 @@ const DepartmentCompanies = ({ department }: DepartmentCompaniesProps) => {
       { name: "Sensus Hub", logo: "/companyImg/senseusHub.png" },
       { name: "Nimbus Venture", logo: "/companyImg/Nimbus-Logo-320x132.png" },
       { name: "CodeGen", logo: "/companyImg/codegen.jpeg" },
+      { name: "Creative Software", logo: "/companyImg/creativeSoftware.jpeg" },
     ],
     Computational_Mathematics: [
       { name: "GTN", logo: "/companyImg/gtnlogo.png" },
@@ -67,6 +70,7 @@ const DepartmentCompanies = ({ department }: DepartmentCompaniesProps) => {
       { name: "Sensus Hub", logo: "/companyImg/senseusHub.png" },
       { name: "Nimbus Venture", logo: "/companyImg/Nimbus-Logo-320x132.png" },
       { name: "CodeGen", logo: "/companyImg/codegen.jpeg" },
+      { name: "Creative Software", logo: "/companyImg/creativeSoftware.jpeg" },
     ],
   };
 
