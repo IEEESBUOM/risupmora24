@@ -61,6 +61,21 @@ function Partners() {
         <Slideshow />
       </div>
       <div className="container-fluid p-0 mt-8 flex flex-col items-center justify-center">
+        <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0 h-44">
+          <div className="text-center text-lg w-64">
+            Main Industrial Partner
+          </div>
+          <div className="flex justify-center items-center size-56">
+            <Image
+              src={IFS}
+              alt="mas"
+              width={200}
+              height={200}
+              objectFit="contain"
+            />
+          </div>
+        </div>
+
         <div className="row flex flex-wrap justify-center items-center mt-5">
           {/* <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
             <div className="text-center text-lg w-64">Platinum Partner</div>
@@ -108,25 +123,8 @@ function Partners() {
           </div>
 
           <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0 h-44">
-            <div className="text-center text-lg w-64">
-              Main Industrial Partner
-            </div>
-            <div className="flex justify-center items-center size-56">
-              <Image
-                src={IFS}
-                alt="mas"
-                width={200}
-                height={200}
-                objectFit="contain"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="row flex flex-wrap justify-center items-center mt-5">
-          <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
-            <div className="text-center text-lg w-64">Bronze   Partner</div>
-            <div className="flex justify-center items-center h-24">
+            <div className="text-center text-lg w-64">Bronze Partner</div>
+            <div className="flex justify-center items-center w-36 h-36">
               <Image
                 src={sensusHub}
                 alt="sensusHub"
@@ -135,8 +133,8 @@ function Partners() {
                 objectFit="contain"
               />
             </div>
-          </div>
-          {/* <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
+
+            {/* <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
             <div className="text-center text-lg w-64">Silver Partner</div>
             <div className="flex justify-center items-center h-24">
               <Image
@@ -151,7 +149,7 @@ function Partners() {
               </div>
             </div>
           </div> */}
-          {/* <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
+            {/* <div className="col-sm-4 flex flex-col items-center justify-center mb-8 sm:mb-0">
             <div className="text-center text-lg w-64">Bronze Partner</div>
             <div className="flex justify-center items-center h-24">
               <Image
@@ -166,6 +164,7 @@ function Partners() {
               </div>
             </div>
           </div> */}
+          </div>
         </div>
       </div>
     </div>
