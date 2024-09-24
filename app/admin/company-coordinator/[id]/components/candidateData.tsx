@@ -228,7 +228,7 @@ const CandidateData = (candidate: any) => {
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };
-
+ 
   return (
     <>
       {/* <Modal
@@ -241,6 +241,9 @@ const CandidateData = (candidate: any) => {
       <tr className="border-b border-gray-300">
         <td className="p-2 border-l border-gray-300">
           {candidate.candidate_id}
+        </td>
+        <td className="p-2 border-l border-gray-300">
+          {candidate.candidate.contactNo}
         </td>
         <td className="p-2 border-l border-gray-300">
           {candidate.firstName} {candidate.lastName}
