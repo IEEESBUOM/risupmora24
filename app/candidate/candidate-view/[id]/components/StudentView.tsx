@@ -89,7 +89,7 @@ const StudentView = () => {
   }
 
   return (
-    <div className="w-full block 2xl:flex 2xl:justify-center 2xl:items-center  px-5 md:px-12 lg:px-28 h-100 mb-10">
+    <div className="w-full block 2xl:flex 2xl:justify-center 2xl:items-center  md:px-12 lg:px-28 h-100 mb-10">
       <div className="w-full ">
         <div className="w-full">
           <StudentNavbar />
@@ -103,6 +103,8 @@ const StudentView = () => {
                   height={50}
                   className="rounded-full"
                 />
+
+               
               </div>
               <div className="container w-full md:w-11/12 lg:w-10/12 xl:w-7/12 px-5 md:px-20 pt-16  mx-auto mt-3.5 mb-10 bg-[#f4f4f4] shadow-custom rounded-3xl pb-16">
                 <div className="space-y-6">
@@ -158,22 +160,22 @@ const StudentView = () => {
                 <div className="mt-8 font-semibold text-center font-poppins text-lg  underline">
                   Company Allocation
                 </div>
-                <div className="overflow-x-auto border-2 border-stv-blue rounded-lg mt-2.5">
+                <div className="overflow-x-auto border-2 border-stv-blue max-sm:text-xs rounded-lg mt-2.5">
                   {allocationDAta && allocationDAta.length > 0 ? (
                     <table className="border-collapse w-full">
                       <thead>
                         <tr>
-                          <th className="py-2.5 font-poppins px-3 text-lg md:text-xl text-left">
+                          <th className="py-2.5 font-poppins px-3 md:text-xl text-left">
                             Company
                           </th>
-                          <th className="py-2.5 font-poppins px-3 text-lg md:text-xl text-left">
+                          <th className="py-2.5 font-poppins px-3  md:text-xl text-left">
                             Date
                           </th>
-                          <th className="py-2.5 font-poppins px-3 text-lg md:text-xl text-left">
+                          <th className="py-2.5 font-poppins px-3  md:text-xl text-left">
                             Panel
                           </th>
 
-                          <th className="py-2.5 font-poppins px-3 text-lg md:text-xl text-left">
+                          <th className="py-2.5 font-poppins px-3  md:text-xl text-left">
                             Time
                           </th>
                         </tr>

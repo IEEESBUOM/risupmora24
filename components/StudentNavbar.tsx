@@ -38,7 +38,7 @@ const StudentNavbar = () => {
             <PrimaryButtonSmall text="Home" />
           </Link>
           <div onClick={logoutHandler}>
-          <PrimaryButtonSmall text="Sign out"  />
+          <PrimaryButtonSmall text="Signout"  />
           </div>
         </div>
         {/* {!isMobile && ( */}
