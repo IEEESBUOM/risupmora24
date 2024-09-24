@@ -208,6 +208,7 @@ const AllIntervieweesData: React.FC<Props> = ({
             <thead>
               <tr className="bg-gray-200">
                 <th className="p-2 border border-gray-300 text-left">ID</th>
+                <th className="p-2 border border-gray-300 text-left">Phone number</th>
                 <th className="p-2 border border-gray-300 text-left">Name</th>
                 {/* <th className="p-2 border border-gray-300 text-left">
                   Preferences
