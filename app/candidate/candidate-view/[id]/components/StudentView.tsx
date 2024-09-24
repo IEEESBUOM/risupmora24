@@ -75,7 +75,7 @@ const StudentView = () => {
 
   function formatTime(timeSlot: string): string {
     if (timeSlot === "00:00") {
-      return "Not Allocated";
+      return "Allocating soon";
     }
 
     // Split the time string into hours and minutes
