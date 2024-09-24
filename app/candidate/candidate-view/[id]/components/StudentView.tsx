@@ -75,7 +75,7 @@ const StudentView = () => {
 
   function formatTime(timeSlot: string): string {
     if (timeSlot === "00:00") {
-      return "Not Allocated";
+      return "Allocating soon";
     }
 
     // Split the time string into hours and minutes
@@ -185,7 +185,7 @@ const StudentView = () => {
                               {allocation.company.company_name}
                             </td>
                             <td className="py-2.5 text-gray-600 px-3 text-left">
-                              2024-9-13
+                              2024-9-25
                             </td>
                             <td className="py-2.5 text-gray-600 px-3 text-left">
                               {allocation.allocated_panel_number}
